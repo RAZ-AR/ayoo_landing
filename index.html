@@ -11,38 +11,39 @@
 /* ayoo landing — design tokens & base */
 
 :root {
-  /* Palette — "Dopamine glass" (default, overridden at runtime by tweak) */
-  --bg: #E4ECFF;
-  --bg-alt: #F1ECFF;
-  --ink: #241B4E;
-  --pop: #FF4FA3;
+  /* Palette — "Pearl" (default light, overridden at runtime) */
+  --bg: #FAF7F4;
+  --bg-alt: #F5F0FF;
+  --ink: #1E1630;
+  --pop: #FF3E8E;
 
-  /* Dopamine rainbow — drives the gradient blobs & accents (CSS-only) */
-  --pop-2: #7C5CFF;   /* violet */
-  --cool: #16C8B8;    /* mint-teal */
-  --lilac: #5BC8FF;   /* sky */
-  --sun: #FFC24B;     /* amber */
-  --tang: #FF7A45;    /* tangerine */
+  /* Pastel rainbow — drives gradient blobs & accents */
+  --pop-2: #8B5CF6;   /* violet */
+  --cool: #38BDF8;    /* sky */
+  --lilac: #E879F9;   /* vivid magenta */
+  --sun: #FB923C;     /* warm orange */
+  --tang: #FF6B6B;    /* coral */
 
   --white: #FFFFFF;
-  --line: color-mix(in srgb, var(--ink) 12%, transparent);
+  --line: color-mix(in srgb, var(--ink) 8%, transparent);
 
-  /* Liquid glass surfaces — enhanced */
-  --glass: color-mix(in srgb, #ffffff 32%, transparent);
-  --glass-strong: color-mix(in srgb, #ffffff 52%, transparent);
-  --glass-edge: rgba(255, 255, 255, 0.72);
-  --glass-edge-soft: rgba(255, 255, 255, 0.44);
+  /* Liquid glass — high opacity on light bg */
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.80);
+  --glass-edge: rgba(255, 255, 255, 0.85);
+  --glass-edge-soft: rgba(255, 255, 255, 0.55);
+
+  /* Sheen = top light highlight + soft bottom shadow — replaces border */
   --sheen:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.88),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.20),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.28);
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.04);
 
-  /* Soft, colored depth shadows (replace hard offset shadows) */
-  --shadow-sm: 0 8px 22px -10px color-mix(in srgb, var(--ink) 40%, transparent);
-  --shadow-md: 0 22px 48px -18px color-mix(in srgb, var(--ink) 46%, transparent);
-  --shadow-lg: 0 40px 80px -26px color-mix(in srgb, var(--ink) 52%, transparent);
-  --shadow-pop: 0 18px 40px -14px color-mix(in srgb, var(--pop) 55%, transparent);
-  --blur: blur(32px) saturate(1.8);
+  /* Soft depth shadows — warm tint */
+  --shadow-sm: 0 4px 18px -6px rgba(120, 60, 160, 0.12);
+  --shadow-md: 0 16px 42px -12px rgba(120, 60, 160, 0.16);
+  --shadow-lg: 0 32px 70px -20px rgba(120, 60, 160, 0.20);
+  --shadow-pop: 0 14px 36px -8px color-mix(in srgb, var(--pop) 44%, transparent);
+  --blur: blur(28px) saturate(1.5);
 
   /* Type */
   --font-display: "Unbounded", "Bricolage Grotesque", system-ui, sans-serif;
@@ -63,17 +64,13 @@
 html, body { margin: 0; padding: 0; }
 
 html {
-  background: var(--ink);
+  background: var(--bg);
 }
 
 body {
   font-family: var(--font-body);
   font-weight: 400;
-  background:
-    radial-gradient(120% 90% at 12% 0%, color-mix(in srgb, var(--lilac) 30%, transparent), transparent 55%),
-    radial-gradient(110% 90% at 90% 8%, color-mix(in srgb, var(--pop) 22%, transparent), transparent 52%),
-    radial-gradient(120% 100% at 70% 100%, color-mix(in srgb, var(--cool) 22%, transparent), transparent 55%),
-    var(--bg);
+  background: var(--bg);
   background-attachment: fixed;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -81,137 +78,115 @@ body {
   overflow-x: hidden;
 }
 
-/* When the animated background is on, body becomes transparent so the
-   fixed lava layer shows through the transparent hero. */
 body.has-lava {
   background: transparent;
 }
 
 ::selection { background: var(--ink); color: var(--bg); }
 
-/* ───────────────────────────────────────────────
-   ANIMATED LIQUID GRADIENT BACKGROUND
-   ─────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────
+   ANIMATED LIGHT GRADIENT BACKGROUND
+   Warm cream base + soft atmospheric blobs
+   ───────────────────────────────────────────────── */
 .lava {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  /* Animated shifting base gradient */
-  background-color: var(--bg);
-  background-image: linear-gradient(
-    -45deg,
-    color-mix(in srgb, var(--pop-2) 32%, var(--bg)),
-    color-mix(in srgb, var(--pop)   28%, var(--bg)),
-    color-mix(in srgb, var(--lilac) 34%, var(--bg)),
-    color-mix(in srgb, var(--cool)  28%, var(--bg)),
-    color-mix(in srgb, var(--sun)   26%, var(--bg))
-  );
-  background-size: 400% 400%;
-  animation: lava-base-flow 18s ease infinite;
-}
-@keyframes lava-base-flow {
-  0%   { background-position: 0%   50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0%   50%; }
+  background-color: #FAF7F4;
 }
 
-/* Spinning color-wash overlay for a depth/aurora effect */
-.lava::before {
+/* Soft ambient shimmer overlay — very subtle top-light */
+.lava::after {
   content: "";
   position: absolute;
   inset: 0;
-  transform: scale(1.6);
-  transform-origin: center center;
-  background: conic-gradient(
-    from 0deg at 50% 50%,
-    color-mix(in srgb, var(--pop)   48%, transparent),
-    color-mix(in srgb, var(--sun)   40%, transparent),
-    color-mix(in srgb, var(--pop-2) 44%, transparent),
-    color-mix(in srgb, var(--cool)  40%, transparent),
-    color-mix(in srgb, var(--lilac) 44%, transparent),
-    color-mix(in srgb, var(--pop)   48%, transparent)
-  );
-  filter: blur(60px);
-  opacity: 0.38;
-  mix-blend-mode: multiply;
-  animation: lava-spin 28s linear infinite;
-}
-@keyframes lava-spin {
-  from { transform: scale(1.6) rotate(0deg); }
-  to   { transform: scale(1.6) rotate(360deg); }
+  background:
+    radial-gradient(110% 60% at 50% 0%, rgba(255,255,255,.55), transparent 60%),
+    radial-gradient(80% 40% at 50% 100%, rgba(255,248,240,.35), transparent 55%);
+  pointer-events: none;
+  z-index: 5;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .lava, .lava::before { animation: none !important; }
-}
-/* ── Organic blobs — multiply blend + shape morphing ───────────────── */
+/* ── Atmospheric blobs — large radial glows on white ──── */
 .lava__blob {
   position: absolute;
-  filter: blur(44px);
-  opacity: 0.82;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
   will-change: transform, border-radius;
 }
 @media (min-width: 900px) {
-  .lava__blob { filter: blur(56px); }
+  .lava__blob { }
 }
+
+/* B1 — large coral-pink, left side */
 .lava__blob.b1 {
-  width: 56vw; height: 48vw;
-  left: -10vw; top: 6vh;
-  background: radial-gradient(ellipse at 32% 28%,
-    color-mix(in srgb, var(--pop) 55%, #fff),
-    var(--pop) 36%,
-    color-mix(in srgb, var(--pop-2) 75%, var(--pop)) 62%,
-    color-mix(in srgb, var(--pop-2) 40%, transparent) 88%);
-  border-radius: 62% 38% 46% 54% / 50% 44% 56% 50%;
-  animation: morph1 22s ease-in-out infinite, lava1 26s ease-in-out infinite;
+  width: 90vw; height: 80vw;
+  left: -30vw; top: -10vh;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(255, 80, 120, 0.72) 0%,
+    rgba(255, 120, 160, 0.50) 25%,
+    rgba(255, 160, 190, 0.30) 50%,
+    rgba(255, 200, 220, 0.10) 70%,
+    transparent 85%);
+  filter: blur(90px);
+  animation: lava1 32s ease-in-out infinite, morph1 28s ease-in-out infinite;
 }
+
+/* B2 — salmon/coral, top right */
 .lava__blob.b2 {
-  width: 48vw; height: 42vw;
-  right: -8vw; top: -6vh;
-  background: radial-gradient(ellipse at 44% 38%,
-    color-mix(in srgb, var(--pop-2) 50%, #fff),
-    var(--pop-2) 40%,
-    color-mix(in srgb, var(--lilac) 68%, var(--pop-2)) 66%,
-    color-mix(in srgb, var(--lilac) 38%, transparent) 90%);
-  border-radius: 42% 58% 54% 46% / 48% 52% 48% 52%;
-  animation: morph2 28s ease-in-out infinite, lava2 32s ease-in-out infinite;
+  width: 75vw; height: 65vw;
+  right: -25vw; top: -15vh;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(255, 110, 80, 0.65) 0%,
+    rgba(255, 150, 110, 0.45) 28%,
+    rgba(255, 180, 150, 0.25) 52%,
+    rgba(255, 210, 190, 0.08) 72%,
+    transparent 88%);
+  filter: blur(100px);
+  animation: lava2 38s ease-in-out infinite, morph2 34s ease-in-out infinite;
 }
+
+/* B3 — violet/purple, center-low */
 .lava__blob.b3 {
-  width: 46vw; height: 40vw;
-  left: 26vw; bottom: -10vh;
-  background: radial-gradient(ellipse at 42% 40%,
-    color-mix(in srgb, var(--cool) 52%, #fff),
-    var(--cool) 42%,
-    color-mix(in srgb, var(--lilac) 62%, var(--cool)) 68%,
-    color-mix(in srgb, var(--lilac) 35%, transparent) 90%);
-  border-radius: 54% 46% 38% 62% / 56% 44% 56% 44%;
-  animation: morph3 26s ease-in-out infinite, lava3 30s ease-in-out infinite;
+  width: 70vw; height: 65vw;
+  left: 10vw; top: 35vh;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(139, 92, 246, 0.55) 0%,
+    rgba(167, 130, 255, 0.38) 28%,
+    rgba(196, 168, 255, 0.20) 52%,
+    rgba(220, 205, 255, 0.06) 70%,
+    transparent 85%);
+  filter: blur(110px);
+  animation: lava3 36s ease-in-out infinite, morph3 30s ease-in-out infinite;
 }
+
+/* B4 — warm amber, bottom left */
 .lava__blob.b4 {
-  width: 38vw; height: 34vw;
-  right: 14vw; bottom: 4vh;
-  background: radial-gradient(ellipse at 38% 35%,
-    color-mix(in srgb, var(--lilac) 55%, #fff),
-    var(--lilac) 44%,
-    color-mix(in srgb, var(--pop) 58%, var(--lilac)) 70%,
-    color-mix(in srgb, var(--pop) 32%, transparent) 90%);
-  border-radius: 46% 54% 62% 38% / 44% 56% 44% 56%;
-  animation: morph4 20s ease-in-out infinite, lava4 22s ease-in-out infinite;
+  width: 60vw; height: 55vw;
+  left: -15vw; bottom: -5vh;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(251, 146, 60, 0.58) 0%,
+    rgba(253, 174, 100, 0.38) 28%,
+    rgba(254, 205, 150, 0.18) 52%,
+    rgba(254, 230, 195, 0.06) 70%,
+    transparent 85%);
+  filter: blur(95px);
+  animation: lava4 28s ease-in-out infinite, morph4 26s ease-in-out infinite;
 }
+
+/* B5 — magenta-pink, right bottom */
 .lava__blob.b5 {
-  width: 36vw; height: 32vw;
-  left: 5vw; top: 34vh;
-  background: radial-gradient(ellipse at 40% 34%,
-    color-mix(in srgb, var(--sun) 58%, #fff),
-    var(--sun) 38%,
-    color-mix(in srgb, var(--tang) 72%, var(--sun)) 60%,
-    color-mix(in srgb, var(--pop) 45%, var(--tang)) 82%,
-    transparent 100%);
-  border-radius: 58% 42% 50% 50% / 42% 58% 42% 58%;
-  animation: morph5 30s ease-in-out infinite, lava5 28s ease-in-out infinite;
+  width: 65vw; height: 60vw;
+  right: -20vw; bottom: -10vh;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(232, 121, 249, 0.60) 0%,
+    rgba(240, 160, 255, 0.40) 28%,
+    rgba(248, 195, 255, 0.18) 52%,
+    rgba(252, 225, 255, 0.06) 70%,
+    transparent 85%);
+  filter: blur(105px);
+  animation: lava5 34s ease-in-out infinite, morph5 38s ease-in-out infinite;
 }
 
 /* Organic shape morphing */
@@ -240,16 +215,41 @@ body.has-lava {
   75%      { border-radius: 52% 48% 42% 58% / 44% 56% 46% 54%; }
 }
 
-/* ── Film-grain overlay — animated to simulate grain texture ──────── */
+@keyframes lava1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(8vw, 12vh) scale(1.12); }
+  66%      { transform: translate(-5vw, 5vh) scale(0.92); }
+}
+@keyframes lava2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%      { transform: translate(-10vw, 18vh) scale(1.18); }
+  70%      { transform: translate(5vw, 7vh) scale(0.90); }
+}
+@keyframes lava3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  35%      { transform: translate(-8vw, -14vh) scale(1.1); }
+  65%      { transform: translate(9vw, -5vh) scale(1.2); }
+}
+@keyframes lava4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-12vw, -18vh) scale(1.25); }
+}
+@keyframes lava5 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  45%      { transform: translate(14vw, -8vh) scale(1.18); }
+  75%      { transform: translate(5vw, 10vh) scale(0.92); }
+}
+
+/* Grain texture overlay */
 .lava__grain {
   position: absolute;
   inset: -30%;
   z-index: 6;
   pointer-events: none;
-  opacity: 0.18;
+  opacity: 0.12;
   mix-blend-mode: overlay;
   filter: url(#blob-grain);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.8);
   animation: grain-drift 0.6s steps(3) infinite;
 }
 @keyframes grain-drift {
@@ -259,92 +259,58 @@ body.has-lava {
   100% { transform: translate(0,   0)   scale(1.35); }
 }
 
-/* faint sheen / top-light overlay */
-.lava::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.28), transparent 55%),
-    radial-gradient(100% 60% at 50% 100%, rgba(0,0,0,.04), transparent 60%);
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
+  .lava, .lava::before { animation: none !important; }
   .lava__blob { animation: none !important; }
   .lava__grain { animation: none !important; }
-}
-@keyframes lava1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%      { transform: translate(8vw, 14vh) scale(1.18); }
-  66%      { transform: translate(-4vw, 6vh) scale(0.92); }
-}
-@keyframes lava2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  40%      { transform: translate(-10vw, 20vh) scale(1.22); }
-  70%      { transform: translate(4vw, 8vh) scale(0.88); }
-}
-@keyframes lava3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  35%      { transform: translate(-12vw, -16vh) scale(1.1); }
-  65%      { transform: translate(10vw, -6vh) scale(1.25); }
-}
-@keyframes lava4 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-14vw, -22vh) scale(1.3); }
-}
-@keyframes lava5 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  45%      { transform: translate(16vw, -10vh) scale(1.2); }
-  75%      { transform: translate(6vw, 12vh) scale(0.9); }
 }
 
 /* keep all real content above the lava layer */
 .nav, .marquee, .section, .footer { position: relative; z-index: 1; }
 
-/* hero is transparent so the lava shows through as the page's hero moment */
+/* hero transparent so lava shows through */
 body.has-lava .hero { background: transparent; }
 body.has-lava .cta-banner { background: transparent; }
 
 /* ── Liquid-glass: nav ─────────────────────────────────────────────── */
 body.has-lava .nav {
-  background: color-mix(in srgb, var(--bg) 42%, transparent);
+  background: rgba(250, 247, 244, 0.72);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  border-bottom: 1px solid var(--glass-edge);
-  box-shadow: 0 1px 0 rgba(255,255,255,.55), var(--shadow-sm);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.90),
+    0 4px 20px -4px rgba(120,60,160,.08);
 }
 
 /* ── Liquid-glass: CTA banner ──────────────────────────────────────── */
 body.has-lava .cta-banner .container {
-  background: color-mix(in srgb, #ffffff 22%, transparent);
-  -webkit-backdrop-filter: blur(48px) saturate(2);
-  backdrop-filter: blur(48px) saturate(2);
-  border: 1px solid var(--glass-edge);
+  background: rgba(255, 255, 255, 0.60);
+  -webkit-backdrop-filter: blur(48px) saturate(1.6);
+  backdrop-filter: blur(48px) saturate(1.6);
   border-radius: var(--r-lg);
   box-shadow:
     var(--shadow-lg),
     var(--sheen),
-    0 0 0 0.5px rgba(255,255,255,.55);
+    0 0 0 0px transparent;
   padding: clamp(48px, 7vw, 90px) clamp(24px, 5vw, 64px);
 }
 
 /* ── Liquid-glass: intro overlay ───────────────────────────────────── */
 body.has-lava .intro {
-  background: color-mix(in srgb, var(--bg) 38%, transparent);
-  -webkit-backdrop-filter: blur(48px) saturate(2);
-  backdrop-filter: blur(48px) saturate(2);
+  background: rgba(250, 247, 244, 0.85);
+  -webkit-backdrop-filter: blur(48px) saturate(1.6);
+  backdrop-filter: blur(48px) saturate(1.6);
 }
 
 /* ── Liquid-glass: hero sticker ────────────────────────────────────── */
 body.has-lava .hero__sticker {
-  -webkit-backdrop-filter: blur(40px) saturate(2);
-  backdrop-filter: blur(40px) saturate(2);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  backdrop-filter: blur(40px) saturate(1.8);
 }
 
-/* sections over lava are transparent to reveal the background */
+/* sections over lava */
 body.has-lava #cats { background: transparent; }
-body.has-lava #faq  { background: color-mix(in srgb, var(--bg-alt) 55%, transparent); }
+body.has-lava #faq  { background: rgba(250, 247, 252, 0.60); }
 body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
 
 /* utility */
@@ -365,7 +331,6 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 8px 15px;
-  border: 1px solid var(--glass-edge);
   border-radius: var(--r-pill);
   background: var(--glass);
   -webkit-backdrop-filter: var(--blur);
@@ -390,12 +355,11 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
 }
 
 .section + .section {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
 }
 
 /* sticker / card base */
 .sticker {
-  border: 1px solid var(--glass-edge);
   border-radius: var(--r-md);
   background: var(--glass);
   -webkit-backdrop-filter: var(--blur);
@@ -415,7 +379,7 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.01em;
-  border: 1px solid color-mix(in srgb, #fff 22%, transparent);
+  border: none;
   background: linear-gradient(160deg, color-mix(in srgb, var(--ink) 84%, #fff), var(--ink));
   color: #fff;
   cursor: pointer;
@@ -428,7 +392,7 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
 .btn--ghost {
   background: var(--glass);
   color: var(--ink);
-  border: 1px solid var(--glass-edge);
+  border: none;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   box-shadow: var(--shadow-sm), var(--sheen);
@@ -440,7 +404,7 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
 .btn--pop {
   background: linear-gradient(150deg, color-mix(in srgb, var(--pop) 86%, #fff), var(--pop) 52%, var(--pop-2));
   color: #fff;
-  border-color: color-mix(in srgb, #fff 30%, transparent);
+  border: none;
   box-shadow: var(--shadow-pop), inset 0 1px 0 rgba(255,255,255,.32);
 }
 .btn .arr { width: 18px; height: 18px; }
@@ -449,17 +413,15 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
 .marquee {
   display: flex;
   overflow: hidden;
-  border-block: 1px solid color-mix(in srgb, #fff 26%, transparent);
-  background: linear-gradient(90deg, var(--pop), var(--pop-2) 48%, var(--cool));
+  background: linear-gradient(90deg, var(--pop), var(--pop-2) 48%, color-mix(in srgb, var(--cool) 80%, var(--pop-2)));
   color: #fff;
   box-shadow: var(--shadow-md);
 }
 .marquee--inverted {
-  background: var(--glass-strong);
+  background: rgba(255,255,255,0.75);
   color: var(--ink);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  border-block: 1px solid var(--glass-edge);
   box-shadow: var(--shadow-sm), var(--sheen);
 }
 .marquee__track {
@@ -484,7 +446,7 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   to { transform: translateX(-50%); }
 }
 
-/* Tilted ticker (Sparkz vibe) */
+/* Tilted ticker */
 .tilt-ticker {
   position: absolute;
   left: -10%;
@@ -496,7 +458,6 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   font-size: clamp(20px, 2.4vw, 34px);
   padding-block: 14px;
   overflow: hidden;
-  border-block: 1.5px solid var(--ink);
 }
 .tilt-ticker__inner {
   display: flex;
@@ -512,7 +473,7 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
 /* Photo placeholder */
 .photo {
   position: relative;
-  background: linear-gradient(150deg, var(--pop) 0%, var(--pop-2) 52%, var(--cool) 100%);
+  background: linear-gradient(150deg, var(--pop) 0%, var(--pop-2) 52%, color-mix(in srgb, var(--cool) 60%, var(--pop-2)) 100%);
   display: grid;
   place-items: center;
   color: #fff;
@@ -520,7 +481,6 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   font-weight: 800;
   letter-spacing: -0.01em;
   overflow: hidden;
-  border: 1px solid var(--glass-edge);
 }
 .photo::before {
   content: "";
@@ -528,16 +488,16 @@ body.has-lava #faq { -webkit-backdrop-filter: var(--blur); backdrop-filter: var(
   inset: 0;
   background-image:
     radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(0,0,0,.18), transparent 55%);
+    radial-gradient(circle at 70% 80%, rgba(0,0,0,.12), transparent 55%);
 }
 .photo > span { position: relative; opacity: .55; }
 
 /* Accordion */
 details.faq-item {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
   padding-block: 22px;
 }
-details.faq-item:last-of-type { border-bottom: 1px solid var(--line); }
+details.faq-item:last-of-type { border-bottom: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); }
 details.faq-item summary {
   list-style: none;
   cursor: pointer;
@@ -556,19 +516,17 @@ details.faq-item summary .toggle {
   flex: 0 0 auto;
   width: 44px; height: 44px;
   border-radius: 999px;
-  border: 1px solid var(--glass-edge);
   display: grid; place-items: center;
   transition: transform .25s ease, background .15s ease, color .15s ease;
   background: var(--glass);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  box-shadow: var(--sheen);
+  box-shadow: var(--sheen), var(--shadow-sm);
 }
 details.faq-item[open] summary .toggle {
   transform: rotate(45deg);
   background: linear-gradient(135deg, var(--pop), var(--pop-2));
   color: #fff;
-  border-color: transparent;
   box-shadow: var(--shadow-pop);
 }
 details.faq-item .a {
@@ -579,16 +537,15 @@ details.faq-item .a {
   opacity: .85;
 }
 
-/* Audience switch (pill) */
+/* Audience switch */
 .audience-switch {
   position: relative;
   display: inline-flex;
   padding: 4px;
   background: var(--glass);
-  border: 1px solid var(--glass-edge);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  box-shadow: var(--sheen);
+  box-shadow: var(--sheen), var(--shadow-sm);
   border-radius: var(--r-pill);
   font-family: var(--font-body);
   font-weight: 700;
@@ -633,10 +590,9 @@ details.faq-item .a {
 }
 .lang__btn {
   background: var(--glass);
-  border: 1px solid var(--glass-edge);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  box-shadow: var(--sheen);
+  box-shadow: var(--sheen), var(--shadow-sm);
   padding: 9px 14px;
   border-radius: var(--r-pill);
   cursor: pointer;
@@ -644,13 +600,13 @@ details.faq-item .a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  border: none;
 }
 .lang__menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
   background: var(--glass-strong);
-  border: 1px solid var(--glass-edge);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   border-radius: var(--r-md);
@@ -672,14 +628,14 @@ details.faq-item .a {
   font: inherit;
   color: var(--ink);
 }
-.lang__menu button:hover { background: var(--bg); }
+.lang__menu button:hover { background: rgba(255,255,255,0.7); }
 .lang__menu button.is-active { background: var(--ink); color: var(--bg); }
 
 /* Intro overlay */
 .intro {
   position: fixed; inset: 0;
   z-index: 100;
-  background: var(--bg);
+  background: #FAF7F4;
   display: grid;
   place-items: center;
   padding: var(--gutter);
@@ -727,10 +683,12 @@ details.faq-item .a {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--bg) 70%, transparent);
-  border-bottom: 1px solid var(--glass-edge-soft);
+  background: rgba(250, 247, 244, 0.72);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.85),
+    0 2px 20px -4px rgba(120,60,160,.07);
 }
 .nav__inner {
   display: flex;
@@ -769,7 +727,7 @@ details.faq-item .a {
 .nav__links a {
   color: var(--ink);
   text-decoration: none;
-  opacity: .8;
+  opacity: .7;
   transition: opacity .2s ease;
 }
 .nav__links a:hover { opacity: 1; }
@@ -833,15 +791,14 @@ details.faq-item .a {
   border-radius: var(--r-lg);
   z-index: 1;
   transform: rotate(4deg);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.45);
+  box-shadow: var(--shadow-lg), inset 0 1.5px 0 rgba(255,255,255,.80);
 }
 .hero__sticker {
   position: absolute;
-  background: var(--glass-strong);
+  background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
-  border: 1px solid var(--glass-edge);
-  -webkit-backdrop-filter: var(--blur);
-  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8);
+  backdrop-filter: blur(32px) saturate(1.8);
   box-shadow: var(--shadow-md), var(--sheen);
   border-radius: var(--r-pill);
   padding: 18px 28px;
@@ -863,7 +820,7 @@ details.faq-item .a {
   border-radius: 50%;
 }
 
-/* HOW IT WORKS — colored grid (Chuckle vibe) */
+/* HOW IT WORKS — liquid glass cards */
 .how-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -871,7 +828,6 @@ details.faq-item .a {
   margin-top: clamp(32px, 5vw, 56px);
 }
 .how-card {
-  border: 1px solid var(--glass-edge);
   border-radius: var(--r-lg);
   padding: clamp(24px, 3vw, 40px);
   min-height: 360px;
@@ -880,42 +836,41 @@ details.faq-item .a {
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(36px) saturate(2);
-  backdrop-filter: blur(36px) saturate(2);
+  -webkit-backdrop-filter: blur(36px) saturate(1.8);
+  backdrop-filter: blur(36px) saturate(1.8);
   box-shadow:
-    0 30px 60px -20px color-mix(in srgb, var(--ink) 38%, transparent),
+    0 24px 56px -16px rgba(120, 60, 160, 0.18),
     var(--sheen);
   transition: transform .22s ease, box-shadow .22s ease;
 }
 .how-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 44px 80px -24px color-mix(in srgb, var(--ink) 48%, transparent), var(--sheen);
+  box-shadow: 0 36px 72px -20px rgba(120, 60, 160, 0.26), var(--sheen);
 }
 .how-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255,255,255,.22) 0%, transparent 60%);
+  background: linear-gradient(145deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.15) 55%, transparent 100%);
   pointer-events: none;
 }
 .how-card:nth-child(1) {
   background: linear-gradient(155deg,
-    color-mix(in srgb, var(--pop) 48%, rgba(255,255,255,.55)),
-    color-mix(in srgb, var(--pop) 18%, rgba(255,255,255,.25)));
+    rgba(255, 62, 142, 0.18),
+    rgba(255, 62, 142, 0.06));
   color: var(--ink);
 }
 .how-card:nth-child(2) {
   background: linear-gradient(155deg,
-    color-mix(in srgb, var(--ink) 72%, rgba(255,255,255,.1)),
-    color-mix(in srgb, var(--ink) 44%, transparent));
-  color: var(--bg);
-  border-color: rgba(255, 255, 255, 0.22);
+    rgba(139, 92, 246, 0.22),
+    rgba(139, 92, 246, 0.07));
+  color: var(--ink);
 }
 .how-card:nth-child(3) {
   background: linear-gradient(155deg,
-    color-mix(in srgb, var(--lilac) 44%, rgba(255,255,255,.5)),
-    color-mix(in srgb, var(--cool) 22%, rgba(255,255,255,.28)));
+    rgba(56, 189, 248, 0.18),
+    rgba(232, 121, 249, 0.10));
   color: var(--ink);
 }
 .how-card__n {
@@ -925,6 +880,9 @@ details.faq-item .a {
   line-height: 1;
   letter-spacing: -0.04em;
 }
+.how-card:nth-child(1) .how-card__n { color: var(--pop); }
+.how-card:nth-child(2) .how-card__n { color: var(--pop-2); }
+.how-card:nth-child(3) .how-card__n { color: var(--cool); }
 .how-card__t {
   font-family: var(--font-display);
   font-weight: 800;
@@ -939,7 +897,7 @@ details.faq-item .a {
   line-height: 1.5;
   margin-top: 14px;
   max-width: 36ch;
-  opacity: .85;
+  opacity: .75;
 }
 
 /* Categories */
@@ -954,26 +912,25 @@ details.faq-item .a {
   align-items: center;
   gap: 10px;
   padding: 16px 22px;
-  border: 1px solid var(--glass-edge);
   border-radius: var(--r-pill);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(16px, 1.6vw, 22px);
-  background: color-mix(in srgb, #ffffff 28%, transparent);
+  background: rgba(255, 255, 255, 0.62);
   color: var(--ink);
   cursor: default;
-  -webkit-backdrop-filter: blur(36px) saturate(2);
-  backdrop-filter: blur(36px) saturate(2);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  backdrop-filter: blur(28px) saturate(1.6);
   box-shadow:
-    0 14px 30px -12px color-mix(in srgb, var(--ink) 30%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 8px 24px -8px rgba(120, 60, 160, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95);
   transition: background .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
 }
 .cat:hover {
   background: var(--ink);
   color: var(--bg);
   transform: translateY(-3px);
-  box-shadow: 0 22px 40px -14px color-mix(in srgb, var(--ink) 55%, transparent);
+  box-shadow: 0 18px 38px -10px rgba(30, 22, 48, 0.28);
 }
 .cat .c {
   font-size: 12px;
@@ -985,7 +942,7 @@ details.faq-item .a {
   font-family: var(--font-body);
   letter-spacing: 0.04em;
 }
-.cat:hover .c { background: var(--pop); color: var(--ink); }
+.cat:hover .c { background: var(--pop); color: #fff; }
 
 /* Places grid */
 .places {
@@ -995,40 +952,39 @@ details.faq-item .a {
   margin-top: clamp(32px, 5vw, 48px);
 }
 .place {
-  border: 1px solid var(--glass-edge);
   border-radius: var(--r-lg);
-  background: color-mix(in srgb, #ffffff 24%, transparent);
+  background: rgba(255, 255, 255, 0.60);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  -webkit-backdrop-filter: blur(36px) saturate(2);
-  backdrop-filter: blur(36px) saturate(2);
+  -webkit-backdrop-filter: blur(36px) saturate(1.8);
+  backdrop-filter: blur(36px) saturate(1.8);
   box-shadow:
-    0 30px 60px -22px color-mix(in srgb, var(--ink) 36%, transparent),
+    0 24px 52px -18px rgba(120, 60, 160, 0.16),
     var(--sheen);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .place:hover {
   transform: translateY(-5px);
   box-shadow:
-    0 44px 80px -24px color-mix(in srgb, var(--ink) 48%, transparent),
+    0 36px 70px -22px rgba(120, 60, 160, 0.24),
     var(--sheen);
 }
 .place__img {
   aspect-ratio: 4 / 3;
   position: relative;
 }
-.place__img.v1 { background: radial-gradient(120% 120% at 28% 22%, #FFC0DC, var(--pop) 45%, var(--tang) 100%); }
-.place__img.v2 { background: radial-gradient(120% 120% at 28% 22%, #CFC2FF, var(--pop-2) 50%, var(--lilac) 100%); }
-.place__img.v3 { background: radial-gradient(120% 120% at 28% 22%, #C7FFF4, var(--cool) 50%, var(--lilac) 100%); }
-.place__img.v4 { background: radial-gradient(120% 120% at 28% 22%, #C8E6FF, var(--lilac) 48%, var(--pop-2) 100%); }
+.place__img.v1 { background: radial-gradient(120% 120% at 28% 22%, #FFD0E8, var(--pop) 45%, var(--tang) 100%); }
+.place__img.v2 { background: radial-gradient(120% 120% at 28% 22%, #CFC2FF, var(--pop-2) 50%, var(--cool) 100%); }
+.place__img.v3 { background: radial-gradient(120% 120% at 28% 22%, #C7FFF4, color-mix(in srgb, var(--cool) 80%, #fff) 50%, var(--lilac) 100%); }
+.place__img.v4 { background: radial-gradient(120% 120% at 28% 22%, #C8E6FF, var(--cool) 48%, var(--pop-2) 100%); }
 .place__img.v5 { background: radial-gradient(120% 120% at 28% 22%, #FFE9B8, var(--sun) 48%, var(--pop) 100%); }
-.place__img.v6 { background: radial-gradient(120% 120% at 28% 22%, #FFC8E6, var(--pop) 48%, var(--pop-2) 100%); }
+.place__img.v6 { background: radial-gradient(120% 120% at 28% 22%, #FFD0E8, var(--pop) 48%, var(--pop-2) 100%); }
 .place__img .tag {
   position: absolute;
   top: 14px; left: 14px;
-  background: var(--ink);
-  color: var(--bg);
+  background: rgba(255,255,255,0.85);
+  color: var(--ink);
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 12px;
@@ -1036,6 +992,7 @@ details.faq-item .a {
   text-transform: uppercase;
   padding: 6px 10px;
   border-radius: var(--r-pill);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 8px rgba(0,0,0,.08);
 }
 .place__img .ph {
   position: absolute;
@@ -1056,7 +1013,7 @@ details.faq-item .a {
   justify-content: space-between;
   gap: 16px;
   flex: 1;
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.60);
 }
 .place__body h3 {
   font-family: var(--font-display);
@@ -1070,11 +1027,11 @@ details.faq-item .a {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 13px;
-  background: color-mix(in srgb, var(--bg) 60%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  background: rgba(255,255,255,0.70);
   padding: 6px 12px;
   border-radius: var(--r-pill);
   white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
 }
 
 /* Stats */
@@ -1082,7 +1039,7 @@ details.faq-item .a {
   background: var(--ink);
   color: var(--bg);
 }
-.stats-section .eyebrow { color: var(--bg); border-color: var(--bg); }
+.stats-section .eyebrow { color: var(--bg); box-shadow: none; background: rgba(255,255,255,0.12); }
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1106,12 +1063,12 @@ details.faq-item .a {
   padding-top: 12px;
 }
 
-/* App / partner-portal section */
+/* App section */
 .app-section {
   background: linear-gradient(135deg, var(--pop), var(--pop-2) 60%, color-mix(in srgb, var(--pop-2) 70%, var(--ink)));
   color: #fff;
 }
-.app-section .eyebrow { color: #fff; }
+.app-section .eyebrow { color: #fff; box-shadow: none; background: rgba(255,255,255,0.18); }
 .app-grid {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
@@ -1142,7 +1099,7 @@ details.faq-item .a {
 .app-stores .btn {
   background: var(--glass-strong);
   color: var(--ink);
-  border: 1px solid var(--glass-edge);
+  border: none;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   box-shadow: var(--shadow-md), var(--sheen);
@@ -1155,8 +1112,7 @@ details.faq-item .a {
   background: var(--ink);
   border-radius: 48px;
   padding: 14px;
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.2);
-  border: 1px solid color-mix(in srgb, #fff 18%, transparent);
+  box-shadow: var(--shadow-lg), inset 0 1.5px 0 rgba(255,255,255,.25);
 }
 .phone__screen {
   background: var(--bg);
@@ -1199,11 +1155,11 @@ details.faq-item .a {
   margin: 14px 22px;
   flex: 1;
   background: var(--white);
-  border: 1.5px solid var(--ink);
   border-radius: 22px;
   display: grid;
   place-items: center;
   position: relative;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 .phone__qr .qr {
   width: 70%;
@@ -1269,7 +1225,7 @@ details.faq-item .a {
 
 /* CTA banner */
 .cta-banner {
-  background: var(--bg-alt);
+  background: transparent;
   text-align: center;
 }
 .cta-banner h2 {
@@ -1308,10 +1264,10 @@ details.faq-item .a {
 .footer ul a:hover { opacity: 1; }
 .footer .newsletter form {
   display: flex;
-  border: 1.5px solid var(--bg);
+  border: 1.5px solid rgba(255,255,255,0.30);
   border-radius: var(--r-pill);
   overflow: hidden;
-  background: color-mix(in srgb, var(--bg) 8%, transparent);
+  background: rgba(255,255,255,0.07);
 }
 .footer .newsletter input {
   flex: 1;
@@ -1324,7 +1280,7 @@ details.faq-item .a {
   font-size: 14px;
   outline: none;
 }
-.footer .newsletter input::placeholder { color: color-mix(in srgb, var(--bg) 50%, transparent); }
+.footer .newsletter input::placeholder { color: color-mix(in srgb, var(--bg) 45%, transparent); }
 .footer .newsletter button {
   background: var(--bg);
   color: var(--ink);
@@ -1358,7 +1314,7 @@ details.faq-item .a {
   gap: 16px;
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid color-mix(in srgb, var(--bg) 20%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--bg) 18%, transparent);
   font-size: 13px;
   opacity: .65;
   flex-wrap: wrap;
@@ -1383,11 +1339,12 @@ details.faq-item .a {
   .stats { grid-template-columns: 1fr 1fr; }
 }
 
-  </style>
+</style>
 </head>
 <body>
   <div id="root"></div>
   <script>
+
 /**
  * @license React
  * react.production.min.js
@@ -3854,6 +3811,2179 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }
   ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
 })();
-  </script>
+ 
+// === i18n.js ===
+(function(){
+// All landing copy in RU / EN / SR (Latin) × Clients / Partners
+// Exposed on window for Babel-transpiled components.
+
+window.AYOO_I18N = {
+  ru: {
+    meta: { langLabel: "RU", langFull: "Русский" },
+    intro: {
+      eyebrow: "★ Программа лояльности",
+      title_l1: "Лучшая программа",
+      title_l2: "лояльности",
+      sub: "Получай баллы и скидки в любимых местах",
+      enter: "Войти",
+    },
+    nav: {
+      about: "О сервисе",
+      how: "Как работает",
+      places: "Места",
+      business: "Для бизнеса",
+      faq: "FAQ",
+      audienceClients: "Клиентам",
+      audiencePartners: "Партнёрам",
+      download: "Скачать",
+      become: "Стать партнёром",
+    },
+    clients: {
+      heroEyebrow: "★ Лояльность № 1",
+      heroTitle: "ayoo",
+      heroSub: "Одна карта — все любимые места. Копи баллы в кафе, ресторанах и магазинах через одно приложение в Telegram. Никаких пластиковых карт.",
+      heroCTA1: "Открыть в Telegram",
+      heroCTA2: "Смотреть места",
+      ticker: ["Прямо в Telegram", "Одна карта на всё", "Баллы за каждую покупку", "Стрики и бонусы", "Бейджи за достижения", "Зови друзей — получай баллы"],
+
+      howEyebrow: "Как это работает",
+      howTitle: "Три шага — и ты в плюсе",
+      howSteps: [
+        { n: "01", t: "Открой ayoo в Telegram", d: "Никаких загрузок из сторов — Mini App открывается прямо в Telegram за пару секунд." },
+        { n: "02", t: "Покажи QR на кассе", d: "Баллы за каждую покупку начисляются автоматически. Никаких пластиковых карт." },
+        { n: "03", t: "Трать баллы на награды", d: "Кофе, скидки, подарки. Держи стрик за регулярные визиты и собирай бейджи." },
+      ],
+
+      catEyebrow: "Категории",
+      catTitle: "Бонусы везде, куда ты ходишь",
+      categories: [
+        { t: "Кафе и кофейни", c: "120+" },
+        { t: "Рестораны", c: "80+" },
+        { t: "Барбершопы", c: "45+" },
+        { t: "Красота и SPA", c: "60+" },
+        { t: "Фитнес и спорт", c: "30+" },
+        { t: "Маркеты", c: "70+" },
+        { t: "Развлечения", c: "25+" },
+        { t: "Авто и сервис", c: "20+" },
+      ],
+
+      placesEyebrow: "Места недели",
+      placesTitle: "Любимые — уже здесь",
+      places: [
+        { t: "Brew Lab", cat: "Кофейня", o: "до 15% баллами" },
+        { t: "Tandyr & Co", cat: "Ресторан", o: "—10% на ужин" },
+        { t: "Sharp Cuts", cat: "Барбершоп", o: "5-я стрижка в подарок" },
+        { t: "Glow Studio", cat: "Красота", o: "—20% на первый визит" },
+        { t: "City Gym", cat: "Фитнес", o: "Месяц за баллы" },
+        { t: "Fresh Market", cat: "Маркет", o: "Кэшбэк 7%" },
+      ],
+
+      statsTitle: "ayoo в цифрах",
+      stats: [
+        { n: "500+", l: "мест-партнёров" },
+        { n: "120K", l: "активных пользователей" },
+        { n: "₽180M", l: "вернули кэшбэком" },
+        { n: "4.8★", l: "рейтинг в сторах" },
+      ],
+
+      appEyebrow: "Telegram Mini App",
+      appTitle: "ayoo живёт в Telegram — там, где ты уже есть",
+      appSub: "Без отдельного приложения и пластиковых карт. Открой Mini App, покажи QR — баллы уже на счету.",
+      appStoreIOS: "Открыть в Telegram",
+      appStoreAndroid: "@ayoo_bot",
+
+      faqTitle: "Частые вопросы",
+      faq: [
+        { q: "Сколько стоит пользоваться ayoo?", a: "Бесплатно. Никаких подписок, скрытых платежей и абонентских." },
+        { q: "Нужно ли что-то скачивать?", a: "Нет. ayoo — это Mini App в Telegram. Открываешь прямо в мессенджере, без App Store и Google Play." },
+        { q: "Как начисляются баллы?", a: "При оплате просто покажи QR-код из Mini App. Баллы прилетают на счёт за пару секунд." },
+        { q: "Где можно тратить баллы?", a: "В любом месте-партнёре ayoo — кафе, рестораны, барбершопы, фитнес, маркеты и сервисы. Список растёт каждую неделю." },
+        { q: "Что если место не подключено?", a: "Напиши нам — мы свяжемся с этим бизнесом и предложим стать партнёром." },
+        { q: "Сгорают ли баллы?", a: "Нет. Баллы живут, пока живёт твой аккаунт." },
+      ],
+
+      footerCTA: "Готов получать больше?",
+      footerCTAbtn: "Открыть в Telegram",
+    },
+
+    partners: {
+      heroEyebrow: "★ Для бизнеса",
+      heroTitle: "ayoo для\u00a0партнёров",
+      heroSub: "Готовая программа лояльности за 5 минут. Подключи заведение через Telegram — без разработки и сложных интеграций.",
+      heroCTA1: "Подключить заведение",
+      heroCTA2: "Кабинет партнёра",
+      ticker: ["Регистрация за 5 минут", "Без договоров и ИТ", "Кабинет в Telegram", "Статистика 24/7", "Акции двух типов"],
+
+      howEyebrow: "Как это работает",
+      howTitle: "Полноценная лояльность за 5 минут",
+      howSteps: [
+        { n: "01", t: "Зарегистрируйся через Telegram", d: "Без договоров, ИТ-отдела и разработчиков. Личный кабинет открывается прямо в Mini App." },
+        { n: "02", t: "Настрой акции", d: "Два типа: % от суммы покупки или баллы за конкретный продукт. Цвет карточки, срок, пауза — всё в твоих руках." },
+        { n: "03", t: "Сканируй QR клиента", d: "Начисляй баллы при сканировании. Добавляй сотрудников — они сканируют без доступа к настройкам." },
+      ],
+
+      catEyebrow: "Кто уже с нами",
+      catTitle: "Подключаем любые категории",
+      categories: [
+        { t: "Кафе и кофейни", c: "120+" },
+        { t: "Рестораны", c: "80+" },
+        { t: "Барбершопы", c: "45+" },
+        { t: "Красота и SPA", c: "60+" },
+        { t: "Фитнес и спорт", c: "30+" },
+        { t: "Маркеты", c: "70+" },
+        { t: "Развлечения", c: "25+" },
+        { t: "Авто и сервис", c: "20+" },
+      ],
+
+      placesEyebrow: "Преимущества",
+      placesTitle: "Почему бизнес выбирает ayoo",
+      places: [
+        { t: "5 минут", cat: "Подключение", o: "Через Telegram, без ИТ" },
+        { t: "Кабинет в Telegram", cat: "Управление", o: "Всё в Mini App" },
+        { t: "2 типа акций", cat: "Гибкость", o: "% от чека или баллы за товар" },
+        { t: "Сотрудники", cat: "Доступы", o: "Сканируют без настроек" },
+        { t: "Статистика 24/7", cat: "Аналитика", o: "Транзакции в реальном времени" },
+        { t: "Настройка карточек", cat: "Бренд", o: "Цвет, срок, пауза" },
+      ],
+
+      statsTitle: "Партнёры ayoo",
+      stats: [
+        { n: "5 мин", l: "на подключение" },
+        { n: "500+", l: "активных партнёров" },
+        { n: "+18%", l: "средний чек" },
+        { n: "×2.3", l: "повторных визитов" },
+      ],
+
+      appEyebrow: "Кабинет партнёра",
+      appTitle: "Весь кабинет — в Telegram Mini App",
+      appSub: "Начисляй баллы, запускай акции, добавляй сотрудников и смотри статистику — всё в одном кабинете.",
+      appStoreIOS: "Открыть кабинет",
+      appStoreAndroid: "@ayoo_business_bot",
+
+      faqTitle: "Частые вопросы",
+      faq: [
+        { q: "Сколько стоит подключение?", a: "Подключение бесплатное. Регистрация и запуск программы лояльности занимают около 5 минут." },
+        { q: "Нужна ли разработка или интеграция с кассой?", a: "Нет. Регистрация идёт через Telegram, кабинет — в Mini App. Достаточно QR-стикера на кассу." },
+        { q: "Какие бывают акции?", a: "Два типа: процент от суммы покупки или баллы за конкретный продукт. Цвет карточки, срок и пауза настраиваются в кабинете." },
+        { q: "Могут ли сотрудники начислять баллы?", a: "Да. Добавь сотрудников — они сканируют QR клиентов, но не имеют доступа к настройкам и статистике." },
+        { q: "Где смотреть статистику?", a: "В личном кабинете Mini App: транзакции и активность клиентов в реальном времени." },
+      ],
+
+      footerCTA: "Готов привести лояльных клиентов?",
+      footerCTAbtn: "Подключить заведение",
+    },
+
+    footer: {
+      tagline: "ayoo работает там, где уже есть твои клиенты — в Telegram.",
+      links: "Ссылки",
+      legal: "Документы",
+      contact: "Контакты",
+      newsletter: "Будь в курсе новых мест",
+      newsPlaceholder: "Твой e-mail",
+      newsBtn: "Подписаться",
+      privacy: "Политика конфиденциальности",
+      terms: "Условия использования",
+      offer: "Публичная оферта",
+      copy: "© 2026 ayoo. Все права защищены.",
+      city: "Город:",
+      cityVal: "Ташкент · Алматы · Москва",
+    },
+  },
+
+  en: {
+    meta: { langLabel: "EN", langFull: "English" },
+    intro: {
+      eyebrow: "★ Loyalty programme",
+      title_l1: "The best loyalty",
+      title_l2: "programme",
+      sub: "Earn points and discounts at the places you already love",
+      enter: "Enter",
+    },
+    nav: {
+      about: "About",
+      how: "How it works",
+      places: "Places",
+      business: "For business",
+      faq: "FAQ",
+      audienceClients: "For you",
+      audiencePartners: "For partners",
+      download: "Download",
+      become: "Become a partner",
+    },
+    clients: {
+      heroEyebrow: "★ Loyalty No.1",
+      heroTitle: "ayoo",
+      heroSub: "One card for all your favourite places. Earn points at cafés, restaurants and shops through a single Telegram app — no plastic cards.",
+      heroCTA1: "Open in Telegram",
+      heroCTA2: "Browse places",
+      ticker: ["Right inside Telegram", "One card for all", "Points on every purchase", "Streaks & bonuses", "Badges for achievements", "Refer friends & earn"],
+
+      howEyebrow: "How it works",
+      howTitle: "Three steps. You win.",
+      howSteps: [
+        { n: "01", t: "Open ayoo in Telegram", d: "No store downloads — the Mini App opens right inside Telegram in a couple of seconds." },
+        { n: "02", t: "Show your QR", d: "Points for every purchase are credited automatically. No plastic cards, ever." },
+        { n: "03", t: "Spend points on rewards", d: "Coffee, discounts, gifts. Keep a streak for regular visits and collect badges." },
+      ],
+
+      catEyebrow: "Categories",
+      catTitle: "Rewards everywhere you go",
+      categories: [
+        { t: "Cafés & coffee", c: "120+" },
+        { t: "Restaurants", c: "80+" },
+        { t: "Barbershops", c: "45+" },
+        { t: "Beauty & SPA", c: "60+" },
+        { t: "Fitness & sport", c: "30+" },
+        { t: "Markets", c: "70+" },
+        { t: "Entertainment", c: "25+" },
+        { t: "Auto services", c: "20+" },
+      ],
+
+      placesEyebrow: "Places of the week",
+      placesTitle: "Your favourites — already here",
+      places: [
+        { t: "Brew Lab", cat: "Coffee", o: "Up to 15% in points" },
+        { t: "Tandyr & Co", cat: "Restaurant", o: "−10% on dinner" },
+        { t: "Sharp Cuts", cat: "Barbershop", o: "5th haircut free" },
+        { t: "Glow Studio", cat: "Beauty", o: "−20% first visit" },
+        { t: "City Gym", cat: "Fitness", o: "A month for points" },
+        { t: "Fresh Market", cat: "Market", o: "7% cashback" },
+      ],
+
+      statsTitle: "ayoo in numbers",
+      stats: [
+        { n: "500+", l: "partner venues" },
+        { n: "120K", l: "active users" },
+        { n: "$2M", l: "returned in cashback" },
+        { n: "4.8★", l: "store rating" },
+      ],
+
+      appEyebrow: "Telegram Mini App",
+      appTitle: "ayoo lives in Telegram — right where you already are",
+      appSub: "No separate app, no plastic cards. Open the Mini App, show your QR — points are already on your balance.",
+      appStoreIOS: "Open in Telegram",
+      appStoreAndroid: "@ayoo_bot",
+
+      faqTitle: "Frequently asked",
+      faq: [
+        { q: "Is ayoo free to use?", a: "Yes. No subscriptions, no hidden fees, no monthly charges." },
+        { q: "Do I need to download anything?", a: "No. ayoo is a Telegram Mini App — it opens right inside the messenger, no App Store or Google Play." },
+        { q: "How do I earn points?", a: "Just show the QR code from the Mini App when you pay. Points land in your account in a couple of seconds." },
+        { q: "Where can I spend points?", a: "At any ayoo partner — cafés, restaurants, barbershops, gyms, markets and services. The list grows every week." },
+        { q: "Do points expire?", a: "No. Your points live as long as your account does." },
+      ],
+
+      footerCTA: "Ready to earn more?",
+      footerCTAbtn: "Open in Telegram",
+    },
+
+    partners: {
+      heroEyebrow: "★ For business",
+      heroTitle: "ayoo for\u00a0partners",
+      heroSub: "A ready-made loyalty programme in 5 minutes. Connect your venue through Telegram — no development, no complex integrations.",
+      heroCTA1: "Connect your venue",
+      heroCTA2: "Partner portal",
+      ticker: ["Sign up in 5 minutes", "No contracts or IT", "Portal inside Telegram", "24/7 analytics", "Two promo types"],
+
+      howEyebrow: "How it works",
+      howTitle: "A full loyalty programme in 5 minutes",
+      howSteps: [
+        { n: "01", t: "Register via Telegram", d: "No contracts, no IT department, no developers. Your portal opens right inside the Mini App." },
+        { n: "02", t: "Set up your promos", d: "Two types: % of the purchase or points for a specific product. Card colour, validity, pause — all yours to control." },
+        { n: "03", t: "Scan the customer's QR", d: "Award points on scan. Add staff — they scan customers without access to settings." },
+      ],
+
+      catEyebrow: "Already onboard",
+      catTitle: "Every category welcome",
+      categories: [
+        { t: "Cafés & coffee", c: "120+" },
+        { t: "Restaurants", c: "80+" },
+        { t: "Barbershops", c: "45+" },
+        { t: "Beauty & SPA", c: "60+" },
+        { t: "Fitness & sport", c: "30+" },
+        { t: "Markets", c: "70+" },
+        { t: "Entertainment", c: "25+" },
+        { t: "Auto services", c: "20+" },
+      ],
+
+      placesEyebrow: "Why ayoo",
+      placesTitle: "What partners love",
+      places: [
+        { t: "Pay per result", cat: "Model", o: "Pay per visit, not per ad" },
+        { t: "1 day", cat: "Onboarding", o: "No POS, no integration" },
+        { t: "+18%", cat: "Avg. ticket", o: "Across partner venues" },
+        { t: "×2.3", cat: "Repeat visits", o: "In the first 3 months" },
+        { t: "24/7 portal", cat: "Analytics", o: "Every customer, every visit" },
+        { t: "5 minutes", cat: "Onboarding", o: "Via Telegram, no IT" },
+        { t: "Portal in Telegram", cat: "Management", o: "Everything in the Mini App" },
+        { t: "2 promo types", cat: "Flexibility", o: "% of ticket or points per item" },
+        { t: "Staff accounts", cat: "Access", o: "They scan, no settings access" },
+        { t: "24/7 analytics", cat: "Analytics", o: "Transactions in real time" },
+        { t: "Card customisation", cat: "Brand", o: "Colour, validity, pause" },
+      ],
+
+      statsTitle: "Partners on ayoo",
+      stats: [
+        { n: "5 min", l: "to onboard" },
+        { n: "500+", l: "active partners" },
+        { n: "+18%", l: "avg. ticket" },
+        { n: "×2.3", l: "repeat visits" },
+      ],
+
+      appEyebrow: "Partner portal",
+      appTitle: "The whole portal — inside Telegram Mini App",
+      appSub: "Award points, launch promos, add staff and track stats — all in one dashboard inside Telegram.",
+      appStoreIOS: "Open portal",
+      appStoreAndroid: "@ayoo_business_bot",
+
+      faqTitle: "Frequently asked",
+      faq: [
+        { q: "How much is onboarding?", a: "Onboarding is free. Registering and launching a loyalty programme takes about 5 minutes." },
+        { q: "Do I need development or POS integration?", a: "No. You register via Telegram and manage everything in the Mini App. A QR sticker on the counter is enough." },
+        { q: "What promo types are there?", a: "Two: a percentage of the purchase, or points for a specific product. Card colour, validity and pause are configurable in the portal." },
+        { q: "Can staff award points?", a: "Yes. Add staff — they scan customer QR codes but have no access to settings or analytics." },
+        { q: "Where do I see analytics?", a: "In the Mini App portal: transactions and customer activity in real time." },
+      ],
+
+      footerCTA: "Ready to fill your venue?",
+      footerCTAbtn: "Connect your venue",
+    },
+
+    footer: {
+      tagline: "ayoo works where your customers already are — in Telegram.",
+      links: "Links",
+      legal: "Legal",
+      contact: "Contact",
+      newsletter: "Stay in the loop with new places",
+      newsPlaceholder: "Your email",
+      newsBtn: "Subscribe",
+      privacy: "Privacy policy",
+      terms: "Terms of service",
+      offer: "Public offer",
+      copy: "© 2026 ayoo. All rights reserved.",
+      city: "Cities:",
+      cityVal: "Tashkent · Almaty · Moscow",
+    },
+  },
+
+  sr: {
+    meta: { langLabel: "SR", langFull: "Srpski" },
+    intro: {
+      eyebrow: "★ Program lojalnosti",
+      title_l1: "Najbolji program",
+      title_l2: "lojalnosti",
+      sub: "Skupljaj poene i popuste na omiljenim mestima",
+      enter: "Uđi",
+    },
+    nav: {
+      about: "O servisu",
+      how: "Kako radi",
+      places: "Mesta",
+      business: "Za biznis",
+      faq: "FAQ",
+      audienceClients: "Za tebe",
+      audiencePartners: "Za partnere",
+      download: "Preuzmi",
+      become: "Postani partner",
+    },
+    clients: {
+      heroEyebrow: "★ Lojalnost br. 1",
+      heroTitle: "ayoo",
+      heroSub: "Jedna kartica za sva omiljena mesta. Skupljaj poene u kafićima, restoranima i prodavnicama kroz jednu aplikaciju u Telegramu — bez plastičnih kartica.",
+      heroCTA1: "Otvori u Telegramu",
+      heroCTA2: "Pogledaj mesta",
+      ticker: ["Direktno u Telegramu", "Jedna kartica za sve", "Poeni za svaku kupovinu", "Nizovi i bonusi", "Bedževi za dostignuća", "Pozovi prijatelje i zaradi"],
+
+      howEyebrow: "Kako radi",
+      howTitle: "Tri koraka — i ti si na dobitku",
+      howSteps: [
+        { n: "01", t: "Otvori ayoo u Telegramu", d: "Bez preuzimanja iz prodavnica — Mini App se otvara direktno u Telegramu za par sekundi." },
+        { n: "02", t: "Pokaži QR na kasi", d: "Poeni za svaku kupovinu se obračunavaju automatski. Nikad više plastičnih kartica." },
+        { n: "03", t: "Troši poene na nagrade", d: "Kafa, popusti, pokloni. Održavaj niz za redovne posete i skupljaj bedževe." },
+      ],
+
+      catEyebrow: "Kategorije",
+      catTitle: "Bonusi gde god da odeš",
+      categories: [
+        { t: "Kafići i kafe", c: "120+" },
+        { t: "Restorani", c: "80+" },
+        { t: "Berbernice", c: "45+" },
+        { t: "Lepota i SPA", c: "60+" },
+        { t: "Fitnes i sport", c: "30+" },
+        { t: "Marketi", c: "70+" },
+        { t: "Zabava", c: "25+" },
+        { t: "Auto servisi", c: "20+" },
+      ],
+
+      placesEyebrow: "Mesta nedelje",
+      placesTitle: "Omiljena — već su ovde",
+      places: [
+        { t: "Brew Lab", cat: "Kafić", o: "do 15% u poenima" },
+        { t: "Tandyr & Co", cat: "Restoran", o: "−10% na večeru" },
+        { t: "Sharp Cuts", cat: "Berbernica", o: "5. šišanje gratis" },
+        { t: "Glow Studio", cat: "Lepota", o: "−20% prva poseta" },
+        { t: "City Gym", cat: "Fitnes", o: "Mesec za poene" },
+        { t: "Fresh Market", cat: "Market", o: "7% keš-bek" },
+      ],
+
+      statsTitle: "ayoo u brojkama",
+      stats: [
+        { n: "500+", l: "partnerskih mesta" },
+        { n: "120K", l: "aktivnih korisnika" },
+        { n: "€2M", l: "vraćeno kroz keš-bek" },
+        { n: "4.8★", l: "ocena u prodavnicama" },
+      ],
+
+      appEyebrow: "Telegram Mini App",
+      appTitle: "ayoo živi u Telegramu — tamo gde si već ti",
+      appSub: "Bez zasebne aplikacije i plastičnih kartica. Otvori Mini App, pokaži QR — poeni su već na tvom računu.",
+      appStoreIOS: "Otvori u Telegramu",
+      appStoreAndroid: "@ayoo_bot",
+
+      faqTitle: "Česta pitanja",
+      faq: [
+        { q: "Koliko košta korišćenje ayoo?", a: "Besplatno. Bez pretplata, skrivenih troškova i mesečnih naknada." },
+        { q: "Da li treba nešto da preuzmem?", a: "Ne. ayoo je Telegram Mini App — otvara se direktno u mesendžeru, bez App Store ili Google Play." },
+        { q: "Kako se skupljaju poeni?", a: "Pri plaćanju samo pokaži QR kod iz Mini App-a. Poeni stižu na račun za par sekundi." },
+        { q: "Gde mogu da trošim poene?", a: "Kod svakog ayoo partnera — kafići, restorani, berbernice, fitnes, marketi i servisi. Lista raste svake nedelje." },
+        { q: "Da li poeni ističu?", a: "Ne. Tvoji poeni žive dokle god živi tvoj nalog." },
+      ],
+
+      footerCTA: "Spreman da zaradiš više?",
+      footerCTAbtn: "Otvori u Telegramu",
+    },
+
+    partners: {
+      heroEyebrow: "★ Za biznis",
+      heroTitle: "ayoo za\u00a0partnere",
+      heroSub: "Gotov program lojalnosti za 5 minuta. Poveži svoj objekat preko Telegrama — bez razvoja i složenih integracija.",
+      heroCTA1: "Poveži objekat",
+      heroCTA2: "Partnerski kabinet",
+      ticker: ["Registracija za 5 minuta", "Bez ugovora i IT-a", "Kabinet u Telegramu", "Statistika 24/7", "Dva tipa akcija"],
+
+      howEyebrow: "Kako radi",
+      howTitle: "Potpun program lojalnosti za 5 minuta",
+      howSteps: [
+        { n: "01", t: "Registruj se preko Telegrama", d: "Bez ugovora, IT-odeljenja i programera. Lični kabinet se otvara direktno u Mini App-u." },
+        { n: "02", t: "Podesi akcije", d: "Dva tipa: % od iznosa kupovine ili poeni za određeni proizvod. Boja kartice, rok, pauza — sve je u tvojim rukama." },
+        { n: "03", t: "Skeniraj QR klijenta", d: "Dodeljuj poene pri skeniranju. Dodaj zaposlene — oni skeniraju bez pristupa podešavanjima." },
+      ],
+
+      catEyebrow: "Već su sa nama",
+      catTitle: "Povezujemo sve kategorije",
+      categories: [
+        { t: "Kafići i kafe", c: "120+" },
+        { t: "Restorani", c: "80+" },
+        { t: "Berbernice", c: "45+" },
+        { t: "Lepota i SPA", c: "60+" },
+        { t: "Fitnes i sport", c: "30+" },
+        { t: "Marketi", c: "70+" },
+        { t: "Zabava", c: "25+" },
+        { t: "Auto servisi", c: "20+" },
+      ],
+
+      placesEyebrow: "Prednosti",
+      placesTitle: "Zašto biznis bira ayoo",
+      places: [
+        { t: "5 minuta", cat: "Povezivanje", o: "Preko Telegrama, bez IT-a" },
+        { t: "Kabinet u Telegramu", cat: "Upravljanje", o: "Sve u Mini App-u" },
+        { t: "2 tipa akcija", cat: "Fleksibilnost", o: "% od računa ili poeni za proizvod" },
+        { t: "Zaposleni", cat: "Pristup", o: "Skeniraju bez podešavanja" },
+        { t: "Statistika 24/7", cat: "Analitika", o: "Transakcije u realnom vremenu" },
+        { t: "Podešavanje kartica", cat: "Brend", o: "Boja, rok, pauza" },
+      ],
+
+      statsTitle: "ayoo partneri",
+      stats: [
+        { n: "5 min", l: "za povezivanje" },
+        { n: "500+", l: "aktivnih partnera" },
+        { n: "+18%", l: "prosečan račun" },
+        { n: "×2.3", l: "ponovljenih poseta" },
+      ],
+
+      appEyebrow: "Partnerski kabinet",
+      appTitle: "Ceo kabinet — u Telegram Mini App-u",
+      appSub: "Dodeljuj poene, pokreći akcije, dodaj zaposlene i prati statistiku — sve u jednom kabinetu u Telegramu.",
+      appStoreIOS: "Otvori kabinet",
+      appStoreAndroid: "@ayoo_business_bot",
+
+      faqTitle: "Česta pitanja",
+      faq: [
+        { q: "Koliko košta povezivanje?", a: "Povezivanje je besplatno. Registracija i pokretanje programa lojalnosti traju oko 5 minuta." },
+        { q: "Da li je potreban razvoj ili integracija sa kasom?", a: "Ne. Registracija ide preko Telegrama, kabinet — u Mini App-u. Dovoljan je QR sticker na kasi." },
+        { q: "Koje akcije postoje?", a: "Dva tipa: procenat od iznosa kupovine ili poeni za određeni proizvod. Boja kartice, rok i pauza se podešavaju u kabinetu." },
+        { q: "Mogu li zaposleni da dodeljuju poene?", a: "Da. Dodaj zaposlene — oni skeniraju QR klijenata, ali nemaju pristup podešavanjima i statistici." },
+        { q: "Gde gledam statistiku?", a: "U ličnom kabinetu Mini App-a: transakcije i aktivnost klijenata u realnom vremenu." },
+      ],
+
+      footerCTA: "Spreman da dovedeš lojalne klijente?",
+      footerCTAbtn: "Poveži objekat",
+    },
+
+    footer: {
+      tagline: "ayoo radi tamo gde su tvoji klijenti već — u Telegramu.",
+      links: "Linkovi",
+      legal: "Dokumenti",
+      contact: "Kontakt",
+      newsletter: "Budi u toku sa novim mestima",
+      newsPlaceholder: "Tvoj e-mail",
+      newsBtn: "Pretplati se",
+      privacy: "Politika privatnosti",
+      terms: "Uslovi korišćenja",
+      offer: "Javna ponuda",
+      copy: "© 2026 ayoo. Sva prava zadržana.",
+      city: "Gradovi:",
+      cityVal: "Beograd · Novi Sad · Niš",
+    },
+  },
+};
+
+})();
+
+// === logo.jsx ===
+(function(){
+// ayoo logo — inline SVG, uses currentColor so it adapts to light/dark backgrounds.
+// Card frame + flourish from the brand mark; wordmark rendered in the display font.
+
+function Logo({
+  height = 30,
+  color,
+  title = "ayoo",
+  style
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 889.3 404.81",
+    role: "img",
+    "aria-label": title,
+    style: {
+      height,
+      width: "auto",
+      color: color || "currentColor",
+      display: "block",
+      ...style
+    }
+  }, /*#__PURE__*/React.createElement("g", {
+    fill: "currentColor"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M170.22,361.11l10.07,10.42,8.95,9.1c.32.32,2.41-.05,2.81-.25s-.37,1.35-.6,1.74c-.31.52-.89.46-2.07.37l-8.01-.39-52.93-52.98c-2.58.12-2.55-1.48-.39-1.56,3.34-.48,7.86-.66,9.56,1.07l12.13,12.4,5.03,4.42,10.47,11.02,4.99,4.66Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M866.41,159.43l-43.57-43.45c-3.35.54-4.87-1.93-5.31-5.37l-5.42-5.52-.18-9.37,40.29,40.3,14.41,14.01-.21,9.39Z"
+  }), /*#__PURE__*/React.createElement("polygon", {
+    points: "866.6 132.79 812.11 78.32 812.15 69.29 866.7 123.68 866.6 132.79"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M178.36,389.03l-7.33,2.89c-1.29-.49.23-4.5,1.89-4.89l3.84-.89c.8-.19,1.94,2.62,1.6,2.9Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M108.15,318.16c-.87,4-7.61,2.11-7.09-.61.45-2.37,7.62-1.77,7.09.61Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M147.18,404.65c-19.15,0-37.65-5.58-50.81-18.6l-75.67-74.82-7.37-9.73c-5.06-6.89-8.62-14.8-11-22.91l1.11-2.52c.16-.36-.75-.33-2.04-.42l-1.4-18.5L.21,72.23c.02-21.46,11.52-40.38,27.02-53.85S60.03,0,79.71,0l670.94.03c10.82,0,20.3,2.39,28.38,8.04,5.55,3.88,11.11,7.47,16.52,12.87l69.89,69.86c15.33,15.32,23.86,34.62,23.86,56.75v179.38c0,44.7-35.78,77.88-79.63,77.87l-662.49-.17ZM796.89,260.59l-.05-187.92c0-2.71-1.54-7.49-2.41-9.74l-4.74-12.2c-11.57-19.84-32.87-29.29-55.92-27.45l-660.11.1c-13.04,0-25.79,7.6-34.27,15.46s-12.61,17.81-15.88,29.14l.02,199.65c5.34,23.19,22.51,40.68,45.92,43.73l11.08.46,63.44.18h593.77c31.09,2.06,56.53-19.64,59.14-51.4ZM866.6,132.79l.1-9.11-54.55-54.39-.04,9.03,54.49,54.47ZM866.41,159.43l.21-9.39-14.41-14.01-40.29-40.3.18,9.37,5.42,5.52c.44,3.44,1.96,5.91,5.31,5.37l43.57,43.45ZM861.61,350.21l3.8-5.97-58.91-58.84c-1.35,2-2.18,4.84-2.08,7.19l37.64,37.55,19.56,20.08ZM791.34,307.19l-5.1,5.1,59.53,59.53,5.1-5.1-59.53-59.53ZM108.15,318.16c.52-2.39-6.64-2.99-7.09-.61-.52,2.72,6.22,4.61,7.09.61ZM827.45,382.69c.26-2.43-.72-4.21-2.27-5.77l-52.43-52.5c-2.74-2.74-6.02-2.5-8.8.48l53.59,53.61c1.09,1.3,1.98,2.98,3.08,2.92l5.43-.28c-.33.31-1.76,1.6-1.76,1.65,0,.13,2.94,1.95,3.16-.1ZM164.68,384.02l-29.35-29.5c.31-1.5.7-3.17.04-3.73l-2.7-2.26-6.53-3.86c-9.38-5.54-14.7-19.9-24.61-17.59-.5-.18-1.85-.8-2.04-.36l-.89,2.06c-.19.44,1.92.77,2.58.84l46.98,46.88c2.52,4.56,6.91,6.78,12.32,5.61l-2.61,3.51,6.81-1.6ZM170.22,361.11l-4.99-4.66-10.47-11.02-5.03-4.42-12.13-12.4c-1.69-1.73-6.22-1.55-9.56-1.07-2.16.08-2.18,1.68.39,1.56l52.93,52.98,8.01.39c1.18.09,1.76.15,2.07-.37.23-.39,1-1.94.6-1.74s-2.5.58-2.81.25l-8.95-9.1-10.07-10.42ZM178.36,389.03c.34-.27-.8-3.08-1.6-2.9l-3.84.89c-1.65.39-3.18,4.4-1.89,4.89l7.33-2.89Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M164.68,384.02l-6.81,1.6,2.61-3.51c-5.42,1.17-9.8-1.05-12.32-5.61l-46.98-46.88c-.65-.08-2.77-.4-2.58-.84l.89-2.06c.19-.44,1.54.18,2.04.36,9.91-2.31,15.23,12.05,24.61,17.59l6.53,3.86,2.7,2.26c.66.55.27,2.23-.04,3.73l29.35,29.5Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M742.58,299.39l-665.14-.06c-22.19-1.92-38.99-16.06-40.87-38.57l-.06-185.01c1.23-19.43,14.91-35.28,34.08-38.2l678.23.02c17.81,2.12,30.4,15.59,34.08,33.32l-.08,195.52c-5.17,19.64-19.9,30.71-40.25,32.99ZM747.95,292.28c19.04-3.28,31.08-20.31,29-39.1l-.03-181.2c-3.17-14.68-12.95-24.81-27.42-28.5H69.26c-14.83,5.02-26.36,16.36-26.35,32.44l.15,184.72c.02,19.64,17.63,31.7,35.6,31.69l669.29-.06Z"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "814.95",
+    y: "297.41",
+    width: "7.22",
+    height: "84.19",
+    transform: "translate(-.32 678.25) rotate(-45)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M827.45,382.69c-.22,2.06-3.15.23-3.16.1,0-.04,1.43-1.34,1.76-1.65l-5.43.28c-1.1.06-1.99-1.62-3.08-2.92l-53.59-53.61c2.78-2.97,6.06-3.22,8.8-.48l52.43,52.5c1.55,1.56,2.53,3.34,2.27,5.77Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M861.61,350.21l-19.56-20.08-37.64-37.55c-.11-2.35.73-5.19,2.08-7.19l58.91,58.84-3.8,5.97Z"
+  })), /*#__PURE__*/React.createElement("text", {
+    x: "430",
+    y: "236",
+    textAnchor: "middle",
+    fill: "currentColor",
+    style: {
+      fontFamily: "var(--font-display)",
+      fontWeight: 900,
+      fontSize: "220px",
+      letterSpacing: "-0.04em"
+    }
+  }, "ayoo"));
+}
+window.Logo = Logo;
+})();
+
+// === sections.jsx ===
+(function(){
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+// ayoo landing — section components
+// All sections take (copy, lang) where copy is i18n[lang][audience]
+
+const {
+  useState,
+  useEffect,
+  useRef
+} = React;
+
+// ─────────────────────────────────────────────────────────────
+// Intro overlay — full-screen tagline that lifts away on enter
+// ─────────────────────────────────────────────────────────────
+function IntroOverlay({
+  copy,
+  onEnter
+}) {
+  const [leaving, setLeaving] = useState(false);
+  const [autoLeft, setAutoLeft] = useState(false);
+  useEffect(() => {
+    // auto-dismiss after 3.4s
+    const t = setTimeout(() => {
+      if (!autoLeft) {
+        setLeaving(true);
+        setAutoLeft(true);
+        setTimeout(onEnter, 900);
+      }
+    }, 3400);
+    return () => clearTimeout(t);
+  }, [autoLeft, onEnter]);
+  const handleEnter = () => {
+    if (leaving) return;
+    setLeaving(true);
+    setTimeout(onEnter, 700);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "intro" + (leaving ? " is-leaving" : ""),
+    onClick: handleEnter
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "intro__inner"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "intro__star"
+  }, "\u2731"), /*#__PURE__*/React.createElement("h1", null, copy.title_l1, " ", /*#__PURE__*/React.createElement("span", {
+    className: "ink2"
+  }, copy.title_l2)), /*#__PURE__*/React.createElement("p", null, copy.sub), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn--pop",
+    onClick: handleEnter
+  }, copy.enter, " ", /*#__PURE__*/React.createElement(Arrow, null))));
+}
+function Arrow() {
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "arr",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.4",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5 12h14M13 5l7 7-7 7"
+  }));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Lava-lamp animated background
+// ─────────────────────────────────────────────────────────────
+function LavaBg() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "lava",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("svg", {
+    style: {
+      position: 'absolute',
+      width: 0,
+      height: 0,
+      overflow: 'hidden'
+    },
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
+    id: "blob-grain",
+    x: "-5%",
+    y: "-5%",
+    width: "110%",
+    height: "110%",
+    colorInterpolationFilters: "sRGB"
+  }, /*#__PURE__*/React.createElement("feTurbulence", {
+    type: "fractalNoise",
+    baseFrequency: "0.68",
+    numOctaves: "3",
+    stitchTiles: "stitch",
+    result: "noise"
+  }), /*#__PURE__*/React.createElement("feColorMatrix", {
+    type: "saturate",
+    values: "0",
+    in: "noise",
+    result: "gray"
+  }), /*#__PURE__*/React.createElement("feBlend", {
+    in: "SourceGraphic",
+    in2: "gray",
+    mode: "overlay"
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "lava__blob b1"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "lava__blob b2"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "lava__blob b3"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "lava__blob b4"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "lava__blob b5"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "lava__grain"
+  }));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Top nav
+// ─────────────────────────────────────────────────────────────
+function TopNav({
+  t,
+  lang,
+  setLang,
+  audience,
+  setAudience
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const swRef = useRef(null);
+  const [pill, setPill] = useState({
+    left: 4,
+    width: 0
+  });
+  useEffect(() => {
+    if (!swRef.current) return;
+    const active = swRef.current.querySelector("button.is-active");
+    if (active) {
+      const r = active.getBoundingClientRect();
+      const p = swRef.current.getBoundingClientRect();
+      setPill({
+        left: r.left - p.left,
+        width: r.width
+      });
+    }
+  }, [audience, lang]);
+  return /*#__PURE__*/React.createElement("header", {
+    className: "nav"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container nav__inner"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#",
+    className: "nav__logo",
+    onClick: e => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    },
+    "aria-label": "ayoo"
+  }, /*#__PURE__*/React.createElement(Logo, {
+    height: 30
+  })), /*#__PURE__*/React.createElement("nav", {
+    className: "nav__links"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#how"
+  }, t.nav.how), /*#__PURE__*/React.createElement("a", {
+    href: "#cats"
+  }, t.nav.places), /*#__PURE__*/React.createElement("a", {
+    href: "#business"
+  }, t.nav.business), /*#__PURE__*/React.createElement("a", {
+    href: "#faq"
+  }, t.nav.faq)), /*#__PURE__*/React.createElement("div", {
+    className: "nav__right"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "audience-switch",
+    ref: swRef
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "audience-switch__pill",
+    style: {
+      left: pill.left,
+      width: pill.width
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    className: audience === "clients" ? "is-active" : "",
+    onClick: () => setAudience("clients")
+  }, t.nav.audienceClients), /*#__PURE__*/React.createElement("button", {
+    className: audience === "partners" ? "is-active" : "",
+    onClick: () => setAudience("partners")
+  }, t.nav.audiencePartners)), /*#__PURE__*/React.createElement("div", {
+    className: "lang"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "lang__btn",
+    onClick: () => setMenuOpen(o => !o)
+  }, t.meta.langLabel, /*#__PURE__*/React.createElement("svg", {
+    width: "10",
+    height: "10",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "3",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M6 9l6 6 6-6"
+  }))), menuOpen && /*#__PURE__*/React.createElement("div", {
+    className: "lang__menu",
+    onMouseLeave: () => setMenuOpen(false)
+  }, ["ru", "en", "sr"].map(l => /*#__PURE__*/React.createElement("button", {
+    key: l,
+    className: lang === l ? "is-active" : "",
+    onClick: () => {
+      setLang(l);
+      setMenuOpen(false);
+    }
+  }, window.AYOO_I18N[l].meta.langFull)))), /*#__PURE__*/React.createElement("a", {
+    href: "#cta",
+    className: "btn"
+  }, audience === "clients" ? t.nav.download : t.nav.become, /*#__PURE__*/React.createElement(Arrow, null)))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Hero — massive wordmark + photo card + sticker
+// ─────────────────────────────────────────────────────────────
+function Hero({
+  copy
+}) {
+  const titleChars = copy.heroTitle.split("");
+  return /*#__PURE__*/React.createElement("section", {
+    className: "hero section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hero__eyebrow-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, copy.heroEyebrow), /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow",
+    style: {
+      background: "var(--ink)",
+      color: "var(--bg)"
+    }
+  }, "\u2605 2026")), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__wordmark",
+    "aria-label": copy.heroTitle
+  }, titleChars.map((ch, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: i === titleChars.length - 1 ? "pop-letter" : ""
+  }, ch))), /*#__PURE__*/React.createElement("div", {
+    className: "hero__sub-row"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "hero__sub"
+  }, copy.heroSub), /*#__PURE__*/React.createElement("div", {
+    className: "hero__ctas"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#cta",
+    className: "btn"
+  }, copy.heroCTA1, " ", /*#__PURE__*/React.createElement(Arrow, null)), /*#__PURE__*/React.createElement("a", {
+    href: "#cats",
+    className: "btn btn--ghost"
+  }, copy.heroCTA2)))), /*#__PURE__*/React.createElement("div", {
+    className: "hero__art photo",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("span", null, "\u0444\u043E\u0442\u043E")), /*#__PURE__*/React.createElement("div", {
+    className: "hero__sticker"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  }), copy.ticker[0]));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Marquee — tilted ticker band
+// ─────────────────────────────────────────────────────────────
+function Marquee({
+  items,
+  inverted,
+  tilt = 0
+}) {
+  const repeated = [...items, ...items, ...items, ...items];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "marquee" + (inverted ? " marquee--inverted" : ""),
+    style: tilt ? {
+      transform: `rotate(${tilt}deg)`,
+      marginTop: "-24px",
+      marginBottom: "-24px"
+    } : null
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "marquee__track"
+  }, /*#__PURE__*/React.createElement("span", null, repeated.map((it, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    style: {
+      marginRight: 48
+    }
+  }, it))), /*#__PURE__*/React.createElement("span", null, repeated.map((it, i) => /*#__PURE__*/React.createElement("span", {
+    key: "b" + i,
+    style: {
+      marginRight: 48
+    }
+  }, it)))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// How it works — 3 chunky colored cards
+// ─────────────────────────────────────────────────────────────
+function HowItWorks({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section",
+    id: "how"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "end",
+      justifyContent: "space-between",
+      gap: 24,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, copy.howEyebrow), /*#__PURE__*/React.createElement("h2", {
+    className: "h-display",
+    style: {
+      fontSize: "clamp(48px, 6vw, 96px)",
+      marginTop: 18
+    }
+  }, copy.howTitle))), /*#__PURE__*/React.createElement("div", {
+    className: "how-grid"
+  }, copy.howSteps.map((s, i) => /*#__PURE__*/React.createElement("div", {
+    className: "how-card",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "how-card__n"
+  }, s.n), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "how-card__t"
+  }, s.t), /*#__PURE__*/React.createElement("div", {
+    className: "how-card__d"
+  }, s.d)))))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Categories — pill chips
+// ─────────────────────────────────────────────────────────────
+function Categories({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section",
+    id: "cats",
+    style: {
+      background: "var(--bg-alt)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, copy.catEyebrow), /*#__PURE__*/React.createElement("h2", {
+    className: "h-display",
+    style: {
+      fontSize: "clamp(48px, 6vw, 96px)",
+      marginTop: 18,
+      maxWidth: "16ch"
+    }
+  }, copy.catTitle), /*#__PURE__*/React.createElement("div", {
+    className: "cats"
+  }, copy.categories.map((c, i) => /*#__PURE__*/React.createElement("div", {
+    className: "cat",
+    key: i
+  }, c.t, " ", /*#__PURE__*/React.createElement("span", {
+    className: "c"
+  }, c.c))))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Places / Benefits — image card grid
+// ─────────────────────────────────────────────────────────────
+function PlacesGrid({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, copy.placesEyebrow), /*#__PURE__*/React.createElement("h2", {
+    className: "h-display",
+    style: {
+      fontSize: "clamp(48px, 6vw, 96px)",
+      marginTop: 18,
+      maxWidth: "20ch"
+    }
+  }, copy.placesTitle), /*#__PURE__*/React.createElement("div", {
+    className: "places"
+  }, copy.places.map((p, i) => /*#__PURE__*/React.createElement("div", {
+    className: "place",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "place__img v" + (i % 6 + 1)
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "tag"
+  }, p.cat), /*#__PURE__*/React.createElement("span", {
+    className: "ph"
+  }, p.t.slice(0, 1))), /*#__PURE__*/React.createElement("div", {
+    className: "place__body"
+  }, /*#__PURE__*/React.createElement("h3", null, p.t), /*#__PURE__*/React.createElement("span", {
+    className: "o"
+  }, p.o)))))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Stats — big numbers on dark
+// ─────────────────────────────────────────────────────────────
+function Stats({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section stats-section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, "\u2605 ayoo"), /*#__PURE__*/React.createElement("h2", {
+    className: "h-display",
+    style: {
+      fontSize: "clamp(48px, 6vw, 96px)",
+      marginTop: 18,
+      color: "var(--bg)"
+    }
+  }, copy.statsTitle), /*#__PURE__*/React.createElement("div", {
+    className: "stats"
+  }, copy.stats.map((s, i) => /*#__PURE__*/React.createElement("div", {
+    className: "stat",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "stat__n"
+  }, s.n), /*#__PURE__*/React.createElement("div", {
+    className: "stat__l"
+  }, s.l))))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// App / Partner-portal — phone mockup + copy
+// ─────────────────────────────────────────────────────────────
+function AppSection({
+  copy,
+  audience
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section app-section",
+    id: "business"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "app-grid"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "app-copy"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, copy.appEyebrow), /*#__PURE__*/React.createElement("h2", null, copy.appTitle), /*#__PURE__*/React.createElement("p", null, copy.appSub), /*#__PURE__*/React.createElement("div", {
+    className: "app-stores"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#",
+    className: "btn"
+  }, /*#__PURE__*/React.createElement(StoreIcon, {
+    kind: "telegram"
+  }), copy.appStoreIOS), /*#__PURE__*/React.createElement("a", {
+    href: "#",
+    className: "btn"
+  }, /*#__PURE__*/React.createElement(StoreIcon, {
+    kind: "at"
+  }), copy.appStoreAndroid))), /*#__PURE__*/React.createElement(PhoneMock, {
+    audience: audience
+  }))));
+}
+function StoreIcon({
+  kind
+}) {
+  const s = {
+    width: 18,
+    height: 18
+  };
+  if (kind === "telegram") return /*#__PURE__*/React.createElement("svg", _extends({}, s, {
+    viewBox: "0 0 24 24",
+    fill: "currentColor"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21.94 4.6c.2-.86-.66-1.55-1.46-1.2L2.9 10.7c-.86.34-.8 1.6.1 1.86l4.4 1.27 1.7 5.18c.2.6.96.78 1.4.32l2.46-2.5 4.46 3.28c.6.44 1.46.12 1.62-.6L21.94 4.6zM8.2 13.2l8.5-5.2-6.9 6.5c-.16.16-.27.37-.3.6l-.26 2.1-1.04-4z"
+  }));
+  if (kind === "at") return /*#__PURE__*/React.createElement("svg", _extends({}, s, {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-3.6 7.2"
+  }));
+  if (kind === "globe") return /*#__PURE__*/React.createElement("svg", _extends({}, s, {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "9"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"
+  }));
+  return /*#__PURE__*/React.createElement("svg", _extends({}, s, {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "6",
+    y: "3",
+    width: "12",
+    height: "18",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M10 18h4"
+  }));
+}
+function PhoneMock({
+  audience
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "phone"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "phone__notch"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "phone__screen"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "phone__hero"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "balance"
+  }, audience === "clients" ? "Твои баллы" : "Сегодня в кабинете"), /*#__PURE__*/React.createElement("div", {
+    className: "pts"
+  }, audience === "clients" ? "2 480" : "+184")), /*#__PURE__*/React.createElement("div", {
+    className: "phone__qr"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "qr"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "label"
+  }, audience === "clients" ? "Покажи на кассе" : "Визиты сегодня")), /*#__PURE__*/React.createElement("div", {
+    className: "phone__nav"
+  }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// FAQ
+// ─────────────────────────────────────────────────────────────
+function FAQ({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section",
+    id: "faq",
+    style: {
+      background: "var(--bg-alt)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "faq-grid"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, "FAQ"), /*#__PURE__*/React.createElement("h2", null, copy.faqTitle)), /*#__PURE__*/React.createElement("div", null, copy.faq.map((item, i) => /*#__PURE__*/React.createElement("details", {
+    className: "faq-item",
+    key: i,
+    open: i === 0
+  }, /*#__PURE__*/React.createElement("summary", null, item.q, /*#__PURE__*/React.createElement("span", {
+    className: "toggle"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.4",
+    strokeLinecap: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 5v14M5 12h14"
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "a"
+  }, item.a)))))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// CTA banner
+// ─────────────────────────────────────────────────────────────
+function CTABanner({
+  copy
+}) {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "section cta-banner",
+    id: "cta"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("h2", null, copy.footerCTA), /*#__PURE__*/React.createElement("a", {
+    href: "#",
+    className: "btn btn--pop",
+    style: {
+      fontSize: 18,
+      padding: "20px 32px"
+    }
+  }, copy.footerCTAbtn, " ", /*#__PURE__*/React.createElement(Arrow, null))));
+}
+
+// ─────────────────────────────────────────────────────────────
+// Footer
+// ─────────────────────────────────────────────────────────────
+function Footer({
+  t
+}) {
+  return /*#__PURE__*/React.createElement("footer", {
+    className: "footer"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "footer-grid"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement(Logo, {
+    height: 40
+  })), /*#__PURE__*/React.createElement("p", {
+    style: {
+      maxWidth: 280,
+      lineHeight: 1.4,
+      margin: 0,
+      opacity: .8
+    }
+  }, t.footer.tagline), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 22,
+      fontSize: 13,
+      opacity: .65
+    }
+  }, /*#__PURE__*/React.createElement("strong", {
+    style: {
+      display: "block",
+      textTransform: "uppercase",
+      letterSpacing: "0.1em",
+      fontSize: 11,
+      opacity: .8,
+      marginBottom: 6
+    }
+  }, t.footer.city), t.footer.cityVal)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, t.footer.links), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#how"
+  }, t.nav.how)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#cats"
+  }, t.nav.places)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#business"
+  }, t.nav.business)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#faq"
+  }, t.nav.faq)))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", null, t.footer.legal), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, t.footer.privacy)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, t.footer.terms)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+    href: "#"
+  }, t.footer.offer)))), /*#__PURE__*/React.createElement("div", {
+    className: "newsletter"
+  }, /*#__PURE__*/React.createElement("h4", null, t.footer.newsletter), /*#__PURE__*/React.createElement("form", {
+    onSubmit: e => e.preventDefault()
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    placeholder: t.footer.newsPlaceholder
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "submit"
+  }, t.footer.newsBtn, " \u2192")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 18,
+      fontSize: 13,
+      opacity: .65
+    }
+  }, "hello@ayoo.app \xB7 @ayoo"))), /*#__PURE__*/React.createElement("div", {
+    className: "footer__mega",
+    "aria-hidden": "true"
+  }, "ayoo", /*#__PURE__*/React.createElement("span", {
+    className: "dot"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "footer__base"
+  }, /*#__PURE__*/React.createElement("span", null, t.footer.copy), /*#__PURE__*/React.createElement("span", null, "Made with \u2731 in Tashkent"))));
+}
+
+// expose all
+Object.assign(window, {
+  IntroOverlay,
+  TopNav,
+  Hero,
+  Marquee,
+  HowItWorks,
+  Categories,
+  PlacesGrid,
+  Stats,
+  AppSection,
+  FAQ,
+  CTABanner,
+  Footer,
+  Arrow,
+  LavaBg
+});
+})();
+
+// === tweaks-panel.jsx ===
+(function(){
+/* BEGIN USAGE */
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+// Exports (to window): useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSlider,
+//   TweakToggle, TweakRadio, TweakSelect, TweakText, TweakNumber, TweakColor, TweakButton.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// TweakRadio is the segmented control for 2–3 short options (auto-falls-back to
+// TweakSelect past ~16/~10 chars per label); reach for TweakSelect directly when
+// options are many or long. For color tweaks always curate 3-4 options rather than
+// a free picker; an option can also be a whole 2–5 color palette (the stored value
+// is the array). The Tweak* controls are a floor, not a ceiling — build custom
+// controls inside the panel if a tweak calls for UI they don't cover.
+/* END USAGE */
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null ? keyOrEdits : {
+      [keyOrEdits]: val
+    };
+    setValues(prev => ({
+      ...prev,
+      ...edits
+    }));
+    window.parent.postMessage({
+      type: '__edit_mode_set_keys',
+      edits
+    }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', {
+      detail: edits
+    }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({
+  title = 'Tweaks',
+  children
+}) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({
+    x: 16,
+    y: 16
+  });
+  const PAD = 16;
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth,
+      h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y))
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+  React.useEffect(() => {
+    const onMsg = e => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({
+      type: '__edit_mode_available'
+    }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({
+      type: '__edit_mode_dismissed'
+    }, '*');
+  };
+  const onDragStart = e => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX,
+      sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = ev => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy)
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+  if (!open) return null;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), /*#__PURE__*/React.createElement("div", {
+    ref: dragRef,
+    className: "twk-panel",
+    "data-omelette-chrome": "",
+    style: {
+      right: offsetRef.current.x,
+      bottom: offsetRef.current.y
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-hd",
+    onMouseDown: onDragStart
+  }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("button", {
+    className: "twk-x",
+    "aria-label": "Close tweaks",
+    onMouseDown: e => e.stopPropagation(),
+    onClick: dismiss
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    className: "twk-body"
+  }, children)));
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({
+  label,
+  children
+}) {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "twk-sect"
+  }, label), children);
+}
+function TweakRow({
+  label,
+  value,
+  children,
+  inline = false
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: inline ? 'twk-row twk-row-h' : 'twk-row'
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-lbl"
+  }, /*#__PURE__*/React.createElement("span", null, label), value != null && /*#__PURE__*/React.createElement("span", {
+    className: "twk-val"
+  }, value)), children);
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({
+  label,
+  value,
+  min = 0,
+  max = 100,
+  step = 1,
+  unit = '',
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label,
+    value: `${value}${unit}`
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "range",
+    className: "twk-slider",
+    min: min,
+    max: max,
+    step: step,
+    value: value,
+    onChange: e => onChange(Number(e.target.value))
+  }));
+}
+function TweakToggle({
+  label,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "twk-row twk-row-h"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-lbl"
+  }, /*#__PURE__*/React.createElement("span", null, label)), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "twk-toggle",
+    "data-on": value ? '1' : '0',
+    role: "switch",
+    "aria-checked": !!value,
+    onClick: () => onChange(!value)
+  }, /*#__PURE__*/React.createElement("i", null)));
+}
+function TweakRadio({
+  label,
+  value,
+  options,
+  onChange
+}) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = o => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({
+    2: 16,
+    3: 10
+  }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = s => {
+      const m = options.find(o => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return /*#__PURE__*/React.createElement(TweakSelect, {
+      label: label,
+      value: value,
+      options: options,
+      onChange: s => onChange(resolve(s))
+    });
+  }
+  const opts = options.map(o => typeof o === 'object' ? o : {
+    value: o,
+    label: o
+  });
+  const idx = Math.max(0, opts.findIndex(o => o.value === value));
+  const n = opts.length;
+  const segAt = clientX => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor((clientX - r.left - 2) / inner * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = e => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = ev => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: trackRef,
+    role: "radiogroup",
+    onPointerDown: onPointerDown,
+    className: dragging ? 'twk-seg dragging' : 'twk-seg'
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-seg-thumb",
+    style: {
+      left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+      width: `calc((100% - 4px) / ${n})`
+    }
+  }), opts.map(o => /*#__PURE__*/React.createElement("button", {
+    key: o.value,
+    type: "button",
+    role: "radio",
+    "aria-checked": o.value === value
+  }, o.label))));
+}
+function TweakSelect({
+  label,
+  value,
+  options,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("select", {
+    className: "twk-field",
+    value: value,
+    onChange: e => onChange(e.target.value)
+  }, options.map(o => {
+    const v = typeof o === 'object' ? o.value : o;
+    const l = typeof o === 'object' ? o.label : o;
+    return /*#__PURE__*/React.createElement("option", {
+      key: v,
+      value: v
+    }, l);
+  })));
+}
+function TweakText({
+  label,
+  value,
+  placeholder,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "twk-field",
+    type: "text",
+    value: value,
+    placeholder: placeholder,
+    onChange: e => onChange(e.target.value)
+  }));
+}
+function TweakNumber({
+  label,
+  value,
+  min,
+  max,
+  step = 1,
+  unit = '',
+  onChange
+}) {
+  const clamp = n => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({
+    x: 0,
+    val: 0
+  });
+  const onScrubStart = e => {
+    e.preventDefault();
+    startRef.current = {
+      x: e.clientX,
+      val: value
+    };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = ev => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "twk-num"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "twk-num-lbl",
+    onPointerDown: onScrubStart
+  }, label), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: value,
+    min: min,
+    max: max,
+    step: step,
+    onChange: e => onChange(clamp(Number(e.target.value)))
+  }), unit && /*#__PURE__*/React.createElement("span", {
+    className: "twk-num-unit"
+  }, unit));
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, c => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = n >> 16 & 255,
+    g = n >> 8 & 255,
+    b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+const __TwkCheck = ({
+  light
+}) => /*#__PURE__*/React.createElement("svg", {
+  viewBox: "0 0 14 14",
+  "aria-hidden": "true"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M3 7.2 5.8 10 11 4.2",
+  fill: "none",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  stroke: light ? 'rgba(0,0,0,.78)' : '#fff'
+}));
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({
+  label,
+  value,
+  options,
+  onChange
+}) {
+  if (!options || !options.length) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "twk-row twk-row-h"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "twk-lbl"
+    }, /*#__PURE__*/React.createElement("span", null, label)), /*#__PURE__*/React.createElement("input", {
+      type: "color",
+      className: "twk-swatch",
+      value: value,
+      onChange: e => onChange(e.target.value)
+    }));
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = o => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-chips",
+    role: "radiogroup"
+  }, options.map((o, i) => {
+    const colors = Array.isArray(o) ? o : [o];
+    const [hero, ...rest] = colors;
+    const sup = rest.slice(0, 4);
+    const on = key(o) === cur;
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      type: "button",
+      className: "twk-chip",
+      role: "radio",
+      "aria-checked": on,
+      "data-on": on ? '1' : '0',
+      "aria-label": colors.join(', '),
+      title: colors.join(' · '),
+      style: {
+        background: hero
+      },
+      onClick: () => onChange(o)
+    }, sup.length > 0 && /*#__PURE__*/React.createElement("span", null, sup.map((c, j) => /*#__PURE__*/React.createElement("i", {
+      key: j,
+      style: {
+        background: c
+      }
+    }))), on && /*#__PURE__*/React.createElement(__TwkCheck, {
+      light: __twkIsLight(hero)
+    }));
+  })));
+}
+function TweakButton({
+  label,
+  onClick,
+  secondary = false
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: secondary ? 'twk-btn secondary' : 'twk-btn',
+    onClick: onClick
+  }, label);
+}
+Object.assign(window, {
+  useTweaks,
+  TweaksPanel,
+  TweakSection,
+  TweakRow,
+  TweakSlider,
+  TweakToggle,
+  TweakRadio,
+  TweakSelect,
+  TweakText,
+  TweakNumber,
+  TweakColor,
+  TweakButton
+});
+})();
+
+// === app.jsx ===
+(function(){
+// ayoo landing — app shell
+
+const {
+  useState,
+  useEffect
+} = React;
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": ["#FAF7F4", "#1E1630", "#FF3E8E", "#F5F0FF"],
+  "displayFont": "Unbounded",
+  "showIntro": true,
+  "lavaBg": true,
+  "audienceDefault": "clients",
+  "langDefault": "ru"
+} /*EDITMODE-END*/;
+const PALETTES = {
+  "Жемчуг": ["#FAF7F4", "#1E1630", "#FF3E8E", "#F5F0FF"],
+  "Аврора": ["#FFF8F5", "#1C2A1E", "#FF6B6B", "#FFF0EB"],
+  "Лаванда": ["#F8F5FF", "#1E1640", "#8B5CF6", "#F0EBFF"],
+  "Закат": ["#FFF6F0", "#2A1420", "#FB923C", "#FFF1E8"],
+  "Мята": ["#F3FFF8", "#0F2318", "#10B981", "#EAFBF6"]
+};
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem("ayoo_lang") || t.langDefault || "ru";
+    } catch (e) {
+      return t.langDefault || "ru";
+    }
+  });
+  const [audience, setAudience] = useState(() => {
+    try {
+      return localStorage.getItem("ayoo_audience") || t.audienceDefault || "clients";
+    } catch (e) {
+      return t.audienceDefault || "clients";
+    }
+  });
+  const [introDone, setIntroDone] = useState(() => {
+    if (!t.showIntro) return true;
+    try {
+      return sessionStorage.getItem("ayoo_intro_done") === "1";
+    } catch (e) {
+      return false;
+    }
+  });
+
+  // persist lang / audience
+  useEffect(() => {
+    try {
+      localStorage.setItem("ayoo_lang", lang);
+    } catch (e) {}
+  }, [lang]);
+  useEffect(() => {
+    try {
+      localStorage.setItem("ayoo_audience", audience);
+    } catch (e) {}
+  }, [audience]);
+
+  // apply palette + font as CSS variables on :root
+  useEffect(() => {
+    const r = document.documentElement;
+    const [bg, ink, pop, bgAlt] = t.palette;
+    r.style.setProperty("--bg", bg);
+    r.style.setProperty("--ink", ink);
+    r.style.setProperty("--pop", pop);
+    r.style.setProperty("--bg-alt", bgAlt);
+    r.style.setProperty("--font-display", `"${t.displayFont}", "Bricolage Grotesque", system-ui, sans-serif`);
+  }, [t.palette, t.displayFont]);
+
+  // toggle the lava background body class
+  useEffect(() => {
+    document.body.classList.toggle("has-lava", !!t.lavaBg);
+  }, [t.lavaBg]);
+  const i18n = window.AYOO_I18N[lang] || window.AYOO_I18N.ru;
+  const copy = i18n[audience];
+  const handleEnter = () => {
+    setIntroDone(true);
+    try {
+      sessionStorage.setItem("ayoo_intro_done", "1");
+    } catch (e) {}
+  };
+
+  // pick a font Google import based on tweak
+  useEffect(() => {
+    const id = "__gfont_link";
+    const family = t.displayFont.replace(/ /g, "+");
+    const href = `https://fonts.googleapis.com/css2?family=${family}:wght@400;700;800;900&family=Manrope:wght@400;500;600;700&display=swap`;
+    let link = document.getElementById(id);
+    if (!link) {
+      link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    link.href = href;
+  }, [t.displayFont]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, t.lavaBg && /*#__PURE__*/React.createElement(LavaBg, null), !introDone && t.showIntro && /*#__PURE__*/React.createElement(IntroOverlay, {
+    copy: i18n.intro,
+    onEnter: handleEnter
+  }), /*#__PURE__*/React.createElement(TopNav, {
+    t: i18n,
+    lang: lang,
+    setLang: setLang,
+    audience: audience,
+    setAudience: setAudience
+  }), /*#__PURE__*/React.createElement(Hero, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(Marquee, {
+    items: copy.ticker
+  }), /*#__PURE__*/React.createElement(HowItWorks, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(Categories, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(Marquee, {
+    items: copy.ticker,
+    inverted: true
+  }), /*#__PURE__*/React.createElement(PlacesGrid, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(Stats, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(AppSection, {
+    copy: copy,
+    audience: audience
+  }), /*#__PURE__*/React.createElement(FAQ, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(CTABanner, {
+    copy: copy
+  }), /*#__PURE__*/React.createElement(Footer, {
+    t: i18n
+  }), /*#__PURE__*/React.createElement(TweaksPanel, null, /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Audience & language"
+  }), /*#__PURE__*/React.createElement(TweakRadio, {
+    label: "Audience",
+    value: audience,
+    options: [{
+      value: "clients",
+      label: i18n.nav.audienceClients
+    }, {
+      value: "partners",
+      label: i18n.nav.audiencePartners
+    }],
+    onChange: v => setAudience(v)
+  }), /*#__PURE__*/React.createElement(TweakRadio, {
+    label: "Language",
+    value: lang,
+    options: [{
+      value: "ru",
+      label: "RU"
+    }, {
+      value: "en",
+      label: "EN"
+    }, {
+      value: "sr",
+      label: "SR"
+    }],
+    onChange: v => setLang(v)
+  }), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Visual style"
+  }), /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Animated lava background",
+    value: t.lavaBg,
+    onChange: v => setTweak("lavaBg", v)
+  }), /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Palette",
+    value: t.palette,
+    options: Object.values(PALETTES),
+    onChange: v => setTweak("palette", v)
+  }), /*#__PURE__*/React.createElement(TweakSelect, {
+    label: "Display font",
+    value: t.displayFont,
+    options: ["Unbounded", "Bricolage Grotesque", "Bowlby One", "Bagel Fat One", "Archivo Black", "Big Shoulders Display", "Boldonse", "Fraunces"],
+    onChange: v => setTweak("displayFont", v)
+  }), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Intro"
+  }), /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Show intro overlay",
+    value: t.showIntro,
+    onChange: v => {
+      setTweak("showIntro", v);
+      if (v) {
+        try {
+          sessionStorage.removeItem("ayoo_intro_done");
+        } catch (e) {}
+        setIntroDone(false);
+      }
+    }
+  }), /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Replay intro",
+    onClick: () => {
+      try {
+        sessionStorage.removeItem("ayoo_intro_done");
+      } catch (e) {}
+      setIntroDone(false);
+    }
+  })));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+})();
+
+</script>
 </body>
 </html>

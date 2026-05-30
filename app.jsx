@@ -3,7 +3,7 @@
 const { useState, useEffect } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "palette": ["#E4ECFF", "#241B4E", "#FF4FA3", "#F1ECFF"],
+  "palette": ["#FAF7F4", "#1E1630", "#FF3E8E", "#F5F0FF"],
   "displayFont": "Unbounded",
   "showIntro": true,
   "lavaBg": true,
@@ -12,11 +12,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const PALETTES = {
-  "Допамин": ["#E4ECFF", "#241B4E", "#FF4FA3", "#F1ECFF"],
-  "Лаванда": ["#F0EBFF", "#26194E", "#8B5CFF", "#F6F2FF"],
-  "Аврора": ["#E6FBFF", "#10303A", "#16C8B8", "#EAFBF6"],
-  "Закат": ["#FFEAF0", "#3A1430", "#FF6B5B", "#FFF1E8"],
-  "Мята + небо": ["#EAF6FF", "#13294B", "#3D8BFF", "#EEF7FF"],
+  "Жемчуг": ["#FAF7F4", "#1E1630", "#FF3E8E", "#F5F0FF"],
+  "Аврора": ["#FFF8F5", "#1C2A1E", "#FF6B6B", "#FFF0EB"],
+  "Лаванда": ["#F8F5FF", "#1E1640", "#8B5CF6", "#F0EBFF"],
+  "Закат": ["#FFF6F0", "#2A1420", "#FB923C", "#FFF1E8"],
+  "Мята": ["#F3FFF8", "#0F2318", "#10B981", "#EAFBF6"],
 };
 
 function App() {
