@@ -8,7 +8,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "showIntro": true,
   "lavaBg": true,
   "audienceDefault": "clients",
-  "langDefault": "ru"
+  "langDefault": "sr"
 }/*EDITMODE-END*/;
 
 const PALETTES = {
