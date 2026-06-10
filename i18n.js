@@ -1,523 +1,157 @@
-// All landing copy in RU / EN / SR (Latin) × Clients / Partners
-// Exposed on window for Babel-transpiled components.
+/* ayoo landing i18n — ru / en / sr. Keys map to [data-i18n] / [data-i18n-ph]. */
 
-window.AYOO_I18N = {
+const I18N = {
   ru: {
-    meta: { langLabel: "RU", langFull: "Русский" },
-    intro: {
-      eyebrow: "★ Программа лояльности",
-      title_l1: "Лучшая программа",
-      title_l2: "лояльности",
-      sub: "Получай баллы и скидки в любимых местах",
-      enter: "Войти",
-    },
-    nav: {
-      about: "О сервисе",
-      how: "Как работает",
-      places: "Места",
-      business: "Для бизнеса",
-      faq: "FAQ",
-      audienceClients: "Клиентам",
-      audiencePartners: "Партнёрам",
-      download: "Скачать",
-      become: "Стать партнёром",
-    },
-    clients: {
-      heroEyebrow: "★ Лояльность № 1",
-      heroTitle: "ayoo",
-      heroSub: "Одна карта — все любимые места. Копи баллы в кафе, ресторанах и магазинах через одно приложение в Telegram. Никаких пластиковых карт.",
-      heroCTA1: "Открыть в Telegram",
-      heroCTA2: "Смотреть места",
-      ticker: ["Прямо в Telegram", "Одна карта на всё", "Баллы за каждую покупку", "Стрики и бонусы", "Бейджи за достижения", "Зови друзей — получай баллы"],
-
-      howEyebrow: "Как это работает",
-      howTitle: "Три шага — и ты в плюсе",
-      howSteps: [
-        { n: "01", t: "Открой ayoo в Telegram", d: "Никаких загрузок из сторов — Mini App открывается прямо в Telegram за пару секунд." },
-        { n: "02", t: "Покажи QR на кассе", d: "Баллы за каждую покупку начисляются автоматически. Никаких пластиковых карт." },
-        { n: "03", t: "Трать баллы на награды", d: "Кофе, скидки, подарки. Держи стрик за регулярные визиты и собирай бейджи." },
-      ],
-
-      catEyebrow: "Категории",
-      catTitle: "Бонусы везде, куда ты ходишь",
-      categories: [
-        { t: "Кафе и кофейни", c: "120+" },
-        { t: "Рестораны", c: "80+" },
-        { t: "Барбершопы", c: "45+" },
-        { t: "Красота и SPA", c: "60+" },
-        { t: "Фитнес и спорт", c: "30+" },
-        { t: "Маркеты", c: "70+" },
-        { t: "Развлечения", c: "25+" },
-        { t: "Авто и сервис", c: "20+" },
-      ],
-
-      placesEyebrow: "Места недели",
-      placesTitle: "Любимые — уже здесь",
-      places: [
-        { t: "Kafeterija", cat: "Кофейня", o: "до 12% баллами" },
-        { t: "Đan Restoran", cat: "Ресторан", o: "−10% на ужин" },
-        { t: "Chop X Chop", cat: "Барбершоп", o: "5-я стрижка в подарок" },
-        { t: "Hi Food", cat: "Ресторан", o: "Кэшбэк 500 RSD" },
-        { t: "Axioma", cat: "Бутик", o: "−15% на всё" },
-        { t: "Planeta Sport", cat: "Спорт", o: "Кэшбэк 8%" },
-      ],
-
-      statsTitle: "ayoo в цифрах",
-      stats: [
-        { n: "500+", l: "мест-партнёров" },
-        { n: "120K", l: "активных пользователей" },
-        { n: "180M RSD", l: "вернули кэшбэком" },
-        { n: "4.8★", l: "рейтинг в сторах" },
-      ],
-
-      appEyebrow: "Telegram Mini App",
-      appTitle: "ayoo живёт в Telegram — там, где ты уже есть",
-      appSub: "Без отдельного приложения и пластиковых карт. Открой Mini App, покажи QR — баллы уже на счету.",
-      appStoreIOS: "Открыть в Telegram",
-      appStoreAndroid: "@ayoo_bot",
-
-      faqTitle: "Частые вопросы",
-      faq: [
-        { q: "Сколько стоит пользоваться ayoo?", a: "Бесплатно. Никаких подписок, скрытых платежей и абонентских." },
-        { q: "Нужно ли что-то скачивать?", a: "Нет. ayoo — это Mini App в Telegram. Открываешь прямо в мессенджере, без App Store и Google Play." },
-        { q: "Как начисляются баллы?", a: "При оплате просто покажи QR-код из Mini App. Баллы прилетают на счёт за пару секунд." },
-        { q: "Где можно тратить баллы?", a: "В любом месте-партнёре ayoo — кафе, рестораны, барбершопы, фитнес, маркеты и сервисы. Список растёт каждую неделю." },
-        { q: "Что если место не подключено?", a: "Напиши нам — мы свяжемся с этим бизнесом и предложим стать партнёром." },
-        { q: "Сгорают ли баллы?", a: "Нет. Баллы живут, пока живёт твой аккаунт." },
-      ],
-
-      footerCTA: "Готов получать больше?",
-      footerCTAbtn: "Открыть в Telegram",
-    },
-
-    partners: {
-      heroEyebrow: "★ Для бизнеса",
-      heroTitle: "ayoo для\u00a0партнёров",
-      heroSub: "Готовая программа лояльности за 5 минут. Подключи заведение через Telegram — без разработки и сложных интеграций.",
-      heroCTA1: "Подключить заведение",
-      heroCTA2: "Кабинет партнёра",
-      ticker: ["Регистрация за 5 минут", "Без договоров и ИТ", "Кабинет в Telegram", "Статистика 24/7", "Акции двух типов"],
-
-      howEyebrow: "Как это работает",
-      howTitle: "Полноценная лояльность за 5 минут",
-      howSteps: [
-        { n: "01", t: "Зарегистрируйся через Telegram", d: "Без договоров, ИТ-отдела и разработчиков. Личный кабинет открывается прямо в Mini App." },
-        { n: "02", t: "Настрой акции", d: "Два типа: % от суммы покупки или баллы за конкретный продукт. Цвет карточки, срок, пауза — всё в твоих руках." },
-        { n: "03", t: "Сканируй QR клиента", d: "Начисляй баллы при сканировании. Добавляй сотрудников — они сканируют без доступа к настройкам." },
-      ],
-
-      catEyebrow: "Кто уже с нами",
-      catTitle: "Подключаем любые категории",
-      categories: [
-        { t: "Кафе и кофейни", c: "120+" },
-        { t: "Рестораны", c: "80+" },
-        { t: "Барбершопы", c: "45+" },
-        { t: "Красота и SPA", c: "60+" },
-        { t: "Фитнес и спорт", c: "30+" },
-        { t: "Маркеты", c: "70+" },
-        { t: "Развлечения", c: "25+" },
-        { t: "Авто и сервис", c: "20+" },
-      ],
-
-      placesEyebrow: "Преимущества",
-      placesTitle: "Почему бизнес выбирает ayoo",
-      places: [
-        { t: "5 минут", cat: "Подключение", o: "Через Telegram, без ИТ" },
-        { t: "Кабинет в Telegram", cat: "Управление", o: "Всё в Mini App" },
-        { t: "2 типа акций", cat: "Гибкость", o: "% от чека или баллы за товар" },
-        { t: "Сотрудники", cat: "Доступы", o: "Сканируют без настроек" },
-        { t: "Статистика 24/7", cat: "Аналитика", o: "Транзакции в реальном времени" },
-        { t: "Настройка карточек", cat: "Бренд", o: "Цвет, срок, пауза" },
-      ],
-
-      statsTitle: "Партнёры ayoo",
-      stats: [
-        { n: "5 мин", l: "на подключение" },
-        { n: "500+", l: "активных партнёров" },
-        { n: "+18%", l: "средний чек" },
-        { n: "×2.3", l: "повторных визитов" },
-      ],
-
-      appEyebrow: "Кабинет партнёра",
-      appTitle: "Весь кабинет — в Telegram Mini App",
-      appSub: "Начисляй баллы, запускай акции, добавляй сотрудников и смотри статистику — всё в одном кабинете.",
-      appStoreIOS: "Открыть кабинет",
-      appStoreAndroid: "@ayoo_business_bot",
-
-      faqTitle: "Частые вопросы",
-      faq: [
-        { q: "Сколько стоит подключение?", a: "Подключение бесплатное. Регистрация и запуск программы лояльности занимают около 5 минут." },
-        { q: "Нужна ли разработка или интеграция с кассой?", a: "Нет. Регистрация идёт через Telegram, кабинет — в Mini App. Достаточно QR-стикера на кассу." },
-        { q: "Какие бывают акции?", a: "Два типа: процент от суммы покупки или баллы за конкретный продукт. Цвет карточки, срок и пауза настраиваются в кабинете." },
-        { q: "Могут ли сотрудники начислять баллы?", a: "Да. Добавь сотрудников — они сканируют QR клиентов, но не имеют доступа к настройкам и статистике." },
-        { q: "Где смотреть статистику?", a: "В личном кабинете Mini App: транзакции и активность клиентов в реальном времени." },
-      ],
-
-      footerCTA: "Готов привести лояльных клиентов?",
-      footerCTAbtn: "Подключить заведение",
-    },
-
-    footer: {
-      tagline: "ayoo работает там, где уже есть твои клиенты — в Telegram.",
-      links: "Ссылки",
-      legal: "Документы",
-      contact: "Контакты",
-      newsletter: "Будь в курсе новых мест",
-      newsPlaceholder: "Твой e-mail",
-      newsBtn: "Подписаться",
-      privacy: "Политика конфиденциальности",
-      terms: "Условия использования",
-      offer: "Публичная оферта",
-      copy: "© 2026 ayoo. Все права защищены.",
-      city: "Города:",
-      cityVal: "Белград · Нови-Сад · Ниш",
-    },
+    "seg.you": "Для тебя",
+    "seg.biz": "Для бизнеса",
+    "hero.h1": "Заведи питомца, который растёт, пока ты живёшь свой город.",
+    "hero.sub": "Места борются за твой визит — а ты прокачиваешь питомца на этом. Бесплатно, в Telegram.",
+    "hero.cta": "Забери питомца в Telegram",
+    "hero.egg": "тапни 3 раза",
+    "hero.name": "назови питомца",
+    "hero.named": "Отлично! Забирай его в Telegram →",
+    "btn.feed": "Скан чека = еда",
+    "btn.play": "Чек-ин = игра",
+    "btn.stats": "Баллы = здоровье",
+    "steps.title": "Как это работает",
+    "steps.lead": "Три тапа между тобой и довольным питомцем.",
+    "step1.t": "Зайди в заведение", "step1.d": "Любое заведение-партнёр в твоём городе.",
+    "step2.t": "Отсканируй чек", "step2.d": "Баллы сразу падают в Telegram.",
+    "step3.t": "Питомец растёт", "step3.d": "Баллы кормят питомца и открывают новых.",
+    "evo.title": "Коллекция растёт с тобой", "evo.lead": "Докуда дорастёт твой?",
+    "cities.title": "Заведения соревнуются за тебя",
+    "cities.lead": "Белград и Нови-Сад · ставки баллов до 10×.",
+    "city.live": "живые ставки баллов",
+    "hs.title": "Таблица рекордов", "hs1": "начислено баллов", "hs2": "вылуплено питомцев", "hs3": "заведений",
+    "rev.title": "Любят вживую",
+    "rev1": "«Теперь сканирую всё подряд, лишь бы покормить дракона.»",
+    "rev2": "«Кэшбэк, в который реально играешь. Ребёнок назвал нашего.»",
+    "rev3": "«Бесплатно, в Telegram, без сторов. Просто работает.»",
+    "final.title": "Твой питомец проголодался по настоящему →",
+    "biz.h1": "Пусть гости выбирают тебя — и кормят питомцев у тебя.",
+    "biz.sub": "Геймифицированная лояльность без оборудования. Ставь свою ставку баллов и выигрывай визиты.",
+    "biz.cta": "Оставить заявку",
+    "biz.steps.title": "Как это работает для бизнеса",
+    "bstep1.t": "Подключись", "bstep1.d": "Регистрация за 10 минут, без оборудования.",
+    "bstep2.t": "Поставь ставку баллов", "bstep2.d": "Конкурируй за гостей публичной ставкой.",
+    "bstep3.t": "Гости приходят", "bstep3.d": "Геймификация возвращает их снова.",
+    "calc.title": "Прикинь выгоду", "calc.check": "Средний чек (RSD)", "calc.visits": "Визитов в месяц",
+    "calc.res": "≈ +{v} визитов/мес · +{r} RSD выручки",
+    "form.title": "Оставить заявку", "form.name": "Имя", "form.venue": "Заведение", "form.city": "Город",
+    "form.contact": "Telegram или телефон", "form.send": "Отправить", "form.done": "Спасибо! Мы свяжемся с тобой.",
   },
-
   en: {
-    meta: { langLabel: "EN", langFull: "English" },
-    intro: {
-      eyebrow: "★ Loyalty programme",
-      title_l1: "The best loyalty",
-      title_l2: "programme",
-      sub: "Earn points and discounts at the places you already love",
-      enter: "Enter",
-    },
-    nav: {
-      about: "About",
-      how: "How it works",
-      places: "Places",
-      business: "For business",
-      faq: "FAQ",
-      audienceClients: "For you",
-      audiencePartners: "For partners",
-      download: "Download",
-      become: "Become a partner",
-    },
-    clients: {
-      heroEyebrow: "★ Loyalty No.1",
-      heroTitle: "ayoo",
-      heroSub: "One card for all your favourite places. Earn points at cafés, restaurants and shops through a single Telegram app — no plastic cards.",
-      heroCTA1: "Open in Telegram",
-      heroCTA2: "Browse places",
-      ticker: ["Right inside Telegram", "One card for all", "Points on every purchase", "Streaks & bonuses", "Badges for achievements", "Refer friends & earn"],
-
-      howEyebrow: "How it works",
-      howTitle: "Three steps. You win.",
-      howSteps: [
-        { n: "01", t: "Open ayoo in Telegram", d: "No store downloads — the Mini App opens right inside Telegram in a couple of seconds." },
-        { n: "02", t: "Show your QR", d: "Points for every purchase are credited automatically. No plastic cards, ever." },
-        { n: "03", t: "Spend points on rewards", d: "Coffee, discounts, gifts. Keep a streak for regular visits and collect badges." },
-      ],
-
-      catEyebrow: "Categories",
-      catTitle: "Rewards everywhere you go",
-      categories: [
-        { t: "Cafés & coffee", c: "120+" },
-        { t: "Restaurants", c: "80+" },
-        { t: "Barbershops", c: "45+" },
-        { t: "Beauty & SPA", c: "60+" },
-        { t: "Fitness & sport", c: "30+" },
-        { t: "Markets", c: "70+" },
-        { t: "Entertainment", c: "25+" },
-        { t: "Auto services", c: "20+" },
-      ],
-
-      placesEyebrow: "Places of the week",
-      placesTitle: "Your favourites — already here",
-      places: [
-        { t: "Kafeterija", cat: "Café", o: "Up to 12% in points" },
-        { t: "Đan Restoran", cat: "Restaurant", o: "−10% on dinner" },
-        { t: "Chop X Chop", cat: "Barbershop", o: "5th haircut free" },
-        { t: "Hi Food", cat: "Restaurant", o: "500 RSD cashback" },
-        { t: "Axioma", cat: "Boutique", o: "−15% off all" },
-        { t: "Planeta Sport", cat: "Sport", o: "8% cashback" },
-      ],
-
-      statsTitle: "ayoo in numbers",
-      stats: [
-        { n: "500+", l: "partner venues" },
-        { n: "120K", l: "active users" },
-        { n: "180M RSD", l: "returned in cashback" },
-        { n: "4.8★", l: "store rating" },
-      ],
-
-      appEyebrow: "Telegram Mini App",
-      appTitle: "ayoo lives in Telegram — right where you already are",
-      appSub: "No separate app, no plastic cards. Open the Mini App, show your QR — points are already on your balance.",
-      appStoreIOS: "Open in Telegram",
-      appStoreAndroid: "@ayoo_bot",
-
-      faqTitle: "Frequently asked",
-      faq: [
-        { q: "Is ayoo free to use?", a: "Yes. No subscriptions, no hidden fees, no monthly charges." },
-        { q: "Do I need to download anything?", a: "No. ayoo is a Telegram Mini App — it opens right inside the messenger, no App Store or Google Play." },
-        { q: "How do I earn points?", a: "Just show the QR code from the Mini App when you pay. Points land in your account in a couple of seconds." },
-        { q: "Where can I spend points?", a: "At any ayoo partner — cafés, restaurants, barbershops, gyms, markets and services. The list grows every week." },
-        { q: "Do points expire?", a: "No. Your points live as long as your account does." },
-      ],
-
-      footerCTA: "Ready to earn more?",
-      footerCTAbtn: "Open in Telegram",
-    },
-
-    partners: {
-      heroEyebrow: "★ For business",
-      heroTitle: "ayoo for\u00a0partners",
-      heroSub: "A ready-made loyalty programme in 5 minutes. Connect your venue through Telegram — no development, no complex integrations.",
-      heroCTA1: "Connect your venue",
-      heroCTA2: "Partner portal",
-      ticker: ["Sign up in 5 minutes", "No contracts or IT", "Portal inside Telegram", "24/7 analytics", "Two promo types"],
-
-      howEyebrow: "How it works",
-      howTitle: "A full loyalty programme in 5 minutes",
-      howSteps: [
-        { n: "01", t: "Register via Telegram", d: "No contracts, no IT department, no developers. Your portal opens right inside the Mini App." },
-        { n: "02", t: "Set up your promos", d: "Two types: % of the purchase or points for a specific product. Card colour, validity, pause — all yours to control." },
-        { n: "03", t: "Scan the customer's QR", d: "Award points on scan. Add staff — they scan customers without access to settings." },
-      ],
-
-      catEyebrow: "Already onboard",
-      catTitle: "Every category welcome",
-      categories: [
-        { t: "Cafés & coffee", c: "120+" },
-        { t: "Restaurants", c: "80+" },
-        { t: "Barbershops", c: "45+" },
-        { t: "Beauty & SPA", c: "60+" },
-        { t: "Fitness & sport", c: "30+" },
-        { t: "Markets", c: "70+" },
-        { t: "Entertainment", c: "25+" },
-        { t: "Auto services", c: "20+" },
-      ],
-
-      placesEyebrow: "Why ayoo",
-      placesTitle: "What partners love",
-      places: [
-        { t: "Pay per result", cat: "Model", o: "Pay per visit, not per ad" },
-        { t: "1 day", cat: "Onboarding", o: "No POS, no integration" },
-        { t: "+18%", cat: "Avg. ticket", o: "Across partner venues" },
-        { t: "×2.3", cat: "Repeat visits", o: "In the first 3 months" },
-        { t: "24/7 portal", cat: "Analytics", o: "Every customer, every visit" },
-        { t: "5 minutes", cat: "Onboarding", o: "Via Telegram, no IT" },
-        { t: "Portal in Telegram", cat: "Management", o: "Everything in the Mini App" },
-        { t: "2 promo types", cat: "Flexibility", o: "% of ticket or points per item" },
-        { t: "Staff accounts", cat: "Access", o: "They scan, no settings access" },
-        { t: "24/7 analytics", cat: "Analytics", o: "Transactions in real time" },
-        { t: "Card customisation", cat: "Brand", o: "Colour, validity, pause" },
-      ],
-
-      statsTitle: "Partners on ayoo",
-      stats: [
-        { n: "5 min", l: "to onboard" },
-        { n: "500+", l: "active partners" },
-        { n: "+18%", l: "avg. ticket" },
-        { n: "×2.3", l: "repeat visits" },
-      ],
-
-      appEyebrow: "Partner portal",
-      appTitle: "The whole portal — inside Telegram Mini App",
-      appSub: "Award points, launch promos, add staff and track stats — all in one dashboard inside Telegram.",
-      appStoreIOS: "Open portal",
-      appStoreAndroid: "@ayoo_business_bot",
-
-      faqTitle: "Frequently asked",
-      faq: [
-        { q: "How much is onboarding?", a: "Onboarding is free. Registering and launching a loyalty programme takes about 5 minutes." },
-        { q: "Do I need development or POS integration?", a: "No. You register via Telegram and manage everything in the Mini App. A QR sticker on the counter is enough." },
-        { q: "What promo types are there?", a: "Two: a percentage of the purchase, or points for a specific product. Card colour, validity and pause are configurable in the portal." },
-        { q: "Can staff award points?", a: "Yes. Add staff — they scan customer QR codes but have no access to settings or analytics." },
-        { q: "Where do I see analytics?", a: "In the Mini App portal: transactions and customer activity in real time." },
-      ],
-
-      footerCTA: "Ready to fill your venue?",
-      footerCTAbtn: "Connect your venue",
-    },
-
-    footer: {
-      tagline: "ayoo works where your customers already are — in Telegram.",
-      links: "Links",
-      legal: "Legal",
-      contact: "Contact",
-      newsletter: "Stay in the loop with new places",
-      newsPlaceholder: "Your email",
-      newsBtn: "Subscribe",
-      privacy: "Privacy policy",
-      terms: "Terms of service",
-      offer: "Public offer",
-      copy: "© 2026 ayoo. All rights reserved.",
-      city: "Cities:",
-      cityVal: "Belgrade · Novi Sad · Niš",
-    },
+    "seg.you": "For you",
+    "seg.biz": "For business",
+    "hero.h1": "Adopt a pet that levels up every time you go out.",
+    "hero.sub": "Venues compete for your visit — and you level up a pet for it. Free, in Telegram.",
+    "hero.cta": "Take your pet to Telegram",
+    "hero.egg": "tap 3 times",
+    "hero.name": "name your pet",
+    "hero.named": "Nice! Take it to Telegram →",
+    "btn.feed": "Scan a receipt = food",
+    "btn.play": "Check in = play",
+    "btn.stats": "Points = health",
+    "steps.title": "How it works",
+    "steps.lead": "Three taps between you and a happy pet.",
+    "step1.t": "Walk into a venue", "step1.d": "Any partner café, bar or shop in your city.",
+    "step2.t": "Scan the receipt", "step2.d": "Points land instantly in Telegram.",
+    "step3.t": "Your pet grows", "step3.d": "Points feed your pet and unlock new ones.",
+    "evo.title": "The collection grows with you", "evo.lead": "How far will yours go?",
+    "cities.title": "Venues compete for you",
+    "cities.lead": "Belgrade & Novi Sad · point rates up to 10×.",
+    "city.live": "live point rates",
+    "hs.title": "Hi-score", "hs1": "points awarded", "hs2": "pets hatched", "hs3": "venues",
+    "rev.title": "Loved in the wild",
+    "rev1": "“I scan everything now just to feed my dragon.”",
+    "rev2": "“Cashback that's actually fun. My kid named ours.”",
+    "rev3": "“Free, in Telegram, no app store. Just works.”",
+    "final.title": "Your pet is hungry for the real thing →",
+    "biz.h1": "Make guests choose you — and feed their pets at your place.",
+    "biz.sub": "Gamified loyalty, no hardware. Set your point rate and win visits.",
+    "biz.cta": "Apply now",
+    "biz.steps.title": "How it works for business",
+    "bstep1.t": "Get set up", "bstep1.d": "10-minute signup, no hardware.",
+    "bstep2.t": "Set your point rate", "bstep2.d": "Compete for guests with a public rate.",
+    "bstep3.t": "Guests come in", "bstep3.d": "Gamification brings them back.",
+    "calc.title": "See your upside", "calc.check": "Average check (RSD)", "calc.visits": "Visits per month",
+    "calc.res": "≈ +{v} visits/mo · +{r} RSD revenue",
+    "form.title": "Apply now", "form.name": "Name", "form.venue": "Venue", "form.city": "City",
+    "form.contact": "Telegram or phone", "form.send": "Send", "form.done": "Thanks! We'll be in touch.",
   },
-
   sr: {
-    meta: { langLabel: "SR", langFull: "Srpski" },
-    intro: {
-      eyebrow: "★ Program lojalnosti",
-      title_l1: "Najbolji program",
-      title_l2: "lojalnosti",
-      sub: "Skupljaj poene i popuste na omiljenim mestima",
-      enter: "Uđi",
-    },
-    nav: {
-      about: "O servisu",
-      how: "Kako radi",
-      places: "Mesta",
-      business: "Za biznis",
-      faq: "FAQ",
-      audienceClients: "Za tebe",
-      audiencePartners: "Za partnere",
-      download: "Preuzmi",
-      become: "Postani partner",
-    },
-    clients: {
-      heroEyebrow: "★ Lojalnost br. 1",
-      heroTitle: "ayoo",
-      heroSub: "Jedna kartica za sva omiljena mesta. Skupljaj poene u kafićima, restoranima i prodavnicama kroz jednu aplikaciju u Telegramu — bez plastičnih kartica.",
-      heroCTA1: "Otvori u Telegramu",
-      heroCTA2: "Pogledaj mesta",
-      ticker: ["Direktno u Telegramu", "Jedna kartica za sve", "Poeni za svaku kupovinu", "Nizovi i bonusi", "Bedževi za dostignuća", "Pozovi prijatelje i zaradi"],
-
-      howEyebrow: "Kako radi",
-      howTitle: "Tri koraka — i ti si na dobitku",
-      howSteps: [
-        { n: "01", t: "Otvori ayoo u Telegramu", d: "Bez preuzimanja iz prodavnica — Mini App se otvara direktno u Telegramu za par sekundi." },
-        { n: "02", t: "Pokaži QR na kasi", d: "Poeni za svaku kupovinu se obračunavaju automatski. Nikad više plastičnih kartica." },
-        { n: "03", t: "Troši poene na nagrade", d: "Kafa, popusti, pokloni. Održavaj niz za redovne posete i skupljaj bedževe." },
-      ],
-
-      catEyebrow: "Kategorije",
-      catTitle: "Bonusi gde god da odeš",
-      categories: [
-        { t: "Kafići i kafe", c: "120+" },
-        { t: "Restorani", c: "80+" },
-        { t: "Berbernice", c: "45+" },
-        { t: "Lepota i SPA", c: "60+" },
-        { t: "Fitnes i sport", c: "30+" },
-        { t: "Marketi", c: "70+" },
-        { t: "Zabava", c: "25+" },
-        { t: "Auto servisi", c: "20+" },
-      ],
-
-      placesEyebrow: "Mesta nedelje",
-      placesTitle: "Omiljena — već su ovde",
-      places: [
-        { t: "Kafeterija", cat: "Kafić", o: "do 12% u poenima" },
-        { t: "Đan Restoran", cat: "Restoran", o: "−10% na večeru" },
-        { t: "Chop X Chop", cat: "Berbernica", o: "5. šišanje gratis" },
-        { t: "Hi Food", cat: "Restoran", o: "Keš-bek 500 RSD" },
-        { t: "Axioma", cat: "Butik", o: "−15% na sve" },
-        { t: "Planeta Sport", cat: "Sport", o: "Keš-bek 8%" },
-      ],
-
-      statsTitle: "ayoo u brojkama",
-      stats: [
-        { n: "500+", l: "partnerskih mesta" },
-        { n: "120K", l: "aktivnih korisnika" },
-        { n: "180M RSD", l: "vraćeno kroz keš-bek" },
-        { n: "4.8★", l: "ocena u prodavnicama" },
-      ],
-
-      appEyebrow: "Telegram Mini App",
-      appTitle: "ayoo živi u Telegramu — tamo gde si već ti",
-      appSub: "Bez zasebne aplikacije i plastičnih kartica. Otvori Mini App, pokaži QR — poeni su već na tvom računu.",
-      appStoreIOS: "Otvori u Telegramu",
-      appStoreAndroid: "@ayoo_bot",
-
-      faqTitle: "Česta pitanja",
-      faq: [
-        { q: "Koliko košta korišćenje ayoo?", a: "Besplatno. Bez pretplata, skrivenih troškova i mesečnih naknada." },
-        { q: "Da li treba nešto da preuzmem?", a: "Ne. ayoo je Telegram Mini App — otvara se direktno u mesendžeru, bez App Store ili Google Play." },
-        { q: "Kako se skupljaju poeni?", a: "Pri plaćanju samo pokaži QR kod iz Mini App-a. Poeni stižu na račun za par sekundi." },
-        { q: "Gde mogu da trošim poene?", a: "Kod svakog ayoo partnera — kafići, restorani, berbernice, fitnes, marketi i servisi. Lista raste svake nedelje." },
-        { q: "Da li poeni ističu?", a: "Ne. Tvoji poeni žive dokle god živi tvoj nalog." },
-      ],
-
-      footerCTA: "Spreman da zaradiš više?",
-      footerCTAbtn: "Otvori u Telegramu",
-    },
-
-    partners: {
-      heroEyebrow: "★ Za biznis",
-      heroTitle: "ayoo za\u00a0partnere",
-      heroSub: "Gotov program lojalnosti za 5 minuta. Poveži svoj objekat preko Telegrama — bez razvoja i složenih integracija.",
-      heroCTA1: "Poveži objekat",
-      heroCTA2: "Partnerski kabinet",
-      ticker: ["Registracija za 5 minuta", "Bez ugovora i IT-a", "Kabinet u Telegramu", "Statistika 24/7", "Dva tipa akcija"],
-
-      howEyebrow: "Kako radi",
-      howTitle: "Potpun program lojalnosti za 5 minuta",
-      howSteps: [
-        { n: "01", t: "Registruj se preko Telegrama", d: "Bez ugovora, IT-odeljenja i programera. Lični kabinet se otvara direktno u Mini App-u." },
-        { n: "02", t: "Podesi akcije", d: "Dva tipa: % od iznosa kupovine ili poeni za određeni proizvod. Boja kartice, rok, pauza — sve je u tvojim rukama." },
-        { n: "03", t: "Skeniraj QR klijenta", d: "Dodeljuj poene pri skeniranju. Dodaj zaposlene — oni skeniraju bez pristupa podešavanjima." },
-      ],
-
-      catEyebrow: "Već su sa nama",
-      catTitle: "Povezujemo sve kategorije",
-      categories: [
-        { t: "Kafići i kafe", c: "120+" },
-        { t: "Restorani", c: "80+" },
-        { t: "Berbernice", c: "45+" },
-        { t: "Lepota i SPA", c: "60+" },
-        { t: "Fitnes i sport", c: "30+" },
-        { t: "Marketi", c: "70+" },
-        { t: "Zabava", c: "25+" },
-        { t: "Auto servisi", c: "20+" },
-      ],
-
-      placesEyebrow: "Prednosti",
-      placesTitle: "Zašto biznis bira ayoo",
-      places: [
-        { t: "5 minuta", cat: "Povezivanje", o: "Preko Telegrama, bez IT-a" },
-        { t: "Kabinet u Telegramu", cat: "Upravljanje", o: "Sve u Mini App-u" },
-        { t: "2 tipa akcija", cat: "Fleksibilnost", o: "% od računa ili poeni za proizvod" },
-        { t: "Zaposleni", cat: "Pristup", o: "Skeniraju bez podešavanja" },
-        { t: "Statistika 24/7", cat: "Analitika", o: "Transakcije u realnom vremenu" },
-        { t: "Podešavanje kartica", cat: "Brend", o: "Boja, rok, pauza" },
-      ],
-
-      statsTitle: "ayoo partneri",
-      stats: [
-        { n: "5 min", l: "za povezivanje" },
-        { n: "500+", l: "aktivnih partnera" },
-        { n: "+18%", l: "prosečan račun" },
-        { n: "×2.3", l: "ponovljenih poseta" },
-      ],
-
-      appEyebrow: "Partnerski kabinet",
-      appTitle: "Ceo kabinet — u Telegram Mini App-u",
-      appSub: "Dodeljuj poene, pokreći akcije, dodaj zaposlene i prati statistiku — sve u jednom kabinetu u Telegramu.",
-      appStoreIOS: "Otvori kabinet",
-      appStoreAndroid: "@ayoo_business_bot",
-
-      faqTitle: "Česta pitanja",
-      faq: [
-        { q: "Koliko košta povezivanje?", a: "Povezivanje je besplatno. Registracija i pokretanje programa lojalnosti traju oko 5 minuta." },
-        { q: "Da li je potreban razvoj ili integracija sa kasom?", a: "Ne. Registracija ide preko Telegrama, kabinet — u Mini App-u. Dovoljan je QR sticker na kasi." },
-        { q: "Koje akcije postoje?", a: "Dva tipa: procenat od iznosa kupovine ili poeni za određeni proizvod. Boja kartice, rok i pauza se podešavaju u kabinetu." },
-        { q: "Mogu li zaposleni da dodeljuju poene?", a: "Da. Dodaj zaposlene — oni skeniraju QR klijenata, ali nemaju pristup podešavanjima i statistici." },
-        { q: "Gde gledam statistiku?", a: "U ličnom kabinetu Mini App-a: transakcije i aktivnost klijenata u realnom vremenu." },
-      ],
-
-      footerCTA: "Spreman da dovedeš lojalne klijente?",
-      footerCTAbtn: "Poveži objekat",
-    },
-
-    footer: {
-      tagline: "ayoo radi tamo gde su tvoji klijenti već — u Telegramu.",
-      links: "Linkovi",
-      legal: "Dokumenti",
-      contact: "Kontakt",
-      newsletter: "Budi u toku sa novim mestima",
-      newsPlaceholder: "Tvoj e-mail",
-      newsBtn: "Pretplati se",
-      privacy: "Politika privatnosti",
-      terms: "Uslovi korišćenja",
-      offer: "Javna ponuda",
-      copy: "© 2026 ayoo. Sva prava zadržana.",
-      city: "Gradovi:",
-      cityVal: "Beograd · Novi Sad · Niš",
-    },
+    "seg.you": "Za tebe",
+    "seg.biz": "Za biznis",
+    "hero.h1": "Othrani ljubimca koji raste dok izlaziš po gradu.",
+    "hero.sub": "Lokali se takmiče za tvoju posetu — a ti time hraniš ljubimca. Besplatno, u Telegramu.",
+    "hero.cta": "Povedi ljubimca u Telegram",
+    "hero.egg": "tapni 3 puta",
+    "hero.name": "daj mu ime",
+    "hero.named": "Odlično! Povedi ga u Telegram →",
+    "btn.feed": "Skeniraj račun = hrana",
+    "btn.play": "Prijava = igra",
+    "btn.stats": "Bodovi = zdravlje",
+    "steps.title": "Kako funkcioniše",
+    "steps.lead": "Tri tapa do srećnog ljubimca.",
+    "step1.t": "Uđi u lokal", "step1.d": "Bilo koji partnerski kafić, bar ili radnja.",
+    "step2.t": "Skeniraj račun", "step2.d": "Bodovi odmah stižu u Telegram.",
+    "step3.t": "Ljubimac raste", "step3.d": "Bodovi hrane ljubimca i otključavaju nove.",
+    "evo.title": "Kolekcija raste s tobom", "evo.lead": "Dokle će tvoj stići?",
+    "cities.title": "Lokali se takmiče za tebe",
+    "cities.lead": "Beograd i Novi Sad · do 10× bodova.",
+    "city.live": "žive stope bodova",
+    "hs.title": "Hi-score", "hs1": "dodeljeno bodova", "hs2": "izleženo ljubimaca", "hs3": "lokala",
+    "rev.title": "Vole ga u praksi",
+    "rev1": "„Sad skeniram sve samo da nahranim zmaja.“",
+    "rev2": "„Kešbek koji je stvarno zabavan. Dete je dalo ime našem.“",
+    "rev3": "„Besplatno, u Telegramu, bez prodavnice. Radi.“",
+    "final.title": "Tvoj ljubimac je gladan pravog →",
+    "biz.h1": "Neka gosti biraju tebe — i hrane ljubimce kod tebe.",
+    "biz.sub": "Gejmifikovana lojalnost bez opreme. Postavi svoju stopu bodova i osvajaj posete.",
+    "biz.cta": "Pošalji prijavu",
+    "biz.steps.title": "Kako funkcioniše za biznis",
+    "bstep1.t": "Priključi se", "bstep1.d": "Registracija za 10 minuta, bez opreme.",
+    "bstep2.t": "Postavi stopu bodova", "bstep2.d": "Takmiči se za goste javnom stopom.",
+    "bstep3.t": "Gosti dolaze", "bstep3.d": "Gejmifikacija ih vraća.",
+    "calc.title": "Vidi svoju dobit", "calc.check": "Prosečan račun (RSD)", "calc.visits": "Poseta mesečno",
+    "calc.res": "≈ +{v} poseta/mes · +{r} RSD prihoda",
+    "form.title": "Pošalji prijavu", "form.name": "Ime", "form.venue": "Lokal", "form.city": "Grad",
+    "form.contact": "Telegram ili telefon", "form.send": "Pošalji", "form.done": "Hvala! Javićemo ti se.",
   },
-};
+}
+
+const LANGS = ["ru", "en", "sr"]
+
+function detectLang() {
+  const q = new URLSearchParams(location.search).get("lang")
+  if (q && LANGS.includes(q)) return q
+  const saved = localStorage.getItem("ayoo_lang")
+  if (saved && LANGS.includes(saved)) return saved
+  const nav = (navigator.language || "en").toLowerCase()
+  if (nav.startsWith("sr")) return "sr"
+  if (nav.startsWith("ru")) return "ru"
+  return "en"
+}
+
+let currentLang = "en"
+
+function applyLang(lang) {
+  currentLang = LANGS.includes(lang) ? lang : "en"
+  localStorage.setItem("ayoo_lang", currentLang)
+  const dict = I18N[currentLang]
+  document.documentElement.lang = currentLang
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const v = dict[el.getAttribute("data-i18n")]
+    if (v != null) el.textContent = v
+  })
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    const v = dict[el.getAttribute("data-i18n-ph")]
+    if (v != null) el.setAttribute("placeholder", v)
+  })
+  document.querySelectorAll("[data-lang]").forEach((b) =>
+    b.classList.toggle("on", b.getAttribute("data-lang") === currentLang))
+}
+
+function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || key }
+
+window.ayooI18n = { applyLang, detectLang, t, get lang() { return currentLang } }
