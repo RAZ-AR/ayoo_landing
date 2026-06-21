@@ -1,204 +1,898 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>ayoo — loyalty you can pet</title>
-<meta name="description" content="Adopt a pet that levels up every time you go out. Venues compete for your visit. Free, in Telegram." />
-<meta property="og:title" content="ayoo — loyalty you can pet" />
-<meta property="og:description" content="Adopt a pixel pet that grows when you live your city. Free, in Telegram." />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="og.png" />
-<meta name="twitter:card" content="summary_large_image" />
-<link rel="canonical" href="https://ayoo.space/" />
-<link rel="alternate" hreflang="en" href="https://ayoo.space/?lang=en" />
-<link rel="alternate" hreflang="ru" href="https://ayoo.space/?lang=ru" />
-<link rel="alternate" hreflang="sr" href="https://ayoo.space/?lang=sr" />
-<link rel="alternate" hreflang="x-default" href="https://ayoo.space/" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AYOO · Loyalty Tamagotchi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:linear-gradient(180deg,#F9FAF5 0,#F5F7F2 34%,#EEF3EA 100%);color:#171714;font-family:"Space Grotesk","Helvetica Neue",Arial,sans-serif;font-weight:600;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+canvas{display:block;}
+input,button{font-family:inherit;}
+a{text-decoration:none;}
+
+@keyframes blink{50%{opacity:.28}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.track{display:none;}
+.track.active{display:block;}
+
+.seg-btn{min-height:34px;padding:0 14px;border:none;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;transition:background .15s,color .15s;}
+.seg-on{background:#171714;color:#fff;}
+.seg-off{background:transparent;color:#60695F;}
+.lang-btn{width:34px;height:30px;border:none;border-radius:999px;font-family:'Press Start 2P';font-size:8px;cursor:pointer;transition:background .15s,color .15s;}
+.lang-on{background:#F4C94D;color:#171714;}
+.lang-off{background:transparent;color:#60695F;}
+
+.card{border-radius:8px;padding:24px;border:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.86);box-shadow:0 10px 28px rgba(26,32,22,.1);}
+.stat-card{position:relative;border-radius:10px;padding:22px;border:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 28px rgba(26,32,22,.1);overflow:hidden;}
+.stat-bar{position:absolute;left:0;top:0;right:0;height:4px;}
+
+.glass-device{position:relative;border-radius:40px;padding:20px;background:linear-gradient(150deg,rgba(255,255,255,.52) 0%,rgba(255,255,255,.14) 46%,rgba(255,255,255,.34) 100%);backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 2px rgba(255,255,255,.95),inset 0 -10px 30px rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.1),0 34px 84px rgba(26,32,22,.24);}
+.glass-shine{position:absolute;inset:0;border-radius:40px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.6) 0%,transparent 26%,transparent 74%,rgba(255,255,255,.2) 100%);mix-blend-mode:screen;}
+.glass-hilight{position:absolute;left:14%;right:14%;top:9px;height:26px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.78),transparent);filter:blur(5px);pointer-events:none;}
+.glass-screen{position:relative;height:362px;border:1px solid rgba(255,255,255,.45);border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent 32%),#D4DACC;overflow:hidden;box-shadow:inset 0 2px 12px rgba(23,23,20,.24),inset 0 0 0 1px rgba(23,23,20,.06),0 8px 26px rgba(26,32,22,.2);}
+.glass-btn{position:relative;min-height:58px;border:1px solid rgba(255,255,255,.55);border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.16));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),0 8px 20px rgba(26,32,22,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;border:1px solid rgba(255,255,255,.55);}
+.glass-input{flex:1;min-width:0;height:48px;border:1px solid rgba(255,255,255,.6);border-radius:16px;padding:0 14px;background:rgba(255,255,255,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#171714;font-family:'Press Start 2P';font-size:10px;}
+
+.hero-grid{width:min(1160px,100%);margin:0 auto;padding:0 22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);gap:48px;align-items:center;}
+.section-wrap{width:min(1160px,100%);margin:0 auto;padding:0 22px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.grid-5{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:14px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;}
+
+.cta-btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:999px;background:#171714;color:#fff;box-shadow:0 14px 34px rgba(23,23,20,.18);font-family:'Press Start 2P';font-size:11px;line-height:1.4;text-decoration:none;transition:box-shadow .15s,transform .15s;border:none;cursor:pointer;}
+.cta-btn:hover{box-shadow:0 18px 42px rgba(23,23,20,.24);transform:translateY(-2px);}
+
+.px-decor-yellow{position:absolute;width:30px;height:30px;border-radius:50%;border:3px solid #171714;background:#F4C94D;animation:float 5s ease-in-out infinite;}
+.px-decor-orange{position:absolute;width:18px;height:18px;background:#F05A28;animation:float 4s ease-in-out infinite .6s;}
+.px-decor-teal{position:absolute;width:22px;height:22px;background:#187A78;animation:float 6s ease-in-out infinite .3s;}
+.px-decor-blue{position:absolute;width:24px;height:24px;background:#2B65D9;animation:float 5s ease-in-out infinite;}
+
+.step-num-orange{color:#F05A28;font-family:'Press Start 2P';font-size:10px;}
+.step-num-blue{color:#2B65D9;font-family:'Press Start 2P';font-size:10px;}
+.step-icon{width:50px;height:50px;display:grid;place-items:center;margin-bottom:18px;border-radius:8px;background:#EEF3EA;font-size:24px;}
+.step-h{margin:10px 0 8px;font-family:'Press Start 2P';font-size:12px;line-height:1.5;font-weight:400;}
+.step-p{color:#60695F;font-size:15px;line-height:1.48;margin:0;}
+
+.section-h{font-family:'Press Start 2P';font-size:clamp(18px,2.4vw,28px);font-weight:400;line-height:1.35;max-width:760px;margin:0 0 14px;}
+.section-lead{color:#60695F;font-size:18px;line-height:1.45;max-width:52ch;margin:0 0 34px;}
+
+@media(max-width:760px){
+  .hero-grid{grid-template-columns:1fr;gap:32px;}
+  .grid-3{grid-template-columns:1fr;}
+  .grid-5{grid-template-columns:repeat(3,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
 
-<!-- top bar -->
-<header class="top">
-  <div class="wrap">
-    <div class="logo">a<b>y</b>oo</div>
-    <div class="spacer"></div>
-    <div class="seg">
-      <button data-track="you" class="on" data-i18n="seg.you">For you</button>
-      <button data-track="biz" data-i18n="seg.biz">For business</button>
+<!-- HEADER -->
+<header style="position:sticky;top:0;z-index:40;background:rgba(249,250,245,.82);border-bottom:1px solid rgba(23,23,20,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);">
+  <div style="width:min(1160px,100%);margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:12px;min-height:68px;flex-wrap:wrap;">
+    <img src="project/landing/logo.svg" alt="ayoo" style="display:block;width:90px;height:auto;filter:drop-shadow(0 5px 8px rgba(23,23,20,.08));">
+    <div style="flex:1;"></div>
+    <div style="display:flex;align-items:center;gap:4px;padding:4px;border:1px solid rgba(23,23,20,.08);border-radius:999px;background:rgba(255,255,255,.78);box-shadow:0 10px 28px rgba(26,32,22,.1);">
+      <button id="btn-you" class="seg-btn seg-on" onclick="setTrack('you')">Для тебя</button>
+      <button id="btn-biz" class="seg-btn seg-off" onclick="setTrack('biz')">Для бизнеса</button>
     </div>
-    <div class="langs">
-      <button data-lang="ru">RU</button>
-      <button data-lang="en">EN</button>
-      <button data-lang="sr">SR</button>
+    <div style="display:flex;align-items:center;gap:4px;padding:4px;border:1px solid rgba(23,23,20,.08);border-radius:999px;background:rgba(255,255,255,.78);box-shadow:0 10px 28px rgba(26,32,22,.1);">
+      <button id="btn-ru" class="lang-btn lang-on" onclick="setLang('ru')">RU</button>
+      <button id="btn-en" class="lang-btn lang-off" onclick="setLang('en')">EN</button>
+      <button id="btn-sr" class="lang-btn lang-off" onclick="setLang('sr')">SR</button>
     </div>
   </div>
 </header>
 
-<!-- ── CLIENT TRACK ── -->
-<main class="track" data-track-panel="you">
-  <section class="hero">
-    <div class="wrap">
-      <div class="copy">
-        <h1 data-i18n="hero.h1">Adopt a pet that levels up every time you go out.</h1>
-        <p class="sub" data-i18n="hero.sub">Venues compete for your visit — and you level up a pet for it.</p>
-        <a class="cta" id="heroCta" href="#" target="_blank" rel="noopener">
-          <span data-i18n="hero.cta">Take your pet to Telegram</span>
-        </a>
-        <div class="tip" id="tip"></div>
+<!-- ===== CONSUMER TRACK ===== -->
+<main id="track-you" class="track active">
+
+  <!-- HERO -->
+  <section style="position:relative;overflow:hidden;padding:42px 0 84px;min-height:84vh;">
+    <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 12% 18%,rgba(240,90,40,.16),transparent 30%),radial-gradient(circle at 84% 18%,rgba(24,122,120,.16),transparent 28%),linear-gradient(135deg,#FFF8D9 0,#F5F7F2 45%,#E9F1EA 100%);"></div>
+    <div data-px="0.18" style="position:absolute;left:0;right:0;bottom:-40px;height:52%;z-index:0;background:linear-gradient(90deg,rgba(23,23,20,.07) 1px,transparent 1px),linear-gradient(180deg,rgba(23,23,20,.07) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000);"></div>
+    <div data-px="-0.22" class="px-decor-yellow" style="left:6%;top:30%;z-index:0;"></div>
+    <div data-px="0.32" class="px-decor-orange" style="left:40%;top:14%;z-index:0;"></div>
+    <div data-px="-0.4" class="px-decor-teal" style="right:38%;bottom:18%;z-index:0;"></div>
+    <div data-px="0.5" style="position:absolute;left:14%;bottom:22%;z-index:0;font-family:'Press Start 2P';font-size:22px;color:#2B65D9;animation:spin 9s linear infinite;">+</div>
+    <div data-px="-0.3" style="position:absolute;right:8%;top:62%;z-index:0;font-family:'Press Start 2P';font-size:18px;color:#F05A28;">✦</div>
+
+    <div class="hero-grid" style="position:relative;z-index:1;">
+      <div style="max-width:660px;">
+        <div id="hero-badge" data-reveal data-reveal-y="20" style="display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(23,23,20,.08);font-family:'Press Start 2P';font-size:8px;color:#187A78;margin-bottom:22px;">● ЖИВОЙ ПИТОМЕЦ</div>
+        <h1 id="hero-h1" data-reveal data-reveal-y="34" style="font-family:'Press Start 2P',sans-serif;font-size:clamp(24px,3.7vw,44px);line-height:1.24;font-weight:400;letter-spacing:0;max-width:15ch;margin:0;">Заведи питомца, который растёт, пока ты живёшь свой город.</h1>
+        <p id="hero-sub" data-reveal data-reveal-y="44" style="margin-top:24px;max-width:42ch;color:#424A3F;font-size:clamp(16px,1.6vw,20px);line-height:1.46;">Места борются за твой визит — а ты прокачиваешь питомца на этом. Бесплатно, в Telegram.</p>
+        <a id="hero-cta" data-reveal data-reveal-y="54" href="https://t.me/ayoo_loyalty_bot?start=pet_HATCHLING" target="_blank" rel="noopener" class="cta-btn" style="margin-top:28px;">Забери питомца в Telegram</a>
+        <div id="hero-tip" style="margin-top:16px;min-height:22px;color:#60695F;font-size:14px;font-weight:600;"></div>
       </div>
 
-      <div class="device">
-        <div class="stats" id="stats"></div>
-        <div class="screen">
-          <canvas id="lcd"></canvas>
-          <div class="coins"><span id="coins">0</span><span class="c"></span></div>
-          <div class="name pixel" id="petName"></div>
-          <div class="hint" id="hint" data-i18n="hero.egg">tap 3 times</div>
+      <!-- GLASS DEVICE -->
+      <div data-px="-0.05" class="glass-device">
+        <div class="glass-shine"></div>
+        <div class="glass-hilight"></div>
+        <div class="glass-screen">
+          <canvas id="pet-canvas" style="width:100%;height:100%;cursor:pointer;image-rendering:pixelated;" onclick="screenClick()"></canvas>
+          <div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(245,247,242,.8);font-family:'Press Start 2P';font-size:11px;color:#171714;"><span id="pet-coins">0</span><span style="width:13px;height:13px;border:2px solid #171714;border-radius:50%;background:#F4C94D;display:inline-block;"></span></div>
+          <div id="pet-label" style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'Press Start 2P';font-size:11px;color:#171714;"></div>
+          <div id="pet-hint" style="position:absolute;left:0;right:0;top:50%;transform:translateY(44px);text-align:center;font-family:'Press Start 2P';font-size:8px;color:#697463;animation:blink 1s steps(2) infinite;">тапни 3 раза</div>
         </div>
-        <div class="controls">
-          <button data-ctl="feed">🍔</button>
-          <button data-ctl="play">🎮</button>
-          <button data-ctl="stats">📊</button>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;">
+          <button onclick="petFeed()" class="glass-btn"><span style="font-size:20px;">🍔</span><span id="ctl-feed" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Покормить</span></button>
+          <button onclick="petPlay()" class="glass-btn"><span style="font-size:20px;">🎮</span><span id="ctl-play" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Играть</span></button>
+          <button onclick="petStats()" class="glass-btn"><span style="font-size:20px;">📊</span><span id="ctl-stats" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Статы</span></button>
         </div>
-        <div class="namebar" id="namebar">
-          <input id="nameInput" maxlength="12" data-i18n-ph="hero.name" />
-          <button id="nameOk" class="pixel">OK</button>
+        <div id="pet-name-form" style="display:none;gap:8px;margin-top:10px;">
+          <input id="pet-name-input" class="glass-input" placeholder="назови питомца" maxlength="12" oninput="state.nameDraft=this.value">
+          <button id="pet-name-ok" onclick="confirmName()" style="padding:0 18px;border:none;border-radius:14px;background:#171714;color:#fff;font-family:'Press Start 2P';font-size:10px;cursor:pointer;flex-shrink:0;">OK</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 3 steps -->
-  <section class="section alt">
-    <div class="wrap">
-      <h2 data-i18n="steps.title">How it works</h2>
-      <p class="lead" data-i18n="steps.lead">Three taps between you and a happy pet.</p>
-      <div class="steps">
-        <div class="step"><div class="ico">🏪</div><div class="n">01</div><h3 data-i18n="step1.t">Walk into a venue</h3><p data-i18n="step1.d">Any partner café, bar or shop in your city.</p></div>
-        <div class="step"><div class="ico">🧾</div><div class="n">02</div><h3 data-i18n="step2.t">Scan the receipt</h3><p data-i18n="step2.d">Points land instantly in Telegram.</p></div>
-        <div class="step"><div class="ico">👾</div><div class="n">03</div><h3 data-i18n="step3.t">Your pet grows</h3><p data-i18n="step3.d">Points feed your pet and unlock new ones.</p></div>
+  <!-- MARQUEE -->
+  <section style="overflow:hidden;background:#171714;padding:20px 0;border-top:3px solid #F05A28;border-bottom:3px solid #F05A28;">
+    <div style="display:flex;width:max-content;animation:marquee 24s linear infinite;font-family:'Press Start 2P';font-size:clamp(22px,4.2vw,46px);white-space:nowrap;gap:34px;">
+      <span style="display:flex;gap:34px;padding-right:34px;"><span style="color:#F4C94D;">EARN</span><span style="color:#F5F7F2;">✦</span><span style="color:#187A78;">PLAY</span><span style="color:#F5F7F2;">✦</span><span style="color:#F05A28;">GROW</span><span style="color:#F5F7F2;">✦</span><span style="color:#2B65D9;">COLLECT</span><span style="color:#F5F7F2;">✦</span></span>
+      <span aria-hidden="true" style="display:flex;gap:34px;padding-right:34px;"><span style="color:#F4C94D;">EARN</span><span style="color:#F5F7F2;">✦</span><span style="color:#187A78;">PLAY</span><span style="color:#F5F7F2;">✦</span><span style="color:#F05A28;">GROW</span><span style="color:#F5F7F2;">✦</span><span style="color:#2B65D9;">COLLECT</span><span style="color:#F5F7F2;">✦</span></span>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section style="padding:88px 0;border-bottom:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.58);">
+    <div class="section-wrap">
+      <h2 id="steps-title" data-reveal class="section-h">Как это работает</h2>
+      <p id="steps-lead" data-reveal data-reveal-y="30" class="section-lead">Три действия между тобой и довольным питомцем.</p>
+      <div class="grid-3">
+        <div data-reveal data-reveal-y="50" class="card" style="min-height:200px;">
+          <div class="step-icon">🏪</div>
+          <div class="step-num-orange">01</div>
+          <h3 id="s1t" class="step-h">Зайди в заведение</h3>
+          <p id="s1d" class="step-p">Любое заведение-партнёр в твоём городе — кафе, бар или магазин.</p>
+        </div>
+        <div data-reveal data-reveal-y="70" class="card" style="min-height:200px;">
+          <div class="step-icon">🧾</div>
+          <div class="step-num-orange">02</div>
+          <h3 id="s2t" class="step-h">Отсканируй чек</h3>
+          <p id="s2d" class="step-p">Баллы мгновенно прилетают в Telegram.</p>
+        </div>
+        <div data-reveal data-reveal-y="90" class="card" style="min-height:200px;">
+          <div class="step-icon">👾</div>
+          <div class="step-num-orange">03</div>
+          <h3 id="s3t" class="step-h">Питомец вырос</h3>
+          <p id="s3d" class="step-p">Баллы кормят питомца и открывают новых.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- evolution ladder -->
-  <section class="section">
-    <div class="wrap">
-      <h2 data-i18n="evo.title">The collection grows with you</h2>
-      <p class="lead" data-i18n="evo.lead">How far will yours go?</p>
-      <div class="ladder" id="ladder"></div>
-    </div>
-  </section>
-
-  <!-- cities -->
-  <section class="section alt">
-    <div class="wrap">
-      <h2 data-i18n="cities.title">Venues compete for you</h2>
-      <p class="lead" data-i18n="cities.lead">Belgrade & Novi Sad · point rates up to 10×.</p>
-      <div class="cities">
-        <div class="city"><span class="dot"></span><div><h3>Belgrade</h3><p data-i18n="city.live">live point rates</p></div></div>
-        <div class="city"><span class="dot"></span><div><h3>Novi Sad</h3><p data-i18n="city.live">live point rates</p></div></div>
+  <!-- EVOLUTION LADDER -->
+  <section style="position:relative;padding:88px 0;overflow:hidden;">
+    <div data-px="0.12" style="position:absolute;right:-2%;top:8%;z-index:0;font-family:'Press Start 2P';font-size:clamp(60px,13vw,150px);color:rgba(23,23,20,.05);white-space:nowrap;pointer-events:none;">GROW</div>
+    <div class="section-wrap" style="position:relative;z-index:1;">
+      <h2 id="evo-title" data-reveal class="section-h">Коллекция растёт с тобой</h2>
+      <p id="evo-lead" data-reveal data-reveal-y="30" class="section-lead">Докуда дорастёт твой? Скролль — и корми питомца на ходу.</p>
+      <div id="ladder-grid" class="grid-5">
+        <div data-reveal data-reveal-y="40" class="card" style="padding:14px;text-align:center;">
+          <div style="height:108px;display:grid;place-items:center;margin-bottom:13px;border:2px solid #AAB6A4;border-radius:8px;background:#D9DED2;overflow:hidden;"><canvas data-pet="HATCHLING" style="width:100%;height:100%;image-rendering:pixelated;"></canvas></div>
+          <div style="margin-bottom:7px;font-family:'Press Start 2P';font-size:10px;">Hatchling</div>
+          <div style="color:#F05A28;font-family:'Press Start 2P';font-size:8px;">500</div>
+        </div>
+        <div data-reveal data-reveal-y="58" class="card" style="padding:14px;text-align:center;">
+          <div style="height:108px;display:grid;place-items:center;margin-bottom:13px;border:2px solid #AAB6A4;border-radius:8px;background:#D9DED2;overflow:hidden;"><canvas data-pet="KID" style="width:100%;height:100%;image-rendering:pixelated;"></canvas></div>
+          <div style="margin-bottom:7px;font-family:'Press Start 2P';font-size:10px;">Kid</div>
+          <div style="color:#F05A28;font-family:'Press Start 2P';font-size:8px;">1 500</div>
+        </div>
+        <div data-reveal data-reveal-y="76" class="card" style="padding:14px;text-align:center;">
+          <div style="height:108px;display:grid;place-items:center;margin-bottom:13px;border:2px solid #AAB6A4;border-radius:8px;background:#D9DED2;overflow:hidden;"><canvas data-pet="FOX" style="width:100%;height:100%;image-rendering:pixelated;"></canvas></div>
+          <div style="margin-bottom:7px;font-family:'Press Start 2P';font-size:10px;">Fox</div>
+          <div style="color:#F05A28;font-family:'Press Start 2P';font-size:8px;">3 000</div>
+        </div>
+        <div data-reveal data-reveal-y="94" class="card" style="padding:14px;text-align:center;">
+          <div style="height:108px;display:grid;place-items:center;margin-bottom:13px;border:2px solid #AAB6A4;border-radius:8px;background:#D9DED2;overflow:hidden;"><canvas data-pet="DRAGON" style="width:100%;height:100%;image-rendering:pixelated;"></canvas></div>
+          <div style="margin-bottom:7px;font-family:'Press Start 2P';font-size:10px;">Dragon</div>
+          <div style="color:#F05A28;font-family:'Press Start 2P';font-size:8px;">5 000</div>
+        </div>
+        <div data-reveal data-reveal-y="112" class="card" style="padding:14px;text-align:center;">
+          <div style="height:108px;display:grid;place-items:center;margin-bottom:13px;border:2px solid #AAB6A4;border-radius:8px;background:#D9DED2;overflow:hidden;"><canvas data-pet="PHOENIX" style="width:100%;height:100%;image-rendering:pixelated;"></canvas></div>
+          <div style="margin-bottom:7px;font-family:'Press Start 2P';font-size:10px;">Phoenix</div>
+          <div style="color:#F05A28;font-family:'Press Start 2P';font-size:8px;">8 000</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- hi-score -->
-  <section class="section">
-    <div class="wrap">
-      <h2 data-i18n="hs.title">Hi-score</h2>
-      <div class="hiscore">
-        <div class="hs"><div class="num">2.1M</div><div class="cap" data-i18n="hs1">points awarded</div></div>
-        <div class="hs"><div class="num">14K</div><div class="cap" data-i18n="hs2">pets hatched</div></div>
-        <div class="hs"><div class="num">120</div><div class="cap" data-i18n="hs3">venues</div></div>
+  <!-- CITIES -->
+  <section style="padding:88px 0;border-top:1px solid rgba(23,23,20,.08);border-bottom:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.58);">
+    <div class="section-wrap">
+      <h2 id="cities-title" data-reveal class="section-h">Заведения соревнуются за тебя</h2>
+      <p id="cities-lead" data-reveal data-reveal-y="30" class="section-lead">Белград и Нови-Сад · ставки баллов до 10×.</p>
+      <div class="grid-2">
+        <div data-reveal data-reveal-y="50" class="card" style="display:flex;align-items:center;gap:16px;padding:22px;">
+          <span style="width:16px;height:16px;flex:0 0 auto;border-radius:50%;background:#187A78;box-shadow:0 0 0 8px rgba(24,122,120,.12);"></span>
+          <div><h3 style="font-family:'Press Start 2P';font-size:13px;font-weight:400;margin:0;">Belgrade</h3><p id="city-live-1" style="margin-top:6px;color:#60695F;font-size:14px;">живые ставки баллов</p></div>
+        </div>
+        <div data-reveal data-reveal-y="70" class="card" style="display:flex;align-items:center;gap:16px;padding:22px;">
+          <span style="width:16px;height:16px;flex:0 0 auto;border-radius:50%;background:#F05A28;box-shadow:0 0 0 8px rgba(240,90,40,.12);"></span>
+          <div><h3 style="font-family:'Press Start 2P';font-size:13px;font-weight:400;margin:0;">Novi Sad</h3><p id="city-live-2" style="margin-top:6px;color:#60695F;font-size:14px;">живые ставки баллов</p></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- reviews -->
-  <section class="section alt">
-    <div class="wrap">
-      <h2 data-i18n="rev.title">Loved in the wild</h2>
-      <div class="reviews">
-        <div class="review"><p data-i18n="rev1">“I scan everything now just to feed my dragon.”</p><div class="who">— Mila, Belgrade</div></div>
-        <div class="review"><p data-i18n="rev2">“Cashback that's actually fun. My kid named ours.”</p><div class="who">— Stefan, Novi Sad</div></div>
-        <div class="review"><p data-i18n="rev3">“Free, in Telegram, no app store. Just works.”</p><div class="who">— Ana, Belgrade</div></div>
+  <!-- MARKET STATS -->
+  <section style="position:relative;padding:88px 0;overflow:hidden;">
+    <div data-px="-0.1" style="position:absolute;left:-2%;bottom:-6%;z-index:0;font-family:'Press Start 2P';font-size:clamp(56px,12vw,140px);color:rgba(23,23,20,.05);white-space:nowrap;pointer-events:none;">ayoo</div>
+    <div class="section-wrap" style="position:relative;z-index:1;">
+      <h2 id="mkt-title" data-reveal class="section-h">Рынок, который ждёт</h2>
+      <p id="mkt-lead" data-reveal data-reveal-y="30" class="section-lead">Сервис новый — а поле огромное. Вот цифры, на которых мы играем.</p>
+      <div class="grid-4">
+        <div data-reveal data-reveal-y="40" class="stat-card">
+          <div class="stat-bar" style="background:#F05A28;"></div>
+          <div style="font-size:20px;margin-bottom:14px;">👥</div>
+          <div style="font-family:'Press Start 2P';font-size:clamp(20px,2.6vw,30px);line-height:1.1;">2.1M</div>
+          <div id="mk-pop" style="margin-top:13px;font-family:'Press Start 2P';font-size:10px;color:#171714;line-height:1.6;">Население</div>
+          <div id="mk-pop-sub" style="margin-top:7px;color:#60695F;font-size:13px;line-height:1.4;">Белград + Нови-Сад</div>
+        </div>
+        <div data-reveal data-reveal-y="56" class="stat-card">
+          <div class="stat-bar" style="background:#187A78;"></div>
+          <div style="font-size:20px;margin-bottom:14px;">🎯</div>
+          <div style="font-family:'Press Start 2P';font-size:clamp(20px,2.6vw,30px);line-height:1.1;">820K</div>
+          <div id="mk-aud" style="margin-top:13px;font-family:'Press Start 2P';font-size:10px;color:#171714;line-height:1.6;">Целевая аудитория</div>
+          <div id="mk-aud-sub" style="margin-top:7px;color:#60695F;font-size:13px;line-height:1.4;">18–45 лет, едят вне дома</div>
+        </div>
+        <div data-reveal data-reveal-y="72" class="stat-card">
+          <div class="stat-bar" style="background:#2B65D9;"></div>
+          <div style="font-size:20px;margin-bottom:14px;">🧾</div>
+          <div style="font-family:'Press Start 2P';font-size:clamp(20px,2.6vw,30px);line-height:1.1;">1 200</div>
+          <div id="mk-chk" style="margin-top:13px;font-family:'Press Start 2P';font-size:10px;color:#171714;line-height:1.6;">Средний чек</div>
+          <div id="mk-chk-sub" style="margin-top:7px;color:#60695F;font-size:13px;line-height:1.4;">RSD за визит в заведение</div>
+        </div>
+        <div data-reveal data-reveal-y="88" class="stat-card">
+          <div class="stat-bar" style="background:#F4C94D;"></div>
+          <div style="font-size:20px;margin-bottom:14px;">🕹️</div>
+          <div style="font-family:'Press Start 2P';font-size:clamp(20px,2.6vw,30px);line-height:1.1;">2×</div>
+          <div id="mk-gam" style="margin-top:13px;font-family:'Press Start 2P';font-size:10px;color:#171714;line-height:1.6;">Геймификация</div>
+          <div id="mk-gam-sub" style="margin-top:7px;color:#60695F;font-size:13px;line-height:1.4;">частота визитов с питомцем</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- final cta -->
-  <section class="section final">
-    <div class="wrap">
-      <h2 data-i18n="final.title">Your pet is hungry for the real thing →</h2>
-      <div class="qr"><img id="qr" alt="QR"></div>
-      <a class="cta" id="heroCta2" href="#" target="_blank" rel="noopener"><span data-i18n="hero.cta">Take your pet to Telegram</span></a>
+  <!-- REVIEWS -->
+  <section style="padding:88px 0;border-top:1px solid rgba(23,23,20,.08);border-bottom:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.58);">
+    <div class="section-wrap">
+      <h2 id="rev-title" data-reveal class="section-h">Любят на районе</h2>
+      <div class="grid-3">
+        <div data-reveal data-reveal-y="40" class="card"><p id="rev1" style="color:#60695F;font-size:15px;line-height:1.48;">«Теперь сканирую всё подряд, лишь бы покормить дракона.»</p><div id="rev1who" style="margin-top:16px;color:#171714;font-family:'Press Start 2P';font-size:8px;line-height:1.6;">— Мила, Белград</div></div>
+        <div data-reveal data-reveal-y="58" class="card"><p id="rev2" style="color:#60695F;font-size:15px;line-height:1.48;">«Кэшбэк, в который реально весело играть. Питомца назвал сын.»</p><div id="rev2who" style="margin-top:16px;color:#171714;font-family:'Press Start 2P';font-size:8px;line-height:1.6;">— Стефан, Нови-Сад</div></div>
+        <div data-reveal data-reveal-y="76" class="card"><p id="rev3" style="color:#60695F;font-size:15px;line-height:1.48;">«Бесплатно, в Telegram, без сторов. Просто работает.»</p><div id="rev3who" style="margin-top:16px;color:#171714;font-family:'Press Start 2P';font-size:8px;line-height:1.6;">— Ана, Белград</div></div>
+      </div>
     </div>
   </section>
+
+  <!-- FINAL CTA -->
+  <section style="padding:96px 0;text-align:center;">
+    <div class="section-wrap" style="display:grid;place-items:center;">
+      <h2 id="final-title" data-reveal class="section-h" style="max-width:22ch;margin:0 0 26px;text-align:center;">Твой питомец проголодался по настоящему →</h2>
+      <a id="final-qr-link" data-reveal data-reveal-y="44" href="https://t.me/ayoo_loyalty_bot?start=pet_HATCHLING" target="_blank" rel="noopener" style="display:block;width:178px;height:178px;margin:0 auto 12px;padding:14px;border:1px solid rgba(23,23,20,.08);border-radius:8px;background:#fff;box-shadow:0 10px 28px rgba(26,32,22,.1);">
+        <canvas id="qr-client" style="width:100%;height:100%;image-rendering:pixelated;"></canvas>
+      </a>
+      <div id="client-scan" data-reveal data-reveal-y="50" style="margin:0 0 18px;color:#60695F;font-size:13px;">Наведи камеру на код</div>
+      <a id="final-cta" data-reveal data-reveal-y="56" href="https://t.me/ayoo_loyalty_bot?start=pet_HATCHLING" target="_blank" rel="noopener" class="cta-btn">Забери питомца в Telegram</a>
+    </div>
+  </section>
+
 </main>
 
-<!-- ── BUSINESS TRACK ── -->
-<main class="track" data-track-panel="biz" hidden>
-  <section class="hero">
-    <div class="wrap">
-      <div class="copy">
-        <h1 data-i18n="biz.h1">Make guests choose you — and feed their pets at your place.</h1>
-        <p class="sub" data-i18n="biz.sub">Gamified loyalty, no hardware. Set your point rate and win visits.</p>
-        <a class="cta" href="#bizform"><span data-i18n="biz.cta">Apply now</span></a>
+<!-- ===== BUSINESS TRACK ===== -->
+<main id="track-biz" class="track">
+
+  <!-- BIZ HERO -->
+  <section style="position:relative;overflow:hidden;padding:42px 0 84px;min-height:80vh;">
+    <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 84% 16%,rgba(43,101,217,.16),transparent 30%),radial-gradient(circle at 12% 20%,rgba(24,122,120,.16),transparent 28%),linear-gradient(135deg,#EAF1FF 0,#F5F7F2 45%,#E9F1EA 100%);"></div>
+    <div data-px="0.18" style="position:absolute;left:0;right:0;bottom:-40px;height:52%;z-index:0;background:linear-gradient(90deg,rgba(23,23,20,.07) 1px,transparent 1px),linear-gradient(180deg,rgba(23,23,20,.07) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000);"></div>
+    <div data-px="-0.3" class="px-decor-blue" style="left:8%;top:26%;z-index:0;"></div>
+    <div data-px="0.4" style="position:absolute;right:42%;top:16%;z-index:0;font-family:'Press Start 2P';font-size:20px;color:#187A78;animation:spin 10s linear infinite;">+</div>
+
+    <div class="hero-grid" style="position:relative;z-index:1;">
+      <div style="max-width:660px;">
+        <h1 id="biz-h1" data-reveal data-reveal-y="34" style="font-family:'Press Start 2P',sans-serif;font-size:clamp(24px,3.7vw,44px);line-height:1.24;font-weight:400;max-width:16ch;margin:0;">Пусть гости выбирают тебя — и кормят питомцев у тебя.</h1>
+        <p id="biz-sub" data-reveal data-reveal-y="44" style="margin-top:24px;max-width:42ch;color:#424A3F;font-size:clamp(16px,1.6vw,20px);line-height:1.46;">Геймифицированная лояльность без оборудования. Ставь свою ставку баллов и выигрывай визиты.</p>
+        <a id="biz-cta" data-reveal data-reveal-y="54" href="#bizform" onclick="scrollToForm(event)" class="cta-btn" style="margin-top:28px;">Оставить заявку</a>
       </div>
-      <div class="device" aria-hidden="true">
-        <div class="screen" style="height:260px">
-          <canvas id="lcdBiz"></canvas>
+
+      <!-- LIVE RATE BOARD -->
+      <div data-px="-0.05" style="position:relative;border-radius:28px;padding:18px;background:linear-gradient(145deg,#FFFFFF 0,#F2F6EC 55%,#E4ECDE 100%);border:1px solid rgba(23,23,20,.08);border-bottom:5px solid #D1DACB;box-shadow:0 20px 60px rgba(26,32,22,.16);">
+        <div id="live-label" style="font-family:'Press Start 2P';font-size:9px;color:#60695F;margin:6px 4px 16px;letter-spacing:1px;">В ЭФИРЕ · БЕЛГРАД</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="border:1px solid rgba(23,23,20,.08);border-radius:12px;padding:14px;background:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;"><span style="font-size:15px;font-weight:700;">Coffee Palace</span><span style="font-family:'Press Start 2P';font-size:9px;color:#fff;background:#187A78;padding:5px 8px;border-radius:8px;">2×</span></div>
+            <div style="height:9px;border:1px solid rgba(23,23,20,.12);border-radius:999px;background:#D9DED2;overflow:hidden;"><i style="display:block;height:100%;width:22%;background:#187A78;"></i></div>
+          </div>
+          <div style="border:1px solid rgba(23,23,20,.08);border-radius:12px;padding:14px;background:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;"><span style="font-size:15px;font-weight:700;">Sushi Bar</span><span style="font-family:'Press Start 2P';font-size:9px;color:#fff;background:#F05A28;padding:5px 8px;border-radius:8px;">5×</span></div>
+            <div style="height:9px;border:1px solid rgba(23,23,20,.12);border-radius:999px;background:#D9DED2;overflow:hidden;"><i style="display:block;height:100%;width:55%;background:#F05A28;"></i></div>
+          </div>
+          <div style="border:1px solid rgba(23,23,20,.08);border-radius:12px;padding:14px;background:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;"><span style="font-size:15px;font-weight:700;">Pastry House</span><span style="font-family:'Press Start 2P';font-size:9px;color:#fff;background:#2B65D9;padding:5px 8px;border-radius:8px;">10×</span></div>
+            <div style="height:9px;border:1px solid rgba(23,23,20,.12);border-radius:999px;background:#D9DED2;overflow:hidden;"><i style="display:block;height:100%;width:100%;background:#2B65D9;"></i></div>
+          </div>
         </div>
       </div>
     </div>
   </section>
-  <section class="section alt">
-    <div class="wrap">
-      <h2 data-i18n="biz.steps.title">How it works for business</h2>
-      <div class="steps">
-        <div class="step"><div class="ico">⚡</div><div class="n">01</div><h3 data-i18n="bstep1.t">Get set up</h3><p data-i18n="bstep1.d">10-minute signup, no hardware.</p></div>
-        <div class="step"><div class="ico">🎯</div><div class="n">02</div><h3 data-i18n="bstep2.t">Set your point rate</h3><p data-i18n="bstep2.d">Compete for guests with a public rate.</p></div>
-        <div class="step"><div class="ico">🚶</div><div class="n">03</div><h3 data-i18n="bstep3.t">Guests come in</h3><p data-i18n="bstep3.d">Gamification brings them back.</p></div>
+
+  <!-- BIZ MARQUEE -->
+  <section style="overflow:hidden;background:#171714;padding:20px 0;border-top:3px solid #2B65D9;border-bottom:3px solid #2B65D9;">
+    <div style="display:flex;width:max-content;animation:marquee 26s linear infinite;font-family:'Press Start 2P';font-size:clamp(20px,3.6vw,40px);white-space:nowrap;gap:34px;">
+      <span style="display:flex;gap:34px;padding-right:34px;"><span id="mq1-a" style="color:#F4C94D;">ПОДКЛЮЧИСЬ</span><span style="color:#F5F7F2;">✦</span><span id="mq2-a" style="color:#187A78;">СТАВЬ СТАВКУ</span><span style="color:#F5F7F2;">✦</span><span id="mq3-a" style="color:#F05A28;">РАСТИ</span><span style="color:#F5F7F2;">✦</span></span>
+      <span aria-hidden="true" style="display:flex;gap:34px;padding-right:34px;"><span id="mq1-b" style="color:#F4C94D;">ПОДКЛЮЧИСЬ</span><span style="color:#F5F7F2;">✦</span><span id="mq2-b" style="color:#187A78;">СТАВЬ СТАВКУ</span><span style="color:#F5F7F2;">✦</span><span id="mq3-b" style="color:#F05A28;">РАСТИ</span><span style="color:#F5F7F2;">✦</span></span>
+    </div>
+  </section>
+
+  <!-- BIZ STEPS -->
+  <section style="padding:88px 0;border-bottom:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.58);">
+    <div class="section-wrap">
+      <h2 id="biz-steps-title" data-reveal class="section-h">Как это работает для бизнеса</h2>
+      <div class="grid-3">
+        <div data-reveal data-reveal-y="50" class="card" style="min-height:190px;">
+          <div class="step-icon">⚡</div><div class="step-num-blue">01</div>
+          <h3 id="b1t" class="step-h">Подключись</h3><p id="b1d" class="step-p">Регистрация за 10 минут, без оборудования.</p>
+        </div>
+        <div data-reveal data-reveal-y="70" class="card" style="min-height:190px;">
+          <div class="step-icon">🎯</div><div class="step-num-blue">02</div>
+          <h3 id="b2t" class="step-h">Поставь ставку баллов</h3><p id="b2d" class="step-p">Конкурируй за гостей публичной ставкой.</p>
+        </div>
+        <div data-reveal data-reveal-y="90" class="card" style="min-height:190px;">
+          <div class="step-icon">🚶</div><div class="step-num-blue">03</div>
+          <h3 id="b3t" class="step-h">Гости приходят</h3><p id="b3d" class="step-p">Геймификация возвращает их снова.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <h2 data-i18n="calc.title">See your upside</h2>
-      <div class="calc">
-        <label data-i18n="calc.check">Average check (RSD)</label>
-        <input id="calcCheck" type="number" value="1200" inputmode="numeric">
-        <label data-i18n="calc.visits">Visits per month</label>
-        <input id="calcVisits" type="number" value="800" inputmode="numeric">
-        <div class="out" id="calcOut"></div>
+  <!-- CALCULATOR -->
+  <section style="padding:88px 0;">
+    <div class="section-wrap">
+      <h2 id="calc-title" data-reveal class="section-h">Посчитай выгоду</h2>
+      <div data-reveal data-reveal-y="44" style="width:min(520px,100%);border-radius:8px;padding:24px;border:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.86);box-shadow:0 10px 28px rgba(26,32,22,.1);">
+        <label id="calc-check-l" style="display:block;margin:0 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Средний чек (RSD)</label>
+        <input id="calc-check" type="number" inputmode="numeric" value="1200" oninput="state.calcCheck=this.value;updateCalc()" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <label id="calc-visits-l" style="display:block;margin:16px 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Визитов в месяц</label>
+        <input id="calc-visits" type="number" inputmode="numeric" value="800" oninput="state.calcVisits=this.value;updateCalc()" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <div id="calc-out" style="margin-top:20px;font-family:'Press Start 2P';font-size:12px;line-height:1.7;color:#171714;"></div>
       </div>
     </div>
   </section>
 
-  <section class="section alt" id="bizform">
-    <div class="wrap">
-      <h2 data-i18n="form.title">Apply now</h2>
-      <form class="form" id="leadForm">
-        <label data-i18n="form.name">Name</label><input id="lf_name" required>
-        <label data-i18n="form.venue">Venue</label><input id="lf_venue" required>
-        <label data-i18n="form.city">City</label><input id="lf_city">
-        <label data-i18n="form.contact">Contact</label><input id="lf_contact" required>
-        <button class="ok" type="submit" data-i18n="form.send">Send</button>
-        <div class="done" id="leadOk" style="display:none" data-i18n="form.done">Thanks! We'll be in touch.</div>
+  <!-- LEAD FORM -->
+  <section id="bizform" style="padding:88px 0;border-top:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.58);">
+    <div class="section-wrap">
+      <h2 id="form-title" data-reveal class="section-h">Оставить заявку</h2>
+      <form data-reveal data-reveal-y="44" onsubmit="submitForm(event)" style="width:min(520px,100%);border-radius:8px;padding:24px;border:1px solid rgba(23,23,20,.08);background:rgba(255,255,255,.92);box-shadow:0 10px 28px rgba(26,32,22,.1);">
+        <label id="f-name-l" style="display:block;margin:0 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Имя</label>
+        <input id="f-name" oninput="state.fName=this.value" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <label id="f-venue-l" style="display:block;margin:16px 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Заведение</label>
+        <input id="f-venue" oninput="state.fVenue=this.value" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <label id="f-city-l" style="display:block;margin:16px 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Город</label>
+        <input id="f-city" oninput="state.fCity=this.value" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <label id="f-contact-l" style="display:block;margin:16px 0 7px;color:#60695F;font-family:'Press Start 2P';font-size:9px;line-height:1.5;">Контакт (Telegram/телефон)</label>
+        <input id="f-contact" oninput="state.fContact=this.value" style="width:100%;height:48px;border:1px solid #DCE4D6;border-radius:8px;padding:0 14px;background:#fff;color:#171714;font:600 15px 'Space Grotesk',sans-serif;">
+        <button id="f-send" type="submit" class="cta-btn" style="width:100%;margin-top:20px;padding:16px;border-radius:999px;font-size:10px;">Отправить</button>
+        <div id="form-done" style="display:none;margin-top:14px;color:#187A78;font-weight:700;">Спасибо! Мы свяжемся с тобой.</div>
       </form>
     </div>
   </section>
+
+  <!-- PARTNER QR -->
+  <section style="padding:96px 0;text-align:center;border-top:1px solid rgba(23,23,20,.08);">
+    <div class="section-wrap" style="display:grid;place-items:center;">
+      <h2 id="biz-qr-title" data-reveal class="section-h" style="max-width:24ch;margin:0 0 26px;text-align:center;">Открой бота-партнёра прямо сейчас</h2>
+      <a id="partner-qr-link" data-reveal data-reveal-y="44" href="https://t.me/ayoo_partner_bot" target="_blank" rel="noopener" style="display:block;width:178px;height:178px;margin:0 auto 12px;padding:14px;border:1px solid rgba(23,23,20,.08);border-radius:8px;background:#fff;box-shadow:0 10px 28px rgba(26,32,22,.1);">
+        <canvas id="qr-partner" style="width:100%;height:100%;image-rendering:pixelated;"></canvas>
+      </a>
+      <div id="biz-scan" data-reveal data-reveal-y="50" style="margin:0 0 18px;color:#60695F;font-size:13px;">Наведи камеру или нажми кнопку</div>
+      <a id="biz-qr-cta" data-reveal data-reveal-y="56" href="https://t.me/ayoo_partner_bot" target="_blank" rel="noopener" class="cta-btn">Открыть бота-партнёра</a>
+    </div>
+  </section>
+
 </main>
 
-<script src="pets.js"></script>
-<script src="i18n.js"></script>
-<script src="game.js"></script>
-<script src="business.js"></script>
+<!-- FOOTER -->
+<footer style="border-top:1px solid rgba(23,23,20,.08);padding:30px 0;background:rgba(249,250,245,.6);">
+  <div style="width:min(1160px,100%);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <img src="project/landing/logo.svg" alt="ayoo" style="width:72px;height:auto;">
+    <div style="flex:1;"></div>
+    <div id="footer-tag" style="color:#60695F;font-size:13px;">© ayoo · лояльность, которую можно погладить</div>
+  </div>
+</footer>
+
+<script>
+// ==================== SPRITES ====================
+const SPRITES = {
+  EGG:[
+    ["..KKKK..",".KKKKKK.","KKKKKKKK","KK.KK.KK","KKKKKKKK","KKKKKKKK",".KKKKKK.","..KKKK.."],
+    ["..KKKK..",".KKKKKK.","KKKKKKKK","KKKKKKKK","KK.KK.KK","KKKKKKKK",".KKKKKK.","..KKKK.."],
+  ],
+  HATCHLING:[
+    ["...KK...","..KKKK..",".KKKKKK.","KK.KK.KK","KKKKKKKK","..K..K..",".K.KK.K.","K.K..K.K"],
+    ["...KK...","..KKKK..",".KKKKKK.","KK.KK.KK","KKKKKKKK",".K.KK.K.","K......K",".K....K."],
+  ],
+  KID:[
+    ["..K.....K..","...K...K...","..KKKKKKK..",".KK.KKK.KK.","KKKKKKKKKKK","K.KKKKKKK.K","K.K.....K.K","...KK.KK..."],
+    ["..K.....K..","K..K...K..K","K.KKKKKKK.K","KKK.KKK.KKK","KKKKKKKKKKK",".KKKKKKKKK.","..K.....K..",".K.......K."],
+  ],
+  FOX:[
+    ["....KKKK....",".KKKKKKKKKK.","KKKKKKKKKKKK","KKK..KK..KKK","KKKKKKKKKKKK","...KK..KK...","..KK.KK.KK..","KK........KK"],
+    ["....KKKK....",".KKKKKKKKKK.","KKKKKKKKKKKK","KKK..KK..KKK","KKKKKKKKKKKK","..KKK..KKK..",".KK..KK..KK.","..KK....KK.."],
+  ],
+  DRAGON:[
+    ["K....KKK....K",".K..KKKKK..K.","..KKKKKKKKK..",".KKK.KKK.KKK.","KKKKKKKKKKKKK","KKKKKKKKKKKKK","K.KKK.K.KKK.K","K.K.......K.K","...KK...KK..."],
+    [".K...KKK...K.","K...KKKKK...K","..KKKKKKKKK..",".KKK.KKK.KKK.","KKKKKKKKKKKKK","KKKKKKKKKKKKK",".KKKK.K.KKKK.","..K.......K..",".KK.......KK."],
+  ],
+  PHOENIX:[
+    ["K....KKK....K","KK..KKKKK..KK",".KKKKKKKKKKK.","..KK.KKK.KK..","KKKKKKKKKKKKK","KKKKKKKKKKKKK",".KKKKKKKKKKK.","..K..KKK..K..",".K...K.K...K."],
+    [".K...KKK...K.","..KKKKKKKKK..",".KKKKKKKKKKK.","..KK.KKK.KK..","KKKKKKKKKKKKK","KKKKKKKKKKKKK","KKKKKKKKKKKKK",".KK..K.K..KK.","K.K.......K.K"],
+  ],
+};
+const PET_NAMES = {EGG:"Egg",HATCHLING:"Hatchling",KID:"Kid",FOX:"Fox",DRAGON:"Dragon",PHOENIX:"Phoenix"};
+
+// ==================== I18N ====================
+const I18N = {
+  ru:{
+    segYou:"Для тебя",segBiz:"Для бизнеса",
+    heroBadge:"ЖИВОЙ ПИТОМЕЦ",
+    heroH1:"Заведи питомца, который растёт, пока ты живёшь свой город.",
+    heroSub:"Места борются за твой визит — а ты прокачиваешь питомца на этом. Бесплатно, в Telegram.",
+    heroCta:"Забери питомца в Telegram",
+    eggHint:"тапни 3 раза",liveHint:"тапни — он прыгнет",hungryHint:"покорми меня!",
+    namePh:"назови питомца",nameOk:"OK",
+    ctlFeed:"Покормить",ctlPlay:"Играть",ctlStats:"Статы",
+    tipFeed:"Скан чека = еда",tipPlay:"Чек-ин = игра",tipStats:"Баллы = здоровье",
+    stepsTitle:"Как это работает",stepsLead:"Три действия между тобой и довольным питомцем.",
+    s1t:"Зайди в заведение",s1d:"Любое заведение-партнёр в твоём городе — кафе, бар или магазин.",
+    s2t:"Отсканируй чек",s2d:"Баллы мгновенно прилетают в Telegram.",
+    s3t:"Питомец вырос",s3d:"Баллы кормят питомца и открывают новых.",
+    evoTitle:"Коллекция растёт с тобой",evoLead:"Докуда дорастёт твой? Скролль — и корми питомца на ходу.",
+    citiesTitle:"Заведения соревнуются за тебя",citiesLead:"Белград и Нови-Сад · ставки баллов до 10×.",
+    cityLive:"живые ставки баллов",
+    mktTitle:"Рынок, который ждёт",mktLead:"Сервис новый — а поле огромное. Вот цифры, на которых мы играем.",
+    mkPop:"Население",mkPopSub:"Белград + Нови-Сад",
+    mkAud:"Целевая аудитория",mkAudSub:"18–45 лет, едят вне дома",
+    mkChk:"Средний чек",mkChkSub:"RSD за визит в заведение",
+    mkGam:"Геймификация",mkGamSub:"частота визитов с питомцем",
+    revTitle:"Любят на районе",
+    rev1:"«Теперь сканирую всё подряд, лишь бы покормить дракона.»",rev1who:"— Мила, Белград",
+    rev2:"«Кэшбэк, в который реально весело играть. Питомца назвал сын.»",rev2who:"— Стефан, Нови-Сад",
+    rev3:"«Бесплатно, в Telegram, без сторов. Просто работает.»",rev3who:"— Ана, Белград",
+    finalTitle:"Твой питомец проголодался по настоящему →",finalCta:"Забери питомца в Telegram",
+    clientScan:"Наведи камеру на код",
+    bizH1:"Пусть гости выбирают тебя — и кормят питомцев у тебя.",
+    bizSub:"Геймифицированная лояльность без оборудования. Ставь свою ставку баллов и выигрывай визиты.",
+    bizCta:"Оставить заявку",bizStepsTitle:"Как это работает для бизнеса",
+    liveLabel:"В ЭФИРЕ · БЕЛГРАД",
+    mq1:"ПОДКЛЮЧИСЬ",mq2:"СТАВЬ СТАВКУ",mq3:"РАСТИ",
+    b1t:"Подключись",b1d:"Регистрация за 10 минут, без оборудования.",
+    b2t:"Поставь ставку баллов",b2d:"Конкурируй за гостей публичной ставкой.",
+    b3t:"Гости приходят",b3d:"Геймификация возвращает их снова.",
+    calcTitle:"Посчитай выгоду",calcCheckL:"Средний чек (RSD)",calcVisitsL:"Визитов в месяц",
+    formTitle:"Оставить заявку",fName:"Имя",fVenue:"Заведение",fCity:"Город",fContact:"Контакт (Telegram/телефон)",
+    fSend:"Отправить",fDone:"Спасибо! Мы свяжемся с тобой.",
+    bizQrTitle:"Открой бота-партнёра прямо сейчас",bizScan:"Наведи камеру или нажми кнопку",bizQrCta:"Открыть бота-партнёра",
+    footerTag:"© ayoo · лояльность, которую можно погладить",
+  },
+  en:{
+    segYou:"For you",segBiz:"For business",
+    heroBadge:"A LIVING PET",
+    heroH1:"Adopt a pet that levels up every time you go out.",
+    heroSub:"Venues compete for your visit — and you level up a pet for it. Free, in Telegram.",
+    heroCta:"Take your pet to Telegram",
+    eggHint:"tap 3 times",liveHint:"tap to make it jump",hungryHint:"feed me!",
+    namePh:"name your pet",nameOk:"OK",
+    ctlFeed:"Feed",ctlPlay:"Play",ctlStats:"Stats",
+    tipFeed:"Scan a receipt = food",tipPlay:"Check in = play",tipStats:"Points = health",
+    stepsTitle:"How it works",stepsLead:"Three taps between you and a happy pet.",
+    s1t:"Walk into a venue",s1d:"Any partner café, bar or shop in your city.",
+    s2t:"Scan the receipt",s2d:"Points land instantly in Telegram.",
+    s3t:"Your pet grows",s3d:"Points feed your pet and unlock new ones.",
+    evoTitle:"The collection grows with you",evoLead:"How far will yours go? Scroll to feed it as you go.",
+    citiesTitle:"Venues compete for you",citiesLead:"Belgrade & Novi Sad · point rates up to 10×.",
+    cityLive:"live point rates",
+    mktTitle:"A market that's waiting",mktLead:"The service is new — the field is huge. Here are the numbers we play on.",
+    mkPop:"Population",mkPopSub:"Belgrade + Novi Sad",
+    mkAud:"Target audience",mkAudSub:"18–45, dining out",
+    mkChk:"Average check",mkChkSub:"RSD per venue visit",
+    mkGam:"Gamification",mkGamSub:"visit frequency with a pet",
+    revTitle:"Loved in the wild",
+    rev1:"“I scan everything now just to feed my dragon.”",rev1who:"— Mila, Belgrade",
+    rev2:"“Cashback that's actually fun. My kid named ours.”",rev2who:"— Stefan, Novi Sad",
+    rev3:"“Free, in Telegram, no app store. Just works.”",rev3who:"— Ana, Belgrade",
+    finalTitle:"Your pet is hungry for the real thing →",finalCta:"Take your pet to Telegram",
+    clientScan:"Point your camera at the code",
+    bizH1:"Make guests choose you — and feed their pets at your place.",
+    bizSub:"Gamified loyalty, no hardware. Set your point rate and win visits.",
+    bizCta:"Apply now",bizStepsTitle:"How it works for business",
+    liveLabel:"LIVE · BELGRADE",
+    mq1:"GET SET UP",mq2:"SET YOUR RATE",mq3:"GROW",
+    b1t:"Get set up",b1d:"10-minute signup, no hardware.",
+    b2t:"Set your point rate",b2d:"Compete for guests with a public rate.",
+    b3t:"Guests come in",b3d:"Gamification brings them back.",
+    calcTitle:"See your upside",calcCheckL:"Average check (RSD)",calcVisitsL:"Visits per month",
+    formTitle:"Apply now",fName:"Name",fVenue:"Venue",fCity:"City",fContact:"Contact (Telegram/phone)",
+    fSend:"Send",fDone:"Thanks! We'll be in touch.",
+    bizQrTitle:"Open the partner bot right now",bizScan:"Point your camera or tap the button",bizQrCta:"Open the partner bot",
+    footerTag:"© ayoo · loyalty you can pet",
+  },
+  sr:{
+    segYou:"Za tebe",segBiz:"Za biznis",
+    heroBadge:"ŽIVI LJUBIMAC",
+    heroH1:"Othrani ljubimca koji raste dok izlaziš po gradu.",
+    heroSub:"Lokali se takmiče za tvoju posetu — a ti time hraniš ljubimca. Besplatno, u Telegramu.",
+    heroCta:"Povedi ljubimca u Telegram",
+    eggHint:"tapni 3 puta",liveHint:"tapni da skoči",hungryHint:"nahrani me!",
+    namePh:"daj mu ime",nameOk:"OK",
+    ctlFeed:"Hrani",ctlPlay:"Igra",ctlStats:"Statistika",
+    tipFeed:"Skeniraj račun = hrana",tipPlay:"Prijava = igra",tipStats:"Bodovi = zdravlje",
+    stepsTitle:"Kako funkcioniše",stepsLead:"Tri dodira do srećnog ljubimca.",
+    s1t:"Uđi u lokal",s1d:"Bilo koji partnerski kafić, bar ili radnja u tvom gradu.",
+    s2t:"Skeniraj račun",s2d:"Bodovi odmah stižu u Telegram.",
+    s3t:"Ljubimac raste",s3d:"Bodovi hrane ljubimca i otključavaju nove.",
+    evoTitle:"Kolekcija raste s tobom",evoLead:"Dokle će tvoj stići? Skroluj i hrani ga usput.",
+    citiesTitle:"Lokali se takmiče za tebe",citiesLead:"Beograd i Novi Sad · do 10× bodova.",
+    cityLive:"žive stope bodova",
+    mktTitle:"Tržište koje čeka",mktLead:"Servis je nov — a teren je ogroman. Evo brojki na kojima igramo.",
+    mkPop:"Stanovništvo",mkPopSub:"Beograd + Novi Sad",
+    mkAud:"Ciljna grupa",mkAudSub:"18–45, jedu napolju",
+    mkChk:"Prosečan račun",mkChkSub:"RSD po poseti lokalu",
+    mkGam:"Gejmifikacija",mkGamSub:"učestalost poseta sa ljubimcem",
+    revTitle:"Vole ga svuda",
+    rev1:"„Sad skeniram sve samo da nahranim zmaja.“",rev1who:"— Mila, Beograd",
+    rev2:"„Keš-bek koji je stvarno zabavan. Sin mu je dao ime.“",rev2who:"— Stefan, Novi Sad",
+    rev3:"„Besplatno, u Telegramu, bez prodavnica. Samo radi.“",rev3who:"— Ana, Beograd",
+    finalTitle:"Tvoj ljubimac je gladan pravog →",finalCta:"Povedi ljubimca u Telegram",
+    clientScan:"Uperi kameru na kod",
+    bizH1:"Neka gosti biraju tebe — i hrane ljubimce kod tebe.",
+    bizSub:"Gejmifikovana lojalnost bez opreme. Postavi svoju stopu bodova i osvajaj posete.",
+    bizCta:"Pošalji prijavu",bizStepsTitle:"Kako funkcioniše za biznis",
+    liveLabel:"UŽIVO · BEOGRAD",
+    mq1:"PRIKLJUČI SE",mq2:"POSTAVI STOPU",mq3:"RASTI",
+    b1t:"Priključi se",b1d:"Registracija za 10 minuta, bez opreme.",
+    b2t:"Postavi stopu bodova",b2d:"Takmiči se za goste javnom stopom.",
+    b3t:"Gosti dolaze",b3d:"Gejmifikacija ih vraća ponovo.",
+    calcTitle:"Vidi svoju dobit",calcCheckL:"Prosečan račun (RSD)",calcVisitsL:"Poseta mesečno",
+    formTitle:"Pošalji prijavu",fName:"Ime",fVenue:"Lokal",fCity:"Grad",fContact:"Kontakt (Telegram/telefon)",
+    fSend:"Pošalji",fDone:"Hvala! Javićemo ti se.",
+    bizQrTitle:"Otvori partnerskog bota odmah",bizScan:"Uperi kameru ili pritisni dugme",bizQrCta:"Otvori partnerskog bota",
+    footerTag:"© ayoo · lojalnost koju možeš pomaziti",
+  },
+};
+
+// ==================== STATE ====================
+const state = {
+  lang:'ru', track:'you',
+  phase:'egg', stage:'EGG', taps:0,
+  petName:'', nameDraft:'',
+  fed:0, joy:0, coins:0, hungry:false, tip:'',
+  calcCheck:1200, calcVisits:800,
+  fName:'', fVenue:'', fCity:'', fContact:'', sent:false,
+};
+
+// ==================== ANIM STATE ====================
+let _frame=0, _hopT=0, _lastSwap=0, _last=Date.now(), _raf=null, _fx=[], _hungryTimer=null;
+
+// ==================== HELPERS ====================
+const $ = id => document.getElementById(id);
+const setText = (id, v) => { const e=$(id); if(e) e.textContent=v; };
+const setAttr = (id, a, v) => { const e=$(id); if(e) e.setAttribute(a,v); };
+
+// ==================== TRACK / LANG ====================
+function setTrack(t) {
+  state.track = t;
+  render();
+  setTimeout(()=>{ collectFx(); drawLadder(); drawQR(); },80);
+}
+function setLang(l) { state.lang = l; render(); }
+
+// ==================== PET ====================
+function screenClick() {
+  if (state.phase==='egg') {
+    state.taps++;
+    _hopT = 1;
+    if (state.taps>=3) { state.phase='naming'; state.stage='HATCHLING'; state.coins=50; state.fed=8; }
+  } else { _hopT=1; bump(); }
+  render();
+}
+function bump() { _last=Date.now(); if(state.hungry){state.hungry=false;} }
+function stageFromFed(f) {
+  if(f>=85) return 'PHOENIX';
+  if(f>=65) return 'DRAGON';
+  if(f>=45) return 'FOX';
+  if(f>=25) return 'KID';
+  return 'HATCHLING';
+}
+function petFeed() { _hopT=1; bump(); state.coins+=50; state.fed=Math.min(100,state.fed+6); state.tip=I18N[state.lang].tipFeed; render(); }
+function petPlay() { _hopT=1; bump(); state.joy=Math.min(100,state.joy+20); state.tip=I18N[state.lang].tipPlay; render(); }
+function petStats() { bump(); state.tip=I18N[state.lang].tipStats; render(); }
+function confirmName() {
+  const n=(state.nameDraft||'').trim();
+  state.petName = n || PET_NAMES.HATCHLING;
+  state.phase='live'; _last=Date.now(); render();
+}
+
+// ==================== CANVAS ====================
+function sizeCanvas(cv) {
+  const r=cv.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(1,Math.round(r.width*dpr)), h=Math.max(1,Math.round(r.height*dpr));
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
+  const ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,W:r.width,H:r.height};
+}
+function dots(ctx,W,H,step,sz) {
+  ctx.fillStyle='#cbcbcb';
+  for(let y=step/2;y<H;y+=step) for(let x=step/2;x<W;x+=step) ctx.fillRect(x,y,sz,sz);
+}
+function drawSprite(ctx,rows,W,H,ox,oy,px) {
+  ctx.fillStyle='#1A1208';
+  for(let r=0;r<rows.length;r++) for(let c=0;c<rows[r].length;c++)
+    if(rows[r][c]==='K') ctx.fillRect(ox+c*px, oy+r*px, px, px);
+}
+function drawHero(now) {
+  const cv=$('pet-canvas'); if(!cv) return;
+  const {ctx,W,H}=sizeCanvas(cv);
+  ctx.clearRect(0,0,W,H);
+  dots(ctx,W,H,8,1.6);
+  const key=state.phase==='egg'?'EGG':state.stage;
+  const frames=SPRITES[key]||SPRITES.HATCHLING;
+  const rows=frames[_frame]||frames[0];
+  const px=7;
+  const sw=rows[0].length*px, sh=rows.length*px;
+  const walk=state.phase==='live'?Math.sin(now/900)*(W*0.16):0;
+  const hop=-Math.sin(_hopT*Math.PI)*22;
+  const shake=state.hungry?Math.sin(now/60)*2:0;
+  const ox=Math.round((W-sw)/2+walk+shake);
+  const oy=Math.round((H-sh)/2+hop);
+  drawSprite(ctx,rows,W,H,ox,oy,px);
+  if(state.hungry){ctx.fillStyle='#F05A28';ctx.fillRect(14,12,7,7);}
+}
+function drawLadder() {
+  document.querySelectorAll('canvas[data-pet]').forEach(cv=>{
+    const key=cv.getAttribute('data-pet');
+    const {ctx,W,H}=sizeCanvas(cv);
+    ctx.clearRect(0,0,W,H);
+    dots(ctx,W,H,7,1.4);
+    const rows=(SPRITES[key]||SPRITES.HATCHLING)[0];
+    const px=Math.max(3,Math.floor(Math.min(W/(rows[0].length+2),H/(rows.length+2))));
+    const sw=rows[0].length*px, sh=rows.length*px;
+    const ox=Math.round((W-sw)/2), oy=Math.round((H-sh)/2);
+    drawSprite(ctx,rows,W,H,ox,oy,px);
+  });
+}
+function renderQR(cv,text) {
+  if(!cv) return;
+  if(!window.qrcode){setTimeout(()=>renderQR(cv,text),150);return;}
+  const {ctx,W}=sizeCanvas(cv);
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,W);
+  const qr=window.qrcode(0,'M');
+  qr.addData(text); qr.make();
+  const n=qr.getModuleCount();
+  const m=Math.floor(W/(n+2));
+  const off=Math.round((W-m*n)/2);
+  ctx.fillStyle='#171714';
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++)
+    if(qr.isDark(r,c)) ctx.fillRect(off+c*m,off+r*m,m,m);
+}
+function drawQR() {
+  const stageKey=state.phase==='egg'?'HATCHLING':state.stage;
+  renderQR($('qr-client'),'https://t.me/ayoo_loyalty_bot?start=pet_'+stageKey);
+  renderQR($('qr-partner'),'https://t.me/ayoo_partner_bot');
+}
+
+// ==================== FX ====================
+function collectFx() { _fx=Array.from(document.querySelectorAll('[data-reveal],[data-px]')); }
+function applyFx() {
+  if(!_fx.length) return;
+  const vh=window.innerHeight||800;
+  for(const el of _fx) {
+    if(!el.isConnected) continue;
+    const pxA=el.getAttribute('data-px');
+    if(pxA!==null) {
+      const sp=parseFloat(pxA)||0;
+      const pr=el.getBoundingClientRect();
+      const rel=((pr.top+pr.height/2)-vh/2)/vh;
+      el.style.transform='translate3d(0,'+( rel*sp*120).toFixed(1)+'px,0)';
+      continue;
+    }
+    const r=el.getBoundingClientRect();
+    const start=vh*0.94, end=vh*0.62;
+    let p=(start-r.top)/(start-end);
+    p=p<0?0:p>1?1:p;
+    const dy=parseFloat(el.getAttribute('data-reveal-y')||'42');
+    el.style.opacity=p.toFixed(3);
+    el.style.transform='translate3d(0,'+((1-p)*dy).toFixed(1)+'px,0)';
+  }
+}
+function scrollFeed() {
+  if(state.phase!=='live') return;
+  const h=document.scrollingElement||document.documentElement;
+  const max=h.scrollHeight-h.clientHeight;
+  const y=window.scrollY||h.scrollTop||0;
+  const p=max>0?Math.min(1,Math.max(0,y/max)):0;
+  const fed=Math.round(p*100);
+  const stage=stageFromFed(fed);
+  if(fed!==state.fed||stage!==state.stage){state.fed=fed;state.stage=stage;render();}
+}
+
+// ==================== LOOP ====================
+function loop(now) {
+  _raf=requestAnimationFrame(loop);
+  if(now-_lastSwap>480){_frame^=1;_lastSwap=now;}
+  _hopT=Math.max(0,_hopT-0.045);
+  applyFx();
+  scrollFeed();
+  drawHero(now);
+}
+
+// ==================== CALC ====================
+function updateCalc() {
+  const tr=I18N[state.lang]||I18N.ru;
+  const check=Number(state.calcCheck)||0;
+  const visits=Number(state.calcVisits)||0;
+  const extra=Math.round(visits*0.15);
+  const revenue=extra*check;
+  const fmt=x=>Math.round(x).toLocaleString('ru-RU').replace(/,/g,' ');
+  let out;
+  if(state.lang==='en') out='+'+fmt(extra)+' visits/mo · +'+fmt(revenue)+' RSD revenue';
+  else if(state.lang==='sr') out='+'+fmt(extra)+' poseta/mes · +'+fmt(revenue)+' RSD prihoda';
+  else out='+'+fmt(extra)+' визитов/мес · +'+fmt(revenue)+' RSD выручки';
+  setText('calc-out', out);
+}
+
+// ==================== FORM ====================
+function submitForm(e) {
+  e.preventDefault();
+  state.sent=true;
+  const done=$('form-done');
+  if(done) done.style.display='block';
+}
+function scrollToForm(e) {
+  e.preventDefault();
+  const f=$('bizform');
+  if(f) window.scrollTo({top:f.getBoundingClientRect().top+window.scrollY-20,behavior:'smooth'});
+}
+
+// ==================== RENDER ====================
+function render() {
+  const tr=I18N[state.lang]||I18N.ru;
+  const stageKey=state.phase==='egg'?'HATCHLING':state.stage;
+  const deepLink='https://t.me/ayoo_loyalty_bot?start=pet_'+stageKey;
+  const partnerLink='https://t.me/ayoo_partner_bot';
+
+  // Track visibility
+  $('track-you').classList.toggle('active', state.track==='you');
+  $('track-biz').classList.toggle('active', state.track==='biz');
+
+  // Segment buttons
+  $('btn-you').className='seg-btn '+(state.track==='you'?'seg-on':'seg-off');
+  $('btn-biz').className='seg-btn '+(state.track==='biz'?'seg-on':'seg-off');
+  setText('btn-you', tr.segYou); setText('btn-biz', tr.segBiz);
+
+  // Lang buttons
+  $('btn-ru').className='lang-btn '+(state.lang==='ru'?'lang-on':'lang-off');
+  $('btn-en').className='lang-btn '+(state.lang==='en'?'lang-on':'lang-off');
+  $('btn-sr').className='lang-btn '+(state.lang==='sr'?'lang-on':'lang-off');
+
+  // Hero consumer
+  setText('hero-badge','● '+tr.heroBadge);
+  setText('hero-h1', tr.heroH1);
+  setText('hero-sub', tr.heroSub);
+  setText('hero-cta', tr.heroCta); setAttr('hero-cta','href',deepLink);
+  setText('hero-tip', state.tip);
+
+  // Pet UI
+  setText('pet-coins', state.coins);
+  setText('pet-label', state.phase==='egg'?'':(state.petName||PET_NAMES[state.stage]));
+  const hint=$('pet-hint');
+  if(hint){
+    hint.style.display=state.phase!=='naming'?'block':'none';
+    hint.textContent=state.phase==='egg'?tr.eggHint:(state.hungry?tr.hungryHint:tr.liveHint);
+  }
+  const nameForm=$('pet-name-form');
+  if(nameForm) nameForm.style.display=state.phase==='naming'?'flex':'none';
+  const nameInput=$('pet-name-input');
+  if(nameInput){nameInput.placeholder=tr.namePh;}
+  setText('pet-name-ok', tr.nameOk);
+  setText('ctl-feed',tr.ctlFeed); setText('ctl-play',tr.ctlPlay); setText('ctl-stats',tr.ctlStats);
+
+  // Steps
+  setText('steps-title',tr.stepsTitle); setText('steps-lead',tr.stepsLead);
+  setText('s1t',tr.s1t); setText('s1d',tr.s1d);
+  setText('s2t',tr.s2t); setText('s2d',tr.s2d);
+  setText('s3t',tr.s3t); setText('s3d',tr.s3d);
+  setText('evo-title',tr.evoTitle); setText('evo-lead',tr.evoLead);
+  setText('cities-title',tr.citiesTitle); setText('cities-lead',tr.citiesLead);
+  setText('city-live-1',tr.cityLive); setText('city-live-2',tr.cityLive);
+
+  // Market stats
+  setText('mkt-title',tr.mktTitle); setText('mkt-lead',tr.mktLead);
+  setText('mk-pop',tr.mkPop); setText('mk-pop-sub',tr.mkPopSub);
+  setText('mk-aud',tr.mkAud); setText('mk-aud-sub',tr.mkAudSub);
+  setText('mk-chk',tr.mkChk); setText('mk-chk-sub',tr.mkChkSub);
+  setText('mk-gam',tr.mkGam); setText('mk-gam-sub',tr.mkGamSub);
+
+  // Reviews
+  setText('rev-title',tr.revTitle);
+  setText('rev1',tr.rev1); setText('rev1who',tr.rev1who);
+  setText('rev2',tr.rev2); setText('rev2who',tr.rev2who);
+  setText('rev3',tr.rev3); setText('rev3who',tr.rev3who);
+
+  // Final CTA
+  setText('final-title',tr.finalTitle);
+  setText('final-cta',tr.finalCta); setAttr('final-cta','href',deepLink);
+  setAttr('final-qr-link','href',deepLink);
+  setText('client-scan',tr.clientScan);
+
+  // Biz hero
+  setText('biz-h1',tr.bizH1); setText('biz-sub',tr.bizSub);
+  setText('biz-cta',tr.bizCta); setText('live-label',tr.liveLabel);
+
+  // Biz marquee
+  setText('mq1-a',tr.mq1); setText('mq2-a',tr.mq2); setText('mq3-a',tr.mq3);
+  setText('mq1-b',tr.mq1); setText('mq2-b',tr.mq2); setText('mq3-b',tr.mq3);
+
+  // Biz steps
+  setText('biz-steps-title',tr.bizStepsTitle);
+  setText('b1t',tr.b1t); setText('b1d',tr.b1d);
+  setText('b2t',tr.b2t); setText('b2d',tr.b2d);
+  setText('b3t',tr.b3t); setText('b3d',tr.b3d);
+
+  // Calc
+  setText('calc-title',tr.calcTitle);
+  setText('calc-check-l',tr.calcCheckL); setText('calc-visits-l',tr.calcVisitsL);
+  updateCalc();
+
+  // Form
+  setText('form-title',tr.formTitle);
+  setText('f-name-l',tr.fName); setText('f-venue-l',tr.fVenue);
+  setText('f-city-l',tr.fCity); setText('f-contact-l',tr.fContact);
+  setText('f-send',tr.fSend);
+  const done=$('form-done');
+  if(done){done.style.display=state.sent?'block':'none'; done.textContent=tr.fDone;}
+
+  // Biz QR section
+  setText('biz-qr-title',tr.bizQrTitle);
+  setText('biz-scan',tr.bizScan);
+  setText('biz-qr-cta',tr.bizQrCta);
+  setAttr('biz-qr-cta','href',partnerLink);
+  setAttr('partner-qr-link','href',partnerLink);
+
+  // Footer
+  setText('footer-tag',tr.footerTag);
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  render();
+  collectFx();
+  if(!_raf) _raf=requestAnimationFrame(loop);
+  _hungryTimer=setInterval(()=>{
+    if(state.phase==='live'&&Date.now()-_last>7000&&!state.hungry){
+      state.hungry=true; render();
+    }
+  },1500);
+  setTimeout(()=>{ drawLadder(); drawQR(); collectFx(); },120);
+  window.addEventListener('resize',()=>{ drawLadder(); drawQR(); collectFx(); });
+});
+</script>
 </body>
 </html>
