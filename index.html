@@ -125,11 +125,6 @@ a{text-decoration:none;}
           <div id="pet-label" style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'Press Start 2P';font-size:11px;color:#171714;"></div>
           <div id="pet-hint" style="position:absolute;left:0;right:0;top:50%;transform:translateY(44px);text-align:center;font-family:'Press Start 2P';font-size:8px;color:#697463;animation:blink 1s steps(2) infinite;">тапни 3 раза</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;">
-          <button onclick="petFeed()" class="glass-btn"><span style="font-size:20px;">🍔</span><span id="ctl-feed" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Покормить</span></button>
-          <button onclick="petPlay()" class="glass-btn"><span style="font-size:20px;">🎮</span><span id="ctl-play" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Играть</span></button>
-          <button onclick="petStats()" class="glass-btn"><span style="font-size:20px;">📊</span><span id="ctl-stats" style="font-family:'Press Start 2P';font-size:6px;color:#3E463B;">Статы</span></button>
-        </div>
         <div id="pet-name-form" style="display:none;gap:8px;margin-top:10px;">
           <input id="pet-name-input" class="glass-input" placeholder="назови питомца" maxlength="12" oninput="state.nameDraft=this.value">
           <button id="pet-name-ok" onclick="confirmName()" style="padding:0 18px;border:none;border-radius:14px;background:#171714;color:#fff;font-family:'Press Start 2P';font-size:10px;cursor:pointer;flex-shrink:0;">OK</button>
@@ -587,7 +582,13 @@ const state = {
 };
 
 // ==================== ANIM STATE ====================
-let _frame=0, _hopT=0, _lastSwap=0, _last=Date.now(), _raf=null, _fx=[], _hungryTimer=null;
+let _frame=0, _hopT=0, _lastSwap=0, _last=Date.now(), _raf=null, _fx=[], _hungryTimer=null, _bubbles=[], _lastBubble=0;
+const PIXEL_EMOJIS={
+  heart:{c:'#F05A28',g:['..RR.RR.','.RRRRRRR.','.RRRRRRR.','..RRRRR..','...RRR...','....R....']},
+  star:{c:'#F4C94D',g:['...Y...','..YYY..','.YYYYY.','..YYY..','.Y.Y.Y.','..Y.Y..']},
+  coin:{c:'#F4C94D',g:['..OOO..','.OOOOO.','.OOYOO.','.OOOOO.','..OOO..','.......']},
+  spark:{c:'#187A78',g:['..C....','.C.C.C.','..CCC..','.C.C.C.','..C....','.......']},
+};
 
 // ==================== HELPERS ====================
 const $ = id => document.getElementById(id);
@@ -609,6 +610,7 @@ function screenClick() {
     _hopT = 1;
     if (state.taps>=3) { state.phase='naming'; state.stage='HATCHLING'; state.coins=50; state.fed=8; }
   } else { _hopT=1; bump(); }
+  spawnBubble(performance.now(), true);
   render();
 }
 function bump() { _last=Date.now(); if(state.hungry){state.hungry=false;} }
@@ -619,9 +621,6 @@ function stageFromFed(f) {
   if(f>=25) return 'KID';
   return 'HATCHLING';
 }
-function petFeed() { _hopT=1; bump(); state.coins+=50; state.fed=Math.min(100,state.fed+6); state.tip=I18N[state.lang].tipFeed; render(); }
-function petPlay() { _hopT=1; bump(); state.joy=Math.min(100,state.joy+20); state.tip=I18N[state.lang].tipPlay; render(); }
-function petStats() { bump(); state.tip=I18N[state.lang].tipStats; render(); }
 function confirmName() {
   const n=(state.nameDraft||'').trim();
   state.petName = n || PET_NAMES.HATCHLING;
@@ -642,10 +641,42 @@ function dots(ctx,W,H,step,sz) {
   ctx.fillStyle='#cbcbcb';
   for(let y=step/2;y<H;y+=step) for(let x=step/2;x<W;x+=step) ctx.fillRect(x,y,sz,sz);
 }
-function drawSprite(ctx,rows,W,H,ox,oy,px) {
-  ctx.fillStyle='#1A1208';
+function drawSprite(ctx,rows,W,H,ox,oy,px,color) {
+  ctx.fillStyle=color||'#1A1208';
   for(let r=0;r<rows.length;r++) for(let c=0;c<rows[r].length;c++)
-    if(rows[r][c]==='K') ctx.fillRect(ox+c*px, oy+r*px, px, px);
+    if(rows[r][c]!==' ') ctx.fillRect(ox+c*px, oy+r*px, px, px);
+}
+function drawPixelEmoji(ctx,emoji,ox,oy,px,alpha) {
+  const pal={R:'#F05A28',Y:'#F4C94D',O:'#F4C94D',C:'#187A78',K:'#1A1208'};
+  ctx.globalAlpha=alpha;
+  for(let r=0;r<emoji.g.length;r++){
+    const row=emoji.g[r];
+    for(let c=0;c<row.length;c++){
+      const ch=row[c];
+      if(ch==='.') continue;
+      ctx.fillStyle=pal[ch]||emoji.c;
+      ctx.fillRect(ox+c*px, oy+r*px, px, px);
+    }
+  }
+  ctx.globalAlpha=1;
+}
+function spawnBubble(now,force) {
+  if(state.phase==='egg') return;
+  if(!force && now-_lastBubble<2200) return;
+  _lastBubble=now;
+  const keys=Object.keys(PIXEL_EMOJIS);
+  const key=keys[Math.floor(Math.random()*keys.length)];
+  _bubbles.push({key, born:now, life:1600+Math.random()*900, drift:(Math.random()-.5)*.05, wobble:Math.random()*Math.PI*2});
+}
+function drawBubbles(ctx,now,petX,petY,petW) {
+  _bubbles=_bubbles.filter(b=>now-b.born<b.life);
+  for(const b of _bubbles){
+    const age=now-b.born, t=age/b.life;
+    const px=3;
+    const x=petX+petW*.5+Math.sin(age/240+b.wobble)*18+b.drift*age;
+    const y=petY-age*.07-10;
+    drawPixelEmoji(ctx,PIXEL_EMOJIS[b.key],x,y,px,Math.max(0,1-t));
+  }
 }
 function drawHero(now) {
   const cv=$('pet-canvas'); if(!cv) return;
@@ -655,14 +686,18 @@ function drawHero(now) {
   const key=state.phase==='egg'?'EGG':state.stage;
   const frames=SPRITES[key]||SPRITES.HATCHLING;
   const rows=frames[_frame]||frames[0];
-  const px=7;
+  const px=Math.max(10,Math.min(13,Math.floor(Math.min((W-48)/rows[0].length,(H-72)/rows.length))));
   const sw=rows[0].length*px, sh=rows.length*px;
-  const walk=state.phase==='live'?Math.sin(now/900)*(W*0.16):0;
-  const hop=-Math.sin(_hopT*Math.PI)*22;
-  const shake=state.hungry?Math.sin(now/60)*2:0;
+  const walkAmp=state.phase==='egg'?.08:.24;
+  const walk=Math.sin(now/700)*(W*walkAmp);
+  const bob=Math.sin(now/520)*5;
+  const hop=-Math.sin(_hopT*Math.PI)*28;
+  const shake=state.hungry?Math.sin(now/60)*3:0;
   const ox=Math.round((W-sw)/2+walk+shake);
-  const oy=Math.round((H-sh)/2+hop);
+  const oy=Math.round((H-sh)/2+bob+hop-8);
   drawSprite(ctx,rows,W,H,ox,oy,px);
+  if(state.phase!=='egg') spawnBubble(now,false);
+  drawBubbles(ctx,now,ox,oy,sw);
   if(state.hungry){ctx.fillStyle='#F05A28';ctx.fillRect(14,12,7,7);}
 }
 function drawLadder() {
@@ -812,7 +847,6 @@ function render() {
   const nameInput=$('pet-name-input');
   if(nameInput){nameInput.placeholder=tr.namePh;}
   setText('pet-name-ok', tr.nameOk);
-  setText('ctl-feed',tr.ctlFeed); setText('ctl-play',tr.ctlPlay); setText('ctl-stats',tr.ctlStats);
 
   // Steps
   setText('steps-title',tr.stepsTitle); setText('steps-lead',tr.stepsLead);
