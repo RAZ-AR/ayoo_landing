@@ -644,7 +644,7 @@ function dots(ctx,W,H,step,sz) {
 function drawSprite(ctx,rows,W,H,ox,oy,px,color) {
   ctx.fillStyle=color||'#1A1208';
   for(let r=0;r<rows.length;r++) for(let c=0;c<rows[r].length;c++)
-    if(rows[r][c]!==' ') ctx.fillRect(ox+c*px, oy+r*px, px, px);
+    if(rows[r][c]==='K') ctx.fillRect(ox+c*px, oy+r*px, px, px);
 }
 function drawPixelEmoji(ctx,emoji,ox,oy,px,alpha) {
   const pal={R:'#F05A28',Y:'#F4C94D',O:'#F4C94D',C:'#187A78',K:'#1A1208'};
