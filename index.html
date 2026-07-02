@@ -73,20 +73,29 @@ a{text-decoration:none;}
   .grid-2{grid-template-columns:1fr;}
 }
 
-/* ---- WAITLIST CHAT OVERLAY ---- */
-@keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes typingPulse{0%,80%,100%{transform:scale(.55);opacity:.25}40%{transform:scale(1);opacity:1}}
-.typing-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#60695F;animation:typingPulse 1.2s infinite ease-in-out;}
-.chat-bubble-wrap{animation:bubbleIn .22s ease;}
-.wait-overlay{display:none;position:absolute;inset:0;z-index:8;flex-direction:column;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent 32%),#D4DACC;}
-.wait-header{background:rgba(245,247,242,.92);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(23,23,20,.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
-.wait-chat-area{flex:1;overflow-y:auto;padding:10px 10px 6px;display:flex;flex-direction:column;gap:7px;scrollbar-width:thin;}
-.wait-input-bar{padding:8px 10px;background:rgba(245,247,242,.92);display:flex;gap:8px;flex-shrink:0;border-top:1px solid rgba(23,23,20,.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
-.wait-tg-input{flex:1;height:36px;border:1px solid rgba(23,23,20,.15);border-radius:999px;padding:0 14px;background:rgba(255,255,255,.8);color:#171714;font-size:9px;font-family:'Press Start 2P';outline:none;}
-.wait-tg-input::placeholder{color:#AAB6A4;font-size:9px;}
-.wait-send-btn{width:36px;height:36px;border:none;border-radius:50%;background:#171714;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
-.wait-send-btn:hover{background:#3E463B;}
-.merch-modal-bg{display:none;position:fixed;inset:0;z-index:100;background:rgba(23,23,20,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;}
+/* ---- WAITLIST TERMINAL OVERLAY ---- */
+@keyframes termIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.wait-overlay{display:none;position:absolute;inset:0;z-index:8;flex-direction:column;border-radius:28px;overflow:hidden;background:#171714;}
+.term-hdr{padding:10px 14px;border-bottom:1px solid rgba(244,201,77,.15);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.term-hdr-title{font-family:'Press Start 2P';font-size:7px;color:#F4C94D;letter-spacing:.5px;}
+.term-close{background:none;border:none;color:rgba(244,201,77,.4);font-size:15px;cursor:pointer;padding:0 2px;line-height:1;transition:color .15s;}
+.term-close:hover{color:#F4C94D;}
+.term-body{flex:1;overflow-y:auto;padding:14px 16px 8px;display:flex;flex-direction:column;gap:0;scrollbar-width:none;}
+.term-body::-webkit-scrollbar{display:none;}
+.term-line{font-family:'Press Start 2P';font-size:7px;line-height:2.2;white-space:pre-wrap;word-break:break-word;animation:termIn .18s ease;}
+.tl-y{color:#F4C94D;}
+.tl-d{color:rgba(244,201,77,.28);}
+.tl-o{color:#F05A28;}
+.tl-t{color:#187A78;}
+.tl-w{color:#F5F7F2;}
+.tl-g{color:#AAB6A4;}
+.term-input-row{padding:10px 14px;border-top:1px solid rgba(244,201,77,.15);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.term-prompt{font-family:'Press Start 2P';font-size:8px;color:#F4C94D;flex-shrink:0;}
+.term-field{flex:1;background:none;border:none;outline:none;font-family:'Press Start 2P';font-size:8px;color:#F4C94D;caret-color:#F4C94D;min-width:0;}
+.term-field::placeholder{color:rgba(244,201,77,.28);}
+.term-submit{background:none;border:1px solid rgba(244,201,77,.3);border-radius:4px;color:#F4C94D;font-family:'Press Start 2P';font-size:7px;padding:5px 8px;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s;flex-shrink:0;}
+.term-submit:hover{background:rgba(244,201,77,.1);border-color:#F4C94D;}
+.merch-modal-bg{display:none;position:fixed;inset:0;z-index:100;background:rgba(23,23,20,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;}
 </style>
 </head>
 <body>
@@ -139,20 +148,17 @@ a{text-decoration:none;}
           <div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(245,247,242,.8);font-family:'Press Start 2P';font-size:11px;color:#171714;"><span id="pet-coins">0</span><span style="width:13px;height:13px;border:2px solid #171714;border-radius:50%;background:#F4C94D;display:inline-block;"></span></div>
           <div id="pet-label" style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'Press Start 2P';font-size:11px;color:#171714;"></div>
           <div id="pet-hint" style="position:absolute;left:0;right:0;top:50%;transform:translateY(44px);text-align:center;font-family:'Press Start 2P';font-size:8px;color:#697463;animation:blink 1s steps(2) infinite;">тапни 3 раза</div>
-          <!-- WAITLIST OVERLAY (client) -->
+          <!-- WAITLIST TERMINAL OVERLAY (client) -->
           <div id="client-overlay" class="wait-overlay">
-            <div class="wait-header">
-              <div style="width:30px;height:30px;border-radius:50%;background:#171714;display:grid;place-items:center;font-size:14px;flex-shrink:0;">🐣</div>
-              <div style="flex:1;min-width:0;">
-                <div style="color:#171714;font-family:'Press Start 2P';font-size:7px;line-height:1.4;">AYOO Support</div>
-                <div style="color:#60695F;font-size:9px;margin-top:3px;font-family:'Press Start 2P';">● online</div>
-              </div>
-              <button onclick="closeWait('client')" style="background:none;border:none;color:#60695F;font-size:18px;cursor:pointer;line-height:1;padding:2px 8px;flex-shrink:0;">✕</button>
+            <div class="term-hdr">
+              <span class="term-hdr-title">AYOO SUPPORT v0.1</span>
+              <button class="term-close" onclick="closeWait('client')">✕</button>
             </div>
-            <div id="co-chat" class="wait-chat-area"></div>
-            <div id="co-form" class="wait-input-bar">
-              <input id="co-input" class="wait-tg-input" placeholder="@username" maxlength="32" onkeydown="if(event.key==='Enter')submitWait('client')">
-              <button class="wait-send-btn" onclick="submitWait('client')">➤</button>
+            <div id="co-chat" class="term-body"></div>
+            <div id="co-form" class="term-input-row">
+              <span class="term-prompt">»</span>
+              <input id="co-input" class="term-field" placeholder="@username" maxlength="32" onkeydown="if(event.key==='Enter')submitWait('client')">
+              <button class="term-submit" onclick="submitWait('client')">SEND</button>
             </div>
           </div>
         </div>
@@ -455,18 +461,15 @@ a{text-decoration:none;}
       <div class="glass-hilight"></div>
       <div class="glass-screen" style="height:460px;">
         <div id="merch-overlay" class="wait-overlay" style="display:flex;">
-          <div class="wait-header">
-            <div style="width:30px;height:30px;border-radius:50%;background:#171714;display:grid;place-items:center;font-size:14px;flex-shrink:0;">🚀</div>
-            <div style="flex:1;min-width:0;">
-              <div style="color:#171714;font-family:'Press Start 2P';font-size:7px;line-height:1.4;">AYOO Support</div>
-              <div style="color:#60695F;font-size:9px;margin-top:3px;font-family:'Press Start 2P';">● online</div>
-            </div>
-            <button onclick="closeWait('merchant')" style="background:none;border:none;color:#60695F;font-size:18px;cursor:pointer;line-height:1;padding:2px 8px;flex-shrink:0;">✕</button>
+          <div class="term-hdr">
+            <span class="term-hdr-title">AYOO SUPPORT v0.1</span>
+            <button class="term-close" onclick="closeWait('merchant')">✕</button>
           </div>
-          <div id="mo-chat" class="wait-chat-area"></div>
-          <div id="mo-form" class="wait-input-bar">
-            <input id="mo-input" class="wait-tg-input" placeholder="@username" maxlength="32" onkeydown="if(event.key==='Enter')submitWait('merchant')">
-            <button class="wait-send-btn" onclick="submitWait('merchant')">➤</button>
+          <div id="mo-chat" class="term-body"></div>
+          <div id="mo-form" class="term-input-row">
+            <span class="term-prompt">»</span>
+            <input id="mo-input" class="term-field" placeholder="@username" maxlength="32" onkeydown="if(event.key==='Enter')submitWait('merchant')">
+            <button class="term-submit" onclick="submitWait('merchant')">SEND</button>
           </div>
         </div>
       </div>
@@ -978,15 +981,23 @@ function startWait(type) {
   if (inp) inp.value = '';
 
   const lang = state.lang;
-  const greet = isClient
-    ? (lang==='ru'?'Оставь свой @username — пришлём питомца! 🐣'
-      :lang==='en'?'Leave your @username — we\'ll send your pet! 🐣'
-      :'Ostavi @username — šaljemo ljubimca! 🐣')
-    : (lang==='ru'?'Оставь свой @username — пришлём доступ к мини-приложению! 🚀'
-      :lang==='en'?'Leave your @username — we\'ll send mini-app access! 🚀'
-      :'Ostavi @username — šaljemo pristup aplikaciji! 🚀');
+  const prompt = isClient
+    ? (lang==='ru'?'Оставь @username\nпришлём питомца 🐣'
+      :lang==='en'?'Leave @username\nwe\'ll send your pet 🐣'
+      :'Ostavi @username\nšaljemo ljubimca 🐣')
+    : (lang==='ru'?'Оставь @username\nпришлём доступ к\nмини-приложению 🚀'
+      :lang==='en'?'Leave @username\nwe\'ll send mini-app\naccess 🚀'
+      :'Ostavi @username\nšaljemo pristup\naplikaciji 🚀');
 
-  setTimeout(()=>{ _waitBubble(chatEl,'bot',greet); if(inp) inp.focus(); }, 380);
+  let t = 0;
+  const intro = ['──────────────────', prompt, '──────────────────'];
+  intro.forEach((line, i) => {
+    setTimeout(()=>{
+      _termLine(chatEl, line, i===0||i===2?'tl-d':'tl-w');
+      if(i===intro.length-1 && inp) inp.focus();
+    }, t);
+    t += 180;
+  });
 }
 
 function closeWait(type) {
@@ -1010,31 +1021,29 @@ function submitWait(type) {
   if (!tg.startsWith('@')) tg = '@' + tg;
   inp.value = '';
 
-  _waitBubble(chatId, 'user', tg);
+  _termLine(chatId, '──────────────────', 'tl-d');
+  _termLine(chatId, '» ' + tg, 'tl-y');
+  _termLine(chatId, '──────────────────', 'tl-d');
   const form = $(formId);
   if (form) form.style.display = 'none';
-  _waitTyping(chatId);
 
   const msgs = WAIT_MSGS[type][state.lang] || WAIT_MSGS[type].ru;
   const startParam = isClient ? 'client' : 'merchant';
   const botLink = 'https://t.me/ayoo_support_bot?start=' + startParam;
-  let delay = 900;
+  let delay = 500;
   msgs.forEach((msg, i) => {
     setTimeout(()=>{
-      _waitClearTyping(chatId);
-      _waitBubble(chatId, 'bot', msg);
-      if (i < msgs.length-1) {
-        setTimeout(()=>_waitTyping(chatId), 280);
-      } else {
-        // After last message: show open-bot button
-        const lang = state.lang;
-        const btnLabel = isClient
-          ? (lang==='ru'?'Открыть бота и получить питомца →':lang==='en'?'Open bot and get your pet →':'Otvori bota i dobij ljubimca →')
-          : (lang==='ru'?'Открыть бота и получить доступ →':lang==='en'?'Open bot and get access →':'Otvori bota i dobij pristup →');
-        setTimeout(()=>_waitBubbleLink(chatId, botLink, btnLabel), 400);
+      _termLine(chatId, '[+] ' + msg, i===0?'tl-g':i===1?'tl-t':'tl-w');
+      if (i === msgs.length - 1) {
+        setTimeout(()=>{
+          _termLine(chatId, '──────────────────', 'tl-d');
+          _termLink(chatId, botLink, isClient
+            ? (state.lang==='ru'?'[ → ОТКРЫТЬ БОТА ]':state.lang==='en'?'[ → OPEN BOT ]':'[ → OTVORI BOTA ]')
+            : (state.lang==='ru'?'[ → ПОЛУЧИТЬ ДОСТУП ]':state.lang==='en'?'[ → GET ACCESS ]':'[ → DOBIJ PRISTUP ]'));
+        }, 300);
       }
     }, delay);
-    delay += 1500;
+    delay += 700;
   });
 
   const adminNote = isClient
@@ -1044,51 +1053,32 @@ function submitWait(type) {
   if (ADMIN_CHAT_ID) _tgSend(ADMIN_CHAT_ID, adminNote);
 }
 
-function _waitBubble(chatId, side, text) {
-  const chat = $(chatId); if (!chat) return;
-  const isBot = side === 'bot';
-  const wrap = document.createElement('div');
-  wrap.className = 'chat-bubble-wrap';
-  wrap.style.cssText = 'display:flex;justify-content:'+(isBot?'flex-start':'flex-end')+';';
-  const bub = document.createElement('div');
-  bub.style.cssText = 'max-width:82%;padding:8px 11px;border-radius:'+(isBot?'4px 14px 14px 14px':'14px 4px 14px 14px')+';background:'+(isBot?'rgba(255,255,255,.82)':'#171714')+';color:'+(isBot?'#171714':'#fff')+';font-family:\'Press Start 2P\';font-size:8px;line-height:1.7;white-space:pre-wrap;word-break:break-word;border:1px solid '+(isBot?'rgba(23,23,20,.08)':'transparent')+';box-shadow:0 2px 8px rgba(23,23,20,.08);';
-  bub.textContent = text;
-  wrap.appendChild(bub);
-  chat.appendChild(wrap);
-  chat.scrollTop = chat.scrollHeight;
+function _termLine(chatId, text, cls) {
+  const body = $(chatId); if (!body) return;
+  const el = document.createElement('div');
+  el.className = 'term-line ' + (cls || 'tl-y');
+  el.textContent = text;
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
+  return el;
 }
 
-function _waitBubbleLink(chatId, href, label) {
-  const chat = $(chatId); if (!chat) return;
-  const wrap = document.createElement('div');
-  wrap.className = 'chat-bubble-wrap';
-  wrap.style.cssText = 'display:flex;justify-content:flex-start;';
+function _termLink(chatId, href, label) {
+  const body = $(chatId); if (!body) return;
+  const el = document.createElement('div');
+  el.className = 'term-line tl-o';
+  el.style.cssText = 'cursor:pointer;';
   const a = document.createElement('a');
   a.href = href;
   a.target = '_blank';
   a.rel = 'noopener';
-  a.style.cssText = 'display:block;padding:9px 13px;border-radius:4px 14px 14px 14px;background:#F05A28;color:#fff;font-family:\'Press Start 2P\';font-size:7px;text-decoration:none;line-height:1.7;max-width:82%;transition:background .15s;box-shadow:0 4px 14px rgba(240,90,40,.3);';
+  a.style.cssText = 'color:#F05A28;text-decoration:none;font-family:\'Press Start 2P\';font-size:7px;line-height:2.2;transition:color .15s;';
   a.textContent = label;
-  a.onmouseover = ()=>{ a.style.background='#d44d1f'; };
-  a.onmouseout = ()=>{ a.style.background='#F05A28'; };
-  wrap.appendChild(a);
-  chat.appendChild(wrap);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function _waitTyping(chatId) {
-  const chat = $(chatId); if (!chat) return;
-  if ($(chatId+'-typing')) return;
-  const el = document.createElement('div');
-  el.id = chatId+'-typing';
-  el.style.cssText = 'display:flex;justify-content:flex-start;';
-  el.innerHTML = '<div style="padding:10px 12px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,.82);border:1px solid rgba(23,23,20,.08);box-shadow:0 2px 8px rgba(23,23,20,.08);display:flex;gap:5px;align-items:center;"><span class="typing-dot"></span><span class="typing-dot" style="animation-delay:.22s"></span><span class="typing-dot" style="animation-delay:.44s"></span></div>';
-  chat.appendChild(el);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function _waitClearTyping(chatId) {
-  const el = $(chatId+'-typing'); if (el) el.remove();
+  a.onmouseover = ()=>{ a.style.color='#F4C94D'; };
+  a.onmouseout = ()=>{ a.style.color='#F05A28'; };
+  el.appendChild(a);
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
 }
 
 function _tgSend(chatId, text) {
