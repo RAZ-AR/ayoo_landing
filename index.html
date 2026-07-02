@@ -943,7 +943,7 @@ const BOT_TOKEN = '8716681173:AAF3VQ3MuCjyUZD9GJ1rB8XJTyYBOkcfko4';
 // To receive admin notifications: message @ayoo_support_bot, then open
 // https://api.telegram.org/bot8716681173:AAF3VQ3MuCjyUZD9GJ1rB8XJTyYBOkcfko4/getUpdates
 // and paste your numeric chat_id below:
-const ADMIN_CHAT_ID = null;
+const ADMIN_CHAT_ID = 128136200;
 
 const WAIT_MSGS = {
   client:{
@@ -1092,10 +1092,11 @@ function _waitClearTyping(chatId) {
 }
 
 function _tgSend(chatId, text) {
+  // URLSearchParams sends as application/x-www-form-urlencoded — a "simple"
+  // CORS request that browsers dispatch without preflight, so it reaches Telegram.
   fetch('https://api.telegram.org/bot'+BOT_TOKEN+'/sendMessage',{
     method:'POST', mode:'no-cors',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({chat_id:chatId, text:text, parse_mode:'HTML'}),
+    body: new URLSearchParams({chat_id: String(chatId), text}),
   }).catch(()=>{});
 }
 

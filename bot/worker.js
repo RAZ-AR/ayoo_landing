@@ -9,7 +9,7 @@
  */
 
 const BOT_TOKEN = '8716681173:AAF3VQ3MuCjyUZD9GJ1rB8XJTyYBOkcfko4';
-const ADMIN_CHAT_ID = null; // paste your numeric id here, e.g. 123456789
+const ADMIN_CHAT_ID = 128136200;
 
 // ---- Messages ----
 const MSGS = {
